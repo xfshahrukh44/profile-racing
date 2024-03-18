@@ -1,5 +1,5 @@
 <?php
-    
+
      $logo = DB::table('imagetable')
                 ->where('table_name', 'logo')
                 ->first();

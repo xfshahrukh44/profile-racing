@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	
+
 	<?php
-	   $favicon = DB::table('imagetable')->where('table_name', 'favicon')->first();			
-	?>	
+	   $favicon = DB::table('imagetable')->where('table_name', 'favicon')->first();
+	?>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,6 +30,7 @@
     <link href="{{asset('plugins/vendors/toast-master/css/jquery.toast.css')}}" rel="stylesheet">
     <link href="{{asset('plugins/vendors/perfect-scrollbar/css/perfect-scrollbar.css')}}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @stack('before-css')
     <link href="{{asset('assets/css/custom.css')}}" rel="stylesheet">
    <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
@@ -45,7 +46,7 @@
     @stack('after-css')
 
 </head>
-			
+
 
 <body class="vertical-layout vertical-menu-modern 2-columns   fixed-navbar" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
 <!-- ============================================================== -->
@@ -71,6 +72,8 @@
 <script src="{{asset('assets/js/app-menu.min.js')}}"></script>
 <script src="{{asset('assets/js/app.min.js')}}"></script>
 <script src="{{asset('assets/js/customizer.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- END: Theme JS-->
 <<!-- script src="{{asset('plugins/vendors/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('plugins/vendors/jquery/spartan-multi-image-picker.min.js')}}"></script>
@@ -81,7 +84,6 @@
 <script src="{{asset('assets/js/sidebarmenu.js')}}"></script>
 <script src="{{asset('assets/js/custom.min.js')}}"></script>
 <script src="{{asset('plugins/vendors/toast-master/js/jquery.toast.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script type="text/javascript" src="{{ asset('assets/js/edituser.js') }}"></script> -->
 
 
@@ -100,7 +102,7 @@
 
 
 <script>
-	
+
 	 $(document).ready(function () {
 
             @if(\Session::has('message'))
@@ -114,8 +116,8 @@
                 stack: 6
             });
             @endif
-			
-			
+
+
             @if(\Session::has('flash_message'))
             $.toast({
                 heading: 'Info!',
@@ -127,11 +129,11 @@
                 stack: 6
             });
             @endif
-			
-			
+
+
         });
 
-	
+
 </script>
 
 <script type="text/javascript">

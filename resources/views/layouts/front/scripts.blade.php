@@ -1,7 +1,7 @@
 <!-- ============================================================== -->
 <!-- All SCRIPTS AND JS LINKS BELOW  -->
 <!-- ============================================================== -->
-  
+
 
  <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -25,7 +25,43 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
-        
+        // $(document).ready(function () {
+        //   $('.inner-shop').click(
+        //     function () {
+        //     $(this).find(".inner-drop").show('fast')
+        //     },
+        //   )
+        // })
+
+        $(document).ready(function () {
+            $('.inner-shop').click(function () {
+                $('.inner-drop').show()
+            })
+        })
+        $(document).ready(function () {
+            $('.inner-shop-2').click(function () {
+                $('.inner-drop-2').show()
+            })
+        })
+
+        // $(document).ready(function () {
+        //   $('.hover-links').click(function () {
+        //     $(this).find('.dropdown-links').toggle()
+        //   })
+        // })
+
+        $('.hover-links').hover(function () {
+            var isHovered = $(this).is(':hover')
+            if (isHovered) {
+                $(this).children('.dropdown-links').stop().slideDown(300)
+            } else {
+                $(this).children('.dropdown-links').stop().slideUp(300)
+            }
+        })
+    </script>
+
+    <script>
+
         // Set the options that I want
         toastr.options = {
         "closeButton": true,
@@ -39,7 +75,7 @@
         "timeOut": "5000",
         "extendedTimeOut": "1000",
         "showEasing": "swing",
-        "hideEasing": "linear", 
+        "hideEasing": "linear",
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
         }
@@ -52,7 +88,7 @@
     </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-    
+
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 

@@ -91,7 +91,7 @@
                         </a>
                     </li>
 
-                    
+
                     <li class="{{ (request()->is('admin/product') || request()->is('admin/product/*')) ? 'active' : '' }}">
                         <a class="menu-item" href="{{url('admin/product')}}"><i></i>
                             <span data-i18n="eCommerce">Products</span>
@@ -118,11 +118,11 @@
 
             <li class="nav-item {{ (request()->is('instagram/instagram') || request()->is('instagram/instagram/*')) ? 'active' : '' }}">
                 <a href="{{url('instagram/instagram')}}"><i class="la la-quote-left"></i>
-                    <span class="menu-title" data-i18n="eCommerce">Follow on Instagram</span> 
+                    <span class="menu-title" data-i18n="eCommerce">Follow on Instagram</span>
                 </a>
             </li>
 
-            
+
 
 
             @php
@@ -132,7 +132,7 @@
                 @if(count(collect($section->items)) > 0)
                     @foreach($section->items as $menu)
                     <li class="nav-item {{ ($url == $menu->url) ? 'active' : '' }}">
-                        <a href="{{ url($menu->url) }}" target="_blank">{!! $menu->icon !!}
+                        <a href="{{ url($menu->url) }}">{!! $menu->icon !!}
                             <span class="menu-title" data-i18n="eCommerce">{{ $menu->title }}</span>
                         </a>
                     </li>

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateChildsubcategoriesTable extends Migration
+class CreateHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,12 @@ class CreateChildsubcategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('childsubcategories', function (Blueprint $table) {
+        Schema::create('histories', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('subcategory')->nullable();
-            $table->string('childsubcategory')->nullable();
+            $table->string('title')->nullable();
+            $table->longText('description')->nullable();
+            $table->string('image')->nullable();
             });
     }
 
@@ -27,6 +28,6 @@ class CreateChildsubcategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('childsubcategories');
+        Schema::drop('histories');
     }
 }
