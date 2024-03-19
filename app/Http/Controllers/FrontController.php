@@ -9,6 +9,7 @@ use App\Models\GlobalMember;
 use App\Models\History;
 use App\Models\HowTo;
 use App\Models\Job;
+use App\Models\News;
 use App\Models\RaceTeamMember;
 use App\Models\Recycling;
 use App\Models\UsMember;
@@ -117,7 +118,19 @@ class FrontController extends Controller
 
     public function news (Request $request)
     {
-        return view('news');
+        $all_items = News::all();
+        $news_items = News::where('type', 'News')->get();
+        $event_items = News::where('type', 'Event')->get();
+        $video_items = News::where('type', 'Video')->get();
+
+        return view('news', compact('all_items', 'news_items', 'event_items', 'video_items'));
+    }
+
+    public function newsDetail (Request $request, $id)
+    {
+        $news = News::find($id);
+
+        return view('news-detail', compact('news'));
     }
 
     public function recycling (Request $request)

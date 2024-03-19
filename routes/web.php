@@ -205,6 +205,7 @@ Route::get('/job-detail/{id}','FrontController@jobDetail')->name('front.jobDetai
 Route::post('/submit-job-application','JobApplicationController@submitJobApplication')->name('front.submitJobApplication');
 Route::get('/manufacturing','FrontController@manufacturing')->name('front.manufacturing');
 Route::get('/news','FrontController@news')->name('front.news');
+Route::get('/news/{id}','FrontController@newsDetail')->name('front.newsDetail');
 Route::get('/recycling','FrontController@recycling')->name('front.recycling');
 Route::get('/returns','FrontController@returns')->name('front.returns');
 Route::get('/shipping','FrontController@shipping')->name('front.shipping');
@@ -317,3 +318,5 @@ Route::resource('admin/distributor', 'Admin\DistributorController');
 Route::resource('admin/how-to', 'Admin\HowToController');
 
 Route::resource('admin/faq', 'Admin\FaqController');
+
+Route::resource('admin/news', 'Admin\NewsController');

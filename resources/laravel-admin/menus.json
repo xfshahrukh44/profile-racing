@@ -57,6 +57,11 @@
                     "title": "Faqs",
                     "icon": "<i class='fas fa-question mr-1'><\/i>",
                     "url": "\/admin\/faq"
+                },
+                {
+                    "title": "News",
+                    "icon": "<i class='fas fa-newspaper mr-1'><\/i>",
+                    "url": "\/admin\/news"
                 }
             ]
         }
