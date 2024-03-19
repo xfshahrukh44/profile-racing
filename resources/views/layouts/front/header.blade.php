@@ -45,7 +45,7 @@
                                         <div class="dropdown-links" style="display: none; height: 69.5px; padding-top: 20px; margin-top: 0px; padding-bottom: 20px; margin-bottom: 0px;">
                                             <ul>
                                                 <li>
-                                                    <a class="nav-link" href="{{route('front.myAccount')}}">My Account</a>
+                                                    <a class="nav-link" href="{{route('account')}}">My Account</a>
                                                 </li>
                                             </ul>
                                         </div>

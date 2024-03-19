@@ -35,137 +35,40 @@
                 </div> -->
             </div>
 
-            <div class="col-lg-3 col-md-3 col-6">
-                <div class="opt-sec-2-main">
-                    <a href="product-1.php">
-                        <div class="opt-sec2-img">
-                            <figure>
-                                <img src="{{asset('images/Mark_Mulville-300x300.jpg')}}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
-                        <div class="opt-sec2-text">
-                            <h6>MARK MULVILLE</h6>
-                            <p>Follow Mark on Instagram</p>
-                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                        </div>
-                    </a>
-                </div>
-            </div>
+            @foreach($us_members as $us_member)
+                <div class="col-lg-3 col-md-3 col-6">
+                    <div class="opt-sec-2-main">
+                        <a href="#">
+                            <div class="opt-sec2-img">
+                                <figure>
+                                    <img src="{{asset($us_member->image)}}" class="img-fluid" alt="">
+                                </figure>
+                            </div>
+                            <div class="opt-sec2-text">
+                                <h6>{{$us_member->name}}</h6>
 
-            <div class="col-lg-3 col-md-3 col-6">
-                <div class="opt-sec-2-main">
-                    <a href="#">
-                        <div class="opt-sec2-img">
-                            <figure>
-                                <img src="{{asset('images/Chad_DeGroot-1-300x300.jpg')}}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
-                        <div class="opt-sec2-text">
-                            <h6>CHAD DEGROOT</h6>
-                            <p>Follow Chad on Instagram</p>
-                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                        </div>
-                    </a>
-                </div>
-            </div>
+                                @if ($us_member->facebook)
+                                    <a href="{{$us_member->facebook}}" target="_blank">
+                                        <p>Follow {{$us_member->name}} on Facebook</p>
+                                    </a>
+                                @endif
 
-            <div class="col-lg-3 col-md-3 col-6">
-                <div class="opt-sec-2-main">
-                    <a href="#">
-                        <div class="opt-sec2-img">
-                            <figure>
-                                <img src="{{asset('images/Terry_Adams-300x300.jpg')}}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
-                        <div class="opt-sec2-text">
-                            <h6>TERRY ADAMS</h6>
-                            <p>Follow Terry on Instagram</p>
-                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-6">
-                <div class="opt-sec-2-main">
-                    <a href="#">
-                        <div class="opt-sec2-img">
-                            <figure>
-                                <img src="{{asset('images/unnamed-2-2-e1611930410379-297x300.jpg')}}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
-                        <div class="opt-sec2-text">
-                            <h6>MYKEL LARRIN</h6>
-                            <p>Follow Mykel on Instagram</p>
-                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-6">
-                <div class="opt-sec-2-main">
-                    <a href="product-1.php">
-                        <div class="opt-sec2-img">
-                            <figure>
-                                <img src="{{asset('images/Napolitan-Anthony-US.jpg')}}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
-                        <div class="opt-sec2-text">
-                            <h6>ANTHONY NAPOLITANs</h6>
-                            <p>Follow Anthony on Instagram</p>
-                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                        </div>
-                    </a>
-                </div>
-            </div>
+                                @if ($us_member->twitter)
+                                    <a href="{{$us_member->twitter}}" target="_blank">
+                                        <p>Follow {{$us_member->name}} on Twitter</p>
+                                    </a>
+                                @endif
 
-            <div class="col-lg-3 col-md-3 col-6">
-                <div class="opt-sec-2-main">
-                    <a href="#">
-                        <div class="opt-sec2-img">
-                            <figure>
-                                <img src="{{asset('images/Mike_Saavedra-300x300.jpg')}}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
-                        <div class="opt-sec2-text">
-                            <h6>MIKE SAAVEDRA</h6>
-                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                        </div>
-                    </a>
+                                @if ($us_member->instagram)
+                                    <a href="{{$us_member->instagram}}" target="_blank">
+                                        <p>Follow {{$us_member->name}} on Instagram</p>
+                                    </a>
+                                @endif
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-6">
-                <div class="opt-sec-2-main">
-                    <a href="#">
-                        <div class="opt-sec2-img">
-                            <figure>
-                                <img src="{{asset('images/IMG_4908-scaled-e1614707623173-480x480.jpg')}}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
-                        <div class="opt-sec2-text">
-                            <h6>DAN CONWAY</h6>
-                            <p>Follow Dan on Instagram</p>
-                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-6">
-                <div class="opt-sec-2-main">
-                    <a href="#">
-                        <div class="opt-sec2-img">
-                            <figure>
-                                <img src="{{asset('images/Ricky_Moseley-300x300.jpg')}}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
-                        <div class="opt-sec2-text">
-                            <h6>RICKY MOSELEY</h6>
-                            <p>Follow Ricky on Instagram</p>
-                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                        </div>
-                    </a>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>

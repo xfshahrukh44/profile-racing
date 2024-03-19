@@ -32,111 +32,22 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="main-bikes">
-                    <div class="cylce-one">
-                        <a href="bike-checks-inner.php">
-                            <h5>DIALING IT IN WITH BOBBY PROCTOR</h5>
-                            <figure>
-                                <img src="{{asset('images/unnamed-9-1-768x576.jpg ')}}" class="img-fluid" alt="">
-                            </figure>
-                        </a>
-                        <div class="discription_cylce">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat iste asperiores
-                                aliquam unde, exercitationem esse. Architecto consectetur beatae debitis fugiat,
-                                doloremque itaque vitae ipsa, sunt incidunt optio, error sint possimus.</p>
-                            <h6> January 11, 2018</h6>
-                            <a href="bike-checks-inner.php" class="btn btn-bustom">Read More</a>
+                    @foreach($bike_checks as $bike_check)
+                        <div class="cylce-one">
+                            <a href="{{route('front.bikeCcheckDetail', $bike_check->id)}}">
+                                <h5>{{$bike_check->title}}</h5>
+                                <figure>
+                                    <img src="{{asset($bike_check->image)}}" class="img-fluid" alt="">
+                                </figure>
+                            </a>
+                            <div class="discription_cylce">
+                                {!! $bike_check->ellipsisified_description() !!}
+{{--                                <h6> January 11, 2018</h6>--}}
+                                <h6>{{\Carbon\Carbon::parse($bike_check->created_at)->format('F d, Y')}}</h6>
+                                <a href="{{route('front.bikeCcheckDetail', $bike_check->id)}}" class="btn btn-bustom">Read More</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="cylce-one">
-                        <a href="#">
-                            <h5>DIALING IT IN WITH BOBBY PROCTOR</h5>
-                            <figure>
-                                <img src="{{asset('images/IMG_4849-768x432.png ')}}" class="img-fluid" alt="">
-                            </figure>
-                        </a>
-                        <div class="discription_cylce">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat iste asperiores
-                                aliquam unde, exercitationem esse. Architecto consectetur beatae debitis fugiat,
-                                doloremque itaque vitae ipsa, sunt incidunt optio, error sint possimus.</p>
-                            <h6> January 11, 2018</h6>
-                            <a href="#" class="btn btn-bustom">Read More</a>
-                        </div>
-                    </div>
-                    <div class="cylce-one">
-                        <a href="#">
-                            <h5>DIALING IT IN WITH BOBBY PROCTOR</h5>
-                            <figure>
-                                <img src="{{asset('images/mike-Bike-check_-9-768x512.jpg ')}}" class="img-fluid" alt="">
-                            </figure>
-                        </a>
-                        <div class="discription_cylce">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat iste asperiores
-                                aliquam unde, exercitationem esse. Architecto consectetur beatae debitis fugiat,
-                                doloremque itaque vitae ipsa, sunt incidunt optio, error sint possimus.</p>
-                            <h6> January 11, 2018</h6>
-                            <a href="#" class="btn btn-bustom">Read More</a>
-                        </div>
-                    </div>
-                    <div class="cylce-one">
-                        <a href="#">
-                            <h5>DIALING IT IN WITH BOBBY PROCTOR</h5>
-                            <figure>
-                                <img src="{{asset('images/grantbike-1-683x1024.jpg ')}}" class="img-fluid" alt="">
-                            </figure>
-                        </a>
-                        <div class="discription_cylce">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat iste asperiores
-                                aliquam unde, exercitationem esse. Architecto consectetur beatae debitis fugiat,
-                                doloremque itaque vitae ipsa, sunt incidunt optio, error sint possimus.</p>
-                            <h6> January 11, 2018</h6>
-                            <a href="#" class="btn btn-bustom">Read More</a>
-                        </div>
-                    </div>
-                    <div class="cylce-one">
-                        <a href="#">
-                            <h5>DIALING IT IN WITH BOBBY PROCTOR</h5>
-                            <figure>
-                                <img src="{{asset('images/20171105_122704-768x576.jpg ')}}" class="img-fluid" alt="">
-                            </figure>
-                        </a>
-                        <div class="discription_cylce">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat iste asperiores
-                                aliquam unde, exercitationem esse. Architecto consectetur beatae debitis fugiat,
-                                doloremque itaque vitae ipsa, sunt incidunt optio, error sint possimus.</p>
-                            <h6> January 11, 2018</h6>
-                            <a href="#" class="btn btn-bustom">Read More</a>
-                        </div>
-                    </div>
-                    <div class="cylce-one">
-                        <a href="#">
-                            <h5>DIALING IT IN WITH BOBBY PROCTOR</h5>
-                            <figure>
-                                <img src="{{asset('images/2017-11-07_02-02-36-646x1024.jpg ')}}" class="img-fluid" alt="">
-                            </figure>
-                        </a>
-                        <div class="discription_cylce">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat iste asperiores
-                                aliquam unde, exercitationem esse. Architecto consectetur beatae debitis fugiat,
-                                doloremque itaque vitae ipsa, sunt incidunt optio, error sint possimus.</p>
-                            <h6> January 11, 2018</h6>
-                            <a href="#" class="btn btn-bustom">Read More</a>
-                        </div>
-                    </div>
-                    <div class="cylce-one">
-                        <a href="#">
-                            <h5>DIALING IT IN WITH BOBBY PROCTOR</h5>
-                            <figure>
-                                <img src="{{asset('images/unnamed-9-1-768x576.jpg ')}}" class="img-fluid" alt="">
-                            </figure>
-                        </a>
-                        <div class="discription_cylce">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat iste asperiores
-                                aliquam unde, exercitationem esse. Architecto consectetur beatae debitis fugiat,
-                                doloremque itaque vitae ipsa, sunt incidunt optio, error sint possimus.</p>
-                            <h6> January 11, 2018</h6>
-                            <a href="#" class="btn btn-bustom">Read More</a>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

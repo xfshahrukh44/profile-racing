@@ -191,7 +191,7 @@ Route::get('/contact','HomeController@contact')->name('contact');
 
 Route::get('/my-account','FrontController@myAccount')->name('front.myAccount');
 Route::get('/bike-checks','FrontController@bikeChecks')->name('front.bikeChecks');
-Route::get('/bike-check-detail','FrontController@bikeCcheckDetail')->name('front.bikeCcheckDetail');
+Route::get('/bike-check-detail/{id}','FrontController@bikeCcheckDetail')->name('front.bikeCcheckDetail');
 Route::get('/distributors','FrontController@distributors')->name('front.distributors');
 Route::get('/factory-race-team','FrontController@factoryRaceTeam')->name('front.factoryRaceTeam');
 Route::get('/faqs','FrontController@faqs')->name('front.faqs');
@@ -199,6 +199,7 @@ Route::get('/freestyle-global-family','FrontController@freestyleGlobalFamily')->
 Route::get('/freestyle-us-family','FrontController@freestyleUsFamily')->name('front.freestyleUsFamily');
 Route::get('/history','FrontController@history')->name('front.history');
 Route::get('/how-tos','FrontController@howTos')->name('front.howTos');
+Route::get('/how-to-detail/{id}','FrontController@howToDetail')->name('front.howToDetail');
 Route::get('/jobs','FrontController@jobs')->name('front.jobs');
 Route::get('/job-detail/{id}','FrontController@jobDetail')->name('front.jobDetail');
 Route::post('/submit-job-application','JobApplicationController@submitJobApplication')->name('front.submitJobApplication');
@@ -306,3 +307,13 @@ Route::resource('admin/history', 'Admin\HistoryController');
 Route::resource('admin/recycling', 'Admin\RecyclingController');
 Route::resource('admin/job', 'Admin\JobController');
 Route::resource('admin/job-application', 'Admin\JobApplicationController');
+
+Route::resource('admin/bikecheck', 'Admin\BikecheckController');
+
+Route::resource('admin/us-member', 'Admin\UsMemberController');
+Route::resource('admin/global-member', 'Admin\GlobalMemberController');
+Route::resource('admin/race-team-member', 'Admin\RaceTeamMemberController');
+Route::resource('admin/distributor', 'Admin\DistributorController');
+Route::resource('admin/how-to', 'Admin\HowToController');
+
+Route::resource('admin/faq', 'Admin\FaqController');

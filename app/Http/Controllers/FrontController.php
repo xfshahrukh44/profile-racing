@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bikecheck;
+use App\Models\Distributor;
+use App\Models\Faq;
+use App\Models\GlobalMember;
 use App\Models\History;
+use App\Models\HowTo;
 use App\Models\Job;
+use App\Models\RaceTeamMember;
 use App\Models\Recycling;
+use App\Models\UsMember;
 use App\Page;
 use Illuminate\Http\Request;
 
@@ -17,37 +24,51 @@ class FrontController extends Controller
 
     public function bikeChecks (Request $request)
     {
-        return view('bike-checks');
+        $bike_checks = Bikecheck::all();
+
+        return view('bike-checks', compact('bike_checks'));
     }
 
-    public function bikeCcheckDetail (Request $request)
+    public function bikeCcheckDetail (Request $request, $id)
     {
-        return view('bike-check-detail');
+        $bike_check = Bikecheck::find($id);
+
+        return view('bike-check-detail', compact('bike_check'));
     }
 
     public function distributors (Request $request)
     {
-        return view('distributors');
+        $distributors = Distributor::all();
+
+        return view('distributors', compact('distributors'));
     }
 
     public function factoryRaceTeam (Request $request)
     {
-        return view('factory-race-team');
+        $race_team_members = RaceTeamMember::all();
+
+        return view('factory-race-team', compact('race_team_members'));
     }
 
     public function faqs (Request $request)
     {
-        return view('faqs');
+        $faqs = Faq::all();
+
+        return view('faqs', compact('faqs'));
     }
 
     public function freestyleGlobalFamily (Request $request)
     {
-        return view('freestyle-global-family');
+        $global_members = GlobalMember::all();
+
+        return view('freestyle-global-family', compact('global_members'));
     }
 
     public function freestyleUsFamily (Request $request)
     {
-        return view('freestyle-us-family');
+        $us_members = UsMember::all();
+
+        return view('freestyle-us-family', compact('us_members'));
     }
 
     public function history (Request $request)
@@ -59,7 +80,18 @@ class FrontController extends Controller
 
     public function howTos (Request $request)
     {
-        return view('how-tos');
+        $how_tos = HowTo::all();
+
+        $recent_how_tos = HowTo::orderBy('id', 'DESC')->get()->take(8);
+
+        return view('how-tos', compact('how_tos', 'recent_how_tos'));
+    }
+
+    public function howToDetail (Request $request, $id)
+    {
+        $how_to = HowTo::find($id);
+
+        return view('how-to-detail', compact('how_to'));
     }
 
     public function jobs (Request $request)
@@ -97,17 +129,23 @@ class FrontController extends Controller
 
     public function returns (Request $request)
     {
-        return view('returns');
+        $page = Page::where('name', 'Returns')->first();
+
+        return view('returns', compact('page'));
     }
 
     public function shipping (Request $request)
     {
-        return view('shipping');
+        $page = Page::where('name', 'Shipping')->first();
+
+        return view('shipping', compact('page'));
     }
 
     public function terms (Request $request)
     {
-        return view('terms');
+        $page = Page::where('name', 'Terms')->first();
+
+        return view('terms', compact('page'));
     }
 
     public function support (Request $request)

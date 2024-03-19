@@ -348,5 +348,27 @@
 @endsection
 
 @section('js')
-<script type="text/javascript"></script>
+    <script>
+
+        function Opencity(evt, Cityname) {
+
+            var k, Tabone, clickabel;
+            Tabone = document.getElementsByClassName("Tabone");
+            for (i = 0; i < Tabone.length; i++) {
+                Tabone[i].style.display = "none";
+            }
+            clickabel = document.getElementsByClassName("clickabel");
+            for (i = 0; i < clickabel.length; i++) {
+                clickabel[i].className = clickabel[i].className.replace("active", "");
+            }
+
+            document.getElementById(Cityname).style.display = "block"
+            evt.currentTarget.className += " active";
+
+        }
+        document.getElementById("showonly").click();
+
+
+
+    </script>
 @endsection
