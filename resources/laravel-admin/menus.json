@@ -10,8 +10,18 @@
                 },
                 {
                     "title": "Recycling",
-                    "icon": "<i class='fas fa-recycle mr-1'></i>",
+                    "icon": "<i class='fas fa-recycle mr-1'><\/i>",
                     "url": "\/admin\/recycling"
+                },
+                {
+                    "title": "Job",
+                    "icon": "<i class='fas fa-user-md mr-1'></i>",
+                    "url": "\/admin\/job"
+                },
+                {
+                    "title": "Job Application",
+                    "icon": "<i class='fas fa-user-md mr-1'></i>",
+                    "url": "\/admin\/job-application"
                 }
             ]
         }

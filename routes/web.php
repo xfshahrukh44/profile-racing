@@ -200,7 +200,8 @@ Route::get('/freestyle-us-family','FrontController@freestyleUsFamily')->name('fr
 Route::get('/history','FrontController@history')->name('front.history');
 Route::get('/how-tos','FrontController@howTos')->name('front.howTos');
 Route::get('/jobs','FrontController@jobs')->name('front.jobs');
-Route::get('/job-detail','FrontController@jobDetail')->name('front.jobDetail');
+Route::get('/job-detail/{id}','FrontController@jobDetail')->name('front.jobDetail');
+Route::post('/submit-job-application','JobApplicationController@submitJobApplication')->name('front.submitJobApplication');
 Route::get('/manufacturing','FrontController@manufacturing')->name('front.manufacturing');
 Route::get('/news','FrontController@news')->name('front.news');
 Route::get('/recycling','FrontController@recycling')->name('front.recycling');
@@ -303,3 +304,5 @@ Route::resource('childsubcategory/childsubcategory', 'Admin\ChildsubcategoryCont
 
 Route::resource('admin/history', 'Admin\HistoryController');
 Route::resource('admin/recycling', 'Admin\RecyclingController');
+Route::resource('admin/job', 'Admin\JobController');
+Route::resource('admin/job-application', 'Admin\JobApplicationController');

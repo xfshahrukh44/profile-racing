@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\History;
+use App\Models\Job;
 use App\Models\Recycling;
 use App\Page;
 use Illuminate\Http\Request;
@@ -63,12 +64,16 @@ class FrontController extends Controller
 
     public function jobs (Request $request)
     {
-        return view('jobs');
+        $jobs = Job::all();
+
+        return view('jobs', compact('jobs'));
     }
 
-    public function jobDetail (Request $request)
+    public function jobDetail (Request $request, $id)
     {
-        return view('job-detail');
+        $job = Job::find($id);
+
+        return view('job-detail', compact('job'));
     }
 
     public function manufacturing (Request $request)
@@ -117,7 +122,9 @@ class FrontController extends Controller
 
     public function warrantyInfo (Request $request)
     {
-        return view('warranty-info');
+        $page = Page::where('name', 'Warranty')->first();
+
+        return view('warranty-info', compact('page'));
     }
 
 }
