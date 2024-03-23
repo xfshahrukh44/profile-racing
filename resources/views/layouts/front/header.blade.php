@@ -1,4 +1,10 @@
 <?php $segment = Request::segment(1);?>
+<?php
+
+$logo = DB::table('imagetable')
+    ->where('table_name', 'logo')
+    ->first();
+?>
 <header>
         <div class="container-fluid">
             <div class="row">
