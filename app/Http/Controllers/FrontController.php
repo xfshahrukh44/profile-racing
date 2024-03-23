@@ -118,10 +118,10 @@ class FrontController extends Controller
 
     public function news (Request $request)
     {
-        $all_items = News::all();
-        $news_items = News::where('type', 'News')->get();
-        $event_items = News::where('type', 'Event')->get();
-        $video_items = News::where('type', 'Video')->get();
+        $all_items = News::paginate(20);
+        $news_items = News::where('type', 'News')->paginate(20);
+        $event_items = News::where('type', 'Event')->paginate(20);
+        $video_items = News::where('type', 'Video')->paginate(20);
 
         return view('news', compact('all_items', 'news_items', 'event_items', 'video_items'));
     }

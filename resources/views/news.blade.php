@@ -57,6 +57,9 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                <div style="color: red;">
+                                    {{ $all_items->links("pagination::bootstrap-4") }}
+                                </div>
                             </div>
                         </div>
                         <div class="Tabone" id="news">
@@ -79,6 +82,9 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                <div style="color: red;">
+                                    {{ $news_items->links("pagination::bootstrap-4") }}
+                                </div>
                             </div>
                         </div>
                         <div class="Tabone" id="event">
@@ -101,6 +107,9 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                <div style="color: red;">
+                                    {{ $event_items->links("pagination::bootstrap-4") }}
+                                </div>
                             </div>
                         </div>
                         <div class="Tabone" id="video">

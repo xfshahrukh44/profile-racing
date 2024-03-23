@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\HowTo;
+use App\Models\News;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -236,9 +238,33 @@ Route::post('update-content','HomeController@updateContent')->name('update-conte
 Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
 
 Route::get('/temp', function() {
-//    foreach (HowTo::all() as $item) {
-//        $item->image = str_replace('test', 'uploads/howtos', $item->image);
-//        $item->save();
+//    News::where('type', 'News')->delete();
+//    $data = json_decode(file_get_contents(public_path('newss.json')), true);
+//
+//    foreach ($data['newss'] as $news) {
+//        $created_news = News::create([
+//            'title' => $news["title"] ?? '',
+//            'description' => $news["description"] ?? '',
+//            'type' => 'News',
+//        ]);
+//
+//        //date
+//        $created_news->created_at = Carbon::parse($news['created_at']);
+//        $created_news->save();
+//
+//        //image
+//        if (isset($news['image'])) {
+//            $upload_dir = 'test';
+//            $unique_file_name = uniqid() . '_' . basename($news['image']);
+//            $destinationPath = storage_path($upload_dir) . '/' . $unique_file_name;
+//            $imageData = file_get_contents($news['image']);
+//            if ($imageData !== false) {
+//                if (file_put_contents($destinationPath, $imageData) !== false) {
+//                    $created_news->image = 'uploads/newss' . '/' . $unique_file_name;
+//                    $created_news->save();
+//                }
+//            }
+//        }
 //    }
 //    dd('Enqueued!');
 });
