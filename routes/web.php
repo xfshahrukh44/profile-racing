@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\HowTo;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -234,16 +235,13 @@ Route::post('update-content','HomeController@updateContent')->name('update-conte
 
 Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
 
-/*
-Route::get('/test', function() {
-    App::setlocale('arab');
-    dd(App::getlocale());
-    if(App::setlocale('arab')) {
-
-    }
+Route::get('/temp', function() {
+//    foreach (HowTo::all() as $item) {
+//        $item->image = str_replace('test', 'uploads/howtos', $item->image);
+//        $item->save();
+//    }
+//    dd('Enqueued!');
 });
-*/
-/* Form Validation */
 
 
 //===================== Shop Routes Below ========================//

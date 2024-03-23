@@ -34,18 +34,18 @@
                 <div class="main-bikes">
                     @foreach($how_tos as $how_to)
                         <div class="cylce-one">
-                            <a href="{{route('front.bikeCcheckDetail', $how_to->id)}}">
+                            <a href="{{route('front.howToDetail', $how_to->id)}}">
                                 <h5>{{$how_to->title}}</h5>
                                 <figure>
                                     <img src="{{asset($how_to->image)}}" class="img-fluid" alt="">
                                 </figure>
                             </a>
-                            <div class="discription_cylce">
-                                {!! $how_to->ellipsisified_description() !!}
-                                {{--                                <h6> January 11, 2018</h6>--}}
-                                <h6>{{\Carbon\Carbon::parse($how_to->created_at)->format('F d, Y')}}</h6>
-                                <a href="{{route('front.howToDetail', $how_to->id)}}" class="btn btn-bustom">Read More</a>
-                            </div>
+{{--                            <div class="discription_cylce">--}}
+{{--                                {!! $how_to->ellipsisified_description() !!}--}}
+{{--                                --}}{{--                                <h6> January 11, 2018</h6>--}}
+{{--                                <h6>{{\Carbon\Carbon::parse($how_to->created_at)->format('F d, Y')}}</h6>--}}
+{{--                                <a href="{{route('front.howToDetail', $how_to->id)}}" class="btn btn-bustom">Read More</a>--}}
+{{--                            </div>--}}
                         </div>
                     @endforeach
                 </div>
