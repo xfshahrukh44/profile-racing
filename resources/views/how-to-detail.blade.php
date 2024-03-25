@@ -39,7 +39,7 @@
                                 <img src="{{asset($how_to->image)}}" class="img-fluid" alt="">
                             </figure>
                         </a>
-                        <div class="discription_cylce">
+                        <div class="discription_cylce" style="color: white;">
                             {!! str_replace('img src="') !!}
                             {!! $how_to->description !!}
                         </div>

@@ -39,7 +39,7 @@
                                 <img src="{{asset($news->image)}}" class="img-fluid" alt="">
                             </figure>
                         </a>
-                        <div class="discription_cylce">
+                        <div class="discription_cylce" style="color: white;">
                             {!! $news->description !!}
                         </div>
                     </div>

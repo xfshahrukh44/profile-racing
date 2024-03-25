@@ -39,7 +39,7 @@
                                 <img src="{{asset($bike_check->image)}}" class="img-fluid" alt="">
                             </figure>
                         </a>
-                        <div class="discription_cylce">
+                        <div class="discription_cylce" style="color: white;">
                             {!! $bike_check->description !!}
                         </div>
                     </div>
