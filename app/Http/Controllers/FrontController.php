@@ -81,9 +81,9 @@ class FrontController extends Controller
 
     public function howTos (Request $request)
     {
-        $how_tos = HowTo::all();
+        $how_tos = HowTo::paginate(8);
 
-        $recent_how_tos = HowTo::orderBy('id', 'DESC')->get()->take(8);
+        $recent_how_tos = HowTo::orderBy('id', 'ASC')->get();
 
         return view('how-tos', compact('how_tos', 'recent_how_tos'));
     }

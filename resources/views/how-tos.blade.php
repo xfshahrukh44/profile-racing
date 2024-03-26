@@ -49,6 +49,9 @@
                         </div>
                     @endforeach
                 </div>
+                <div style="color: red !important;">
+                    {{ $how_tos->links("pagination::bootstrap-4") }}
+                </div>
             </div>
             <div class="col-lg-6">
                 <div class="date-month">
