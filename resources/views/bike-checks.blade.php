@@ -45,6 +45,8 @@
                                 {!! \Illuminate\Support\Str::limit(($bike_check->description), 150, $end='...') !!}
 {{--                                <h6> January 11, 2018</h6>--}}
                                 <h6>{{\Carbon\Carbon::parse($bike_check->created_at)->format('F d, Y')}}</h6>
+                                <br>
+                                <br>
                                 <a href="{{route('front.bikeCcheckDetail', $bike_check->id)}}" class="btn btn-bustom">Read More</a>
                             </div>
                         </div>
