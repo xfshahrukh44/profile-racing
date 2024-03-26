@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Bikecheck;
 use App\Models\HowTo;
 use App\Models\News;
 use Carbon\Carbon;
@@ -238,35 +239,34 @@ Route::post('update-content','HomeController@updateContent')->name('update-conte
 Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
 
 Route::get('/temp', function() {
-//    News::where('type', 'News')->delete();
-//    $data = json_decode(file_get_contents(public_path('newss.json')), true);
+    Bikecheck::truncate();
+    $data = json_decode(file_get_contents(public_path('bike_checks.json')), true);
 //
-//    foreach ($data['newss'] as $news) {
-//        $created_news = News::create([
-//            'title' => $news["title"] ?? '',
-//            'description' => $news["description"] ?? '',
-//            'type' => 'News',
-//        ]);
-//
+    foreach ($data['bike_checks'] as $bike_check) {
+        $created_bike_check = Bikecheck::create([
+            'title' => $bike_check["title"] ?? '',
+            'description' => $bike_check["description"] ?? '',
+        ]);
+
 //        //date
-//        $created_news->created_at = Carbon::parse($news['created_at']);
-//        $created_news->save();
-//
-//        //image
-//        if (isset($news['image'])) {
-//            $upload_dir = 'test';
-//            $unique_file_name = uniqid() . '_' . basename($news['image']);
-//            $destinationPath = storage_path($upload_dir) . '/' . $unique_file_name;
-//            $imageData = file_get_contents($news['image']);
-//            if ($imageData !== false) {
-//                if (file_put_contents($destinationPath, $imageData) !== false) {
-//                    $created_news->image = 'uploads/newss' . '/' . $unique_file_name;
-//                    $created_news->save();
-//                }
-//            }
-//        }
-//    }
-//    dd('Enqueued!');
+//        $created_bike_check->created_at = Carbon::parse($bike_check['created_at']);
+//        $created_bike_check->save();
+
+        //image
+        if (isset($bike_check['image'])) {
+            $upload_dir = 'test';
+            $unique_file_name = uniqid() . '_' . basename($bike_check['image']);
+            $destinationPath = storage_path($upload_dir) . '/' . $unique_file_name;
+            $imageData = file_get_contents($bike_check['image']);
+            if ($imageData !== false) {
+                if (file_put_contents($destinationPath, $imageData) !== false) {
+                    $created_bike_check->image = 'uploads/bikechecks' . '/' . $unique_file_name;
+                    $created_bike_check->save();
+                }
+            }
+        }
+    }
+    dd('Enqueued!');
 });
 
 
