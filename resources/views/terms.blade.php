@@ -28,7 +28,8 @@
 <section class="terms-policy">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7">
+{{--            <div class="col-lg-7">--}}
+            <div class="col-lg-12">
                 <div class="policy-main">
                     {!! $page->sections[0]->value ?? '' !!}
 {{--                    <h4>Effective Date: May 28, 2018 </h4>--}}

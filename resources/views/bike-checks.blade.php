@@ -30,7 +30,8 @@
 <section class="bikes-inner">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6">
+{{--            <div class="col-lg-6">--}}
+            <div class="col-lg-12">
                 <div class="main-bikes">
                     @foreach($bike_checks as $bike_check)
                         <div class="cylce-one">

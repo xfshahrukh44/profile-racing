@@ -28,7 +28,8 @@
 <section class="inner-about-sec for-inner history-pg">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-7">
+{{--            <div class="col-lg-7">--}}
+            <div class="col-lg-12">
                 <div class="inner-about-txt">
                     {!! $page->sections[0]->value ?? '' !!}
 {{--                    <h3>PROFILE RACING HUB WARRANTY AND MAINTENANCE</h3>--}}

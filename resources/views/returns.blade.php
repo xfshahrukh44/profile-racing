@@ -27,7 +27,8 @@
 <section class="terms-policy">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7">
+{{--            <div class="col-lg-7">--}}
+            <div class="col-lg-12">
                 <div class="policy-main">
                     {!! $page->sections[0]->value ?? '' !!}
 {{--                    <p>Thank you for shopping at ProfileRacing.com.</p>--}}

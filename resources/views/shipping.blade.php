@@ -29,7 +29,8 @@
 <section class="terms-policy">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7">
+{{--            <div class="col-lg-7">--}}
+            <div class="col-lg-12">
                 <div class="policy-main">
                     <img src="{{asset($page->sections[0]->value)}}" class="img-fluid" alt="">
 {{--                    <img src="{{asset('images/UPS-MAP-e1532005130543-600x514.jpg')}}" class="img-fluid" alt="">--}}

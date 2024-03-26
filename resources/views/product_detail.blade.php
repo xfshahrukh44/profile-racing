@@ -43,9 +43,9 @@
 
 
 table{
-    
+
     color:#fff;
-    
+
 }
 
 tbody, th, td{
@@ -73,14 +73,14 @@ h3 strong{
 
 .activeee{
    background:#000;
-   color:#fff; 
+   color:#fff;
    border:1px solid #fff;
-    
+
 }
 
 
 .activee{
-    
+
     background:#000;
     color:#fff;
     border:1px solid #fff;
@@ -114,10 +114,10 @@ h3 strong{
 <section class="inner-product-sec">
     <div class="container">
         <div class="row">
-            
-        
-            <?php 
-                
+
+
+            <?php
+
                 $get_category = DB::table('categories')->get();
                 $route_category = Request::segment(3);
                 $route_subcategory = Request::segment(4);
@@ -133,9 +133,9 @@ h3 strong{
 
                         @foreach($get_category as $key1 => $val_category)
                         <li class="inner-shop">
-                            
+
                             <a href="{{ URL('product/'.$val_category->id) }}" style="<?php if($route_category == $val_category->id){ echo 'color:red'; } ?>" > {{ $val_category->name }} </a>
-                                
+
                                 <?php $get_subcategory = DB::table('subcategories')->where('category',$val_category->id)->get(); ?>
 
                                 @foreach($get_subcategory as $key2 => $val_subcategory)
@@ -143,14 +143,14 @@ h3 strong{
                                     <ul>
                                     <li class="inner-shop-2">
                                         <a href="{{ URL('product/'.$route_category.'/'.$val_subcategory->id) }}" style="<?php if($route_subcategory == $val_subcategory->id){ echo 'color:red'; } ?>" > {{ $val_subcategory->subcategory }} </a>
-                                            
-                                        <?php $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?> 
-                                        
+
+                                        <?php $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?>
+
                                         @foreach($get_childsubcategory as $key2 => $val_childsubcategory)
                                         <div class="inner-drop-2" style="<?php if($route_subcategory == $val_childsubcategory->subcategory){ echo 'display:block;'; } ?>" >
                                             <ul>
                                                 <li>
-                                                    <a href="{{ URL('product/'.$route_category.'/'.$val_subcategory->id.'/'.$val_childsubcategory->id) }}"  style="<?php if($route_child_subcategory == $val_childsubcategory->id){ echo 'color:red'; } ?>" > {{ $val_childsubcategory->childsubcategory }} </a> 
+                                                    <a href="{{ URL('product/'.$route_category.'/'.$val_subcategory->id.'/'.$val_childsubcategory->id) }}"  style="<?php if($route_child_subcategory == $val_childsubcategory->id){ echo 'color:red'; } ?>" > {{ $val_childsubcategory->childsubcategory }} </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -169,7 +169,7 @@ h3 strong{
 
             </div>
 
-            <?php 
+            <?php
                 $get_multiple_images = DB::table('product_imagess')->where('product_id', $get_product_detail->id)->get();
             ?>
 
@@ -177,11 +177,11 @@ h3 strong{
                 <div class="inner-img">
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
-                            
+
                             <div class="swiper-slide">
                                 <img src="{{asset($get_product_detail->image)}}" style="height: 430px;width: 430px;" />
                             </div>
-                            
+
                             @foreach($get_multiple_images as $key => $val_images)
                             <div class="swiper-slide">
                                 <img src="{{asset($val_images->image)}}" style="height: 430px;width: 430px;" />
@@ -204,45 +204,45 @@ h3 strong{
                         </div>
                     </div>
                 </div>
-                
+
                 <br><br><hr style="border:1px solid #5f5f5f;">
 
                 <div class="col-lg-12">
-                        
+
                     <div class="inner-producttt">
-                        
+
                             <div class="productmain">
-                                  <button class="clicktabs activeee" onclick="opencity(event , 'porduct1')" id="showonly" > Description </button>
+                                  <button class="clicktabs activee" onclick="opencity(event , 'porduct1')" id="showonly" > Description </button>
                                   <button class="clicktabs" onclick="opencity(event , 'porduct2')"> Additional Information </button>
                             </div>
-                         
+
                          <br>
-                         
+
                         <div class="contentinfo">
-                        
+
                             <div class="cycleinfo" id="porduct1">
-                            
+
                                 {!! $get_product_detail->description !!}
-                                
+
                             </div>
-                            
-                            
+
+
                             <div class="cycleinfo" id="porduct2" style="display:none;">
-                              
+
                                 {!! $get_product_detail->additional_information !!}
-                                
+
                             </div>
-                            
-                        
+
+
                         </div>
-                
-                
+
+
                      </div>
-                     
+
                 </div>
-             
-                
-                
+
+
+
             </div>
 
 
@@ -254,7 +254,7 @@ h3 strong{
                 // dump($productAttributes);
             ?>
 
-            
+
 
             <div class="col-lg-4">
 
@@ -267,21 +267,21 @@ h3 strong{
                 <div class="inner-product-details">
                     <!-- <h4>TECHDEV-PROFILERACING</h4> -->
                     <h2> {{ $get_product_detail->product_title }} </h2>
-                    <h3>${{ $get_product_detail->price }} USD</h3>
-                    
-                    
+                    <h3>${{ $get_product_detail->price }} <?php if($get_product_detail->maximum_price != "" && $get_product_detail->maximum_price != "0"){ echo ' - $'.$get_product_detail->maximum_price; } ?></h3>
+
+
                     @foreach($productAttributes_id as $key => $val_product_attribute)
-                    
+
                     <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }} </h6>
 
-                    <?php  
+                    <?php
 
                         $get_attribute_values = DB::table('product_attributes')->where('attribute_id',$val_product_attribute->attribute_id)->where('product_id',$val_product_attribute->product_id)->get();
 
                     ?>
 
                     <select class="form-control" name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]>
-                        
+
                         <option value="0">Choose an option</option>
                         @foreach($get_attribute_values as $key => $val_attr_value)
                         <option value="{{ $val_attr_value->value }}"> {{ App\AttributeValue::find($val_attr_value->value)->value }} </option>
@@ -306,22 +306,22 @@ h3 strong{
                     </div>
 
                 </div>
-            
+
             </form>
 
             </div>
-            
-            
-            
-            
-            
+
+
+
+
+
 
 
 
         </div>
-        
-        
-        
+
+
+
     </div>
 </section>
 
@@ -349,11 +349,11 @@ $(document).ready(function () {
 
 
  function opencity(evt, cityName) {
-     
+
        var a, cycleinfo, clicktabs;
 
        cycleinfo = document.getElementsByClassName("cycleinfo");
-       
+
        for (i = 0; i < cycleinfo.length; i++) {
             cycleinfo[i].style.display = "none";
        }

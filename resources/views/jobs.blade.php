@@ -28,7 +28,8 @@
 <section class="jobs-pg">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6">
+{{--            <div class="col-lg-6">--}}
+            <div class="col-lg-12">
                 @foreach($jobs as $job)
                     <div class="job-discription">
                         <h3>{{$job->title}}</h3>

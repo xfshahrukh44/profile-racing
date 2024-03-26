@@ -109,6 +109,11 @@
             span.page-link {
                 color: white !important;
             }
+
+            button.activee {
+                background: #cb1e20 !important;
+                color: #fff !important;
+            }
         </style>
     </head>
     <body class="responsive">
