@@ -27,7 +27,7 @@
 <section class="machinist-job">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7">
+            <div class="col-lg-7" style="color: white;">
                 <h5 style="color: red;">Location: {{$job->location}}</h5>
 
                 {!! $job->additional_information !!}
