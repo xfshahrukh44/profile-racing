@@ -25,7 +25,7 @@ class FrontController extends Controller
 
     public function bikeChecks (Request $request)
     {
-        $bike_checks = Bikecheck::all();
+        $bike_checks = Bikecheck::paginate(10);
 
         return view('bike-checks', compact('bike_checks'));
     }
@@ -81,7 +81,7 @@ class FrontController extends Controller
 
     public function howTos (Request $request)
     {
-        $how_tos = HowTo::paginate(8);
+        $how_tos = HowTo::paginate(10);
 
         $recent_how_tos = HowTo::orderBy('id', 'ASC')->get();
 

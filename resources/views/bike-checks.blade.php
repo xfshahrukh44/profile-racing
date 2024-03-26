@@ -52,6 +52,9 @@
                         </div>
                     @endforeach
                 </div>
+                <div style="color: red !important;">
+                    {{ $bike_checks->links("pagination::bootstrap-4") }}
+                </div>
             </div>
         </div>
     </div>
