@@ -32,6 +32,9 @@
 
 <section class="jd-cycle">
     <div class="container">
+        <p class="mb-4" style="color: white;">
+            Profile Racing has established long-term strategic relationships with the world’s best-known bicycle parts distributors. This relationship is based on trust and the understanding of each others objectives. Our distributors offer their customers one or several product ranges for BMX, MTB and Cyclocross. Several of our distributors are trained to be authorized service centers and they’ve been trained at our St. Petersburg, FL factory.
+        </p>
         <div class="row">
             @foreach($distributors as $distributor)
                 <div class="col-lg-4">
