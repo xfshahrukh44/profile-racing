@@ -48,7 +48,7 @@
                         about your Profile Racing bicycle components. You’ll also find installation discussions on
                         cranks, hubs and many other How To’s for your new and current Profile Racng components.
                     </p>
-                    <a href="#" class="btn btn-bustom">Read More</a>
+                    <a href="{{route('front.howTos')}}" class="btn btn-bustom">Read More</a>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -58,7 +58,7 @@
                         every qustion about our components has been asked before. There’s a good chance that your
                         question is among those in our FAQ and so is the answer.
                     </p>
-                    <a href="#" class="btn btn-bustom">Read More</a>
+                    <a href="{{route('front.faqs')}}" class="btn btn-bustom">Read More</a>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -66,7 +66,7 @@
                     <h5>MANUFACTURING</h5>
                     <p>Since 1981 Profile Racing has been manufacturing American made quality BMX and bicycle parts for competitive cyclists. It started with BMX and now we manufacture Mountain Bike (MTB) components as well as Road/Cyclocross and even components for Unicycles…
                     </p>
-                    <a href="#" class="btn btn-bustom">Read More</a>
+                    <a href="{{route('front.manufacturing')}}" class="btn btn-bustom">Read More</a>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -74,7 +74,7 @@
                     <h5>WARRANTY INFO</h5>
                     <p>Profile Racing warrants its bicycle products to be free from defects in materials or workmanship for a period of 30 days from the original date of purchase. Our chromoly cranks & spindles have a Limited Lifetime Warranty for the original owners…
                     </p>
-                    <a href="#" class="btn btn-bustom">Read More</a>
+                    <a href="{{route('front.warrantyInfo')}}" class="btn btn-bustom">Read More</a>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -82,7 +82,7 @@
                     <h5>RETURNS & EXCHANGES</h5>
                     <p>You have 30-calendar days to return an item from the date you receive it.To be eligible for a return, your item must be uninstalled, unused and in the same condition that you received it. Returns must have prior approval so please call for return authorization…
                     </p>
-                    <a href="#" class="btn btn-bustom">Read More</a>
+                    <a href="{{route('front.returns')}}" class="btn btn-bustom">Read More</a>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -92,7 +92,7 @@
 
 
                     </p>
-                    <a href="#" class="btn btn-bustom">Read More</a>
+                    <a href="{{route('front.privacy')}}" class="btn btn-bustom">Read More</a>
                 </div>
             </div>
         </div>

@@ -217,6 +217,7 @@ Route::get('/terms', 'FrontController@terms')->name('front.terms');
 Route::get('/support', 'FrontController@support')->name('front.support');
 Route::get('/measurements', 'FrontController@measurements')->name('front.measurements');
 Route::get('/warranty-info', 'FrontController@warrantyInfo')->name('front.warrantyInfo');
+Route::get('/privacy', 'FrontController@privacy')->name('front.privacy');
 
 Route::get('/set_sub_category', 'Admin\ProductController@set_sub_category')->name('set_sub_category');
 Route::get('/set_child_sub_category', 'Admin\ProductController@set_child_sub_category')->name('set_child_sub_category');

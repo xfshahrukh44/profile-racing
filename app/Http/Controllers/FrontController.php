@@ -161,6 +161,13 @@ class FrontController extends Controller
         return view('terms', compact('page'));
     }
 
+    public function privacy (Request $request)
+    {
+        $page = Page::where('name', 'Privacy')->first();
+
+        return view('privacy', compact('page'));
+    }
+
     public function support (Request $request)
     {
         return view('support');
