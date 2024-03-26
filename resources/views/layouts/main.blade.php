@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        
+
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <!-- Tell the browser to be responsive to screen width -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -87,19 +87,41 @@
             .editable-wrapper a.edit{
                 background-color: #007bff;
             }
-        </style> 
+
+             .page-item.active .page-link {
+                 z-index: 1;
+                 color: #fff;
+                 background-color: red !important;
+                 border-color: red !important;
+             }
+
+            .page-link {
+                position: relative;
+                display: block;
+                padding: 0.5rem 0.75rem;
+                margin-left: -1px;
+                line-height: 1.25;
+                color: red !important;
+                background-color: #fff;
+                border: 1px solid #dee2e6;
+            }
+
+            span.page-link {
+                color: white !important;
+            }
+        </style>
     </head>
     <body class="responsive">
-      
+
 
         @include('layouts/front.header')
-		
-	
 
-		
+
+
+
         @yield('content')
 
-        
+
         @include('layouts/front.footer')
         <!-- ============================================================== -->
         <!-- All SCRIPTS ANS JS LINKS IN BELOW FILE -->
