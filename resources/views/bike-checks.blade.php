@@ -47,7 +47,7 @@
                                 <h6>{{\Carbon\Carbon::parse($bike_check->created_at)->format('F d, Y')}}</h6>
                                 <br>
                                 <br>
-                                <a href="{{route('front.bikeCcheckDetail', $bike_check->id)}}" class="btn btn-bustom">Read More</a>
+                                <a href="{{route('front.bikeCcheckDetail', $bike_check->id)}}" class="btn btn-bustom mb-4">Read More</a>
                             </div>
                         </div>
                     @endforeach
