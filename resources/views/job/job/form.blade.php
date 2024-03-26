@@ -16,6 +16,12 @@
     		{!! Form::textarea('description', null, ('required' == 'required') ? ['class' => 'form-control', 'id' => 'summary-ckeditor', 'required' => 'required'] : ['class' => 'form-control']) !!}
     </div>
 </div>
+</div><div class="col-md-12">
+    <div class="form-group">
+    	{!! Form::label('additional_information', 'Additional Information') !!}
+    		{!! Form::textarea('additional_information', null, ('required' == 'required') ? ['class' => 'form-control', 'id' => 'summary-ckeditor', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    </div>
+</div>
 	</div>
 </div>
 <div class="form-actions text-right pb-0">

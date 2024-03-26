@@ -30,7 +30,7 @@
             <div class="col-lg-7">
                 <h5 style="color: red;">Location: {{$job->location}}</h5>
 
-                {!! $job->description !!}
+                {!! $job->additional_information !!}
 {{--                <div class="location-job">--}}
 {{--                    <h5><span>Compensation:</span>Dependent on experience and machining knowledge</h5>--}}
 {{--                    <h5><span>Employment Type:</span>Full-Time</h5>--}}

@@ -1,6 +1,11 @@
 @extends('layouts.main')
 
 @section('css')
+    <style>
+        li {
+            list-style-type: none !important;
+        }
+    </style>
 @endsection
 
 
