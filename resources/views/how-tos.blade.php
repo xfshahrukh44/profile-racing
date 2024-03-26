@@ -44,7 +44,7 @@
 {{--                                {!! $how_to->ellipsisified_description() !!}--}}
 {{--                                                                <h6> January 11, 2018</h6>--}}
                                 <h6>{{\Carbon\Carbon::parse($how_to->created_at)->format('F d, Y')}}</h6>
-                                <a href="{{route('front.howToDetail', $how_to->id)}}" class="btn btn-bustom">Read More</a>
+                                <a href="{{route('front.howToDetail', $how_to->id)}}" class="btn btn-bustom mb-4">Read More</a>
                             </div>
                         </div>
                     @endforeach
