@@ -27,8 +27,8 @@ class Bikecheck extends Model
      */
     protected $fillable = ['title', 'description', 'image'];
 
-    public function ellipsisified_description () {
-        $maxChars = mb_strlen($this->description) > 4 ? (mb_strlen($this->description) / 4) :  mb_strlen($this->description);
+    public function ellipsisified_description ($range = 4) {
+        $maxChars = mb_strlen($this->description) > $range ? (mb_strlen($this->description) / $range) :  mb_strlen($this->description);
         $trimmedText = substr($this->description, 0, $maxChars);
         $lastSpacePos = strrpos($trimmedText, ' ');
 

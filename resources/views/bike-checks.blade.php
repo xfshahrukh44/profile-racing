@@ -40,8 +40,9 @@
                                     <img src="{{asset($bike_check->image)}}" class="img-fluid" alt="">
                                 </figure>
                             </a>
-                            <div class="discription_cylce">
-{{--                                {!! $bike_check->ellipsisified_description() !!}--}}
+                            <div class="discription_cylce" style="color:white;">
+{{--                                {!! $bike_check->ellipsisified_description(32) !!}--}}
+                                {!! \Illuminate\Support\Str::limit(($bike_check->description), 150, $end='...') !!}
 {{--                                <h6> January 11, 2018</h6>--}}
                                 <h6>{{\Carbon\Carbon::parse($bike_check->created_at)->format('F d, Y')}}</h6>
                                 <a href="{{route('front.bikeCcheckDetail', $bike_check->id)}}" class="btn btn-bustom">Read More</a>
