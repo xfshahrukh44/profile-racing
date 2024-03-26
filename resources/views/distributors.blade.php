@@ -69,7 +69,7 @@
                             @endif
                         </ul>
 
-                        <a href="mailto:{{$distributor->email}}" class="btn btn-bustom">Connect to {{$distributor->name}}</a>
+                        <a href="{{$distributor->email}}" target="_blank" class="btn btn-bustom">Connect to {{$distributor->name}}</a>
                     </div>
                 </div>
             @endforeach
