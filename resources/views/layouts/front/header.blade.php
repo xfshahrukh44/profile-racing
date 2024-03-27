@@ -48,13 +48,13 @@ $logo = DB::table('imagetable')
                                     </li>
                                     <li class="nav-item hover-links">
                                         <a class="nav-link" href="{{ route('product') }}">Products</a>
-                                        <div class="dropdown-links" style="display: none; height: 69.5px; padding-top: 20px; margin-top: 0px; padding-bottom: 20px; margin-bottom: 0px;">
-                                            <ul>
-                                                <li>
-                                                    <a class="nav-link" href="{{route('account')}}">My Account</a>
-                                                </li>
-                                            </ul>
-                                        </div>
+{{--                                        <div class="dropdown-links" style="display: none; height: 69.5px; padding-top: 20px; margin-top: 0px; padding-bottom: 20px; margin-bottom: 0px;">--}}
+{{--                                            <ul>--}}
+{{--                                                <li>--}}
+{{--                                                    <a class="nav-link" href="{{route('account')}}">My Account</a>--}}
+{{--                                                </li>--}}
+{{--                                            </ul>--}}
+{{--                                        </div>--}}
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('blog') }}">Blogs</a>

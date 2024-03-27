@@ -15,6 +15,9 @@
     display:none;
 }
 
+.category ul li a {
+    text-transform: uppercase;
+}
 
 .cart-btn a.btn.btn-custom {
     color: #c0c0c0;

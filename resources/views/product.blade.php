@@ -19,6 +19,7 @@
     font-family: 'Lato';
     font-size: 18px !important;
     text-decoration: none;
+    text-transform: uppercase;
 }
 
 .page-link {

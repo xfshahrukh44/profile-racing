@@ -22,13 +22,13 @@
                           <!-- Swiper -->
   <div class="swiper mySwiper-banner">
     <div class="swiper-wrapper">
-      
+
 
         @foreach($banner as $key => $val_banner)
-            
+
             @if($key == '0')
                 <div class="swiper-slide swipper-banner banner-{{ $key+1 }}">
-                
+
                     <div class="video-banner">
                         <video width="100%" height="100%" autoplay muted>
                         <source src="{{ asset($val_banner->image) }}" type="video/mp4">
@@ -76,14 +76,14 @@
                     </div>
                 </div>
 
-                
-                @foreach($get_product as $key => $val_product) 
+
+                @foreach($get_product as $key => $val_product)
                 <div class="col-lg-4 col-md-4 col-6">
                     <div class="opt-sec-2-main">
                         <a href="{{ URL('product_detail/'.$val_product->id.'/'.$val_product->category.'/'.$val_product->subcategory.'/'.$val_product->childsubcategory) }}">
                             <div class="opt-sec2-img">
                                 <figure>
-                                <img src="{{asset($val_product->image)}}" class="img-fluid" alt="" style="height: 300px; width: 300px;"> 
+                                <img src="{{asset($val_product->image)}}" class="img-fluid" alt="" style="height: 300px; width: 300px;">
                                 </figure>
                             </div>
                             <div class="opt-sec2-text">
@@ -106,7 +106,7 @@
     <section class="section3">
         <div class="container">
             <div class="row justify-content-center">
-                
+
                 <div class="col-lg-12">
 
                     {!! $section[0]->value !!}
@@ -143,7 +143,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="sec-4-text">
-                        
+
                         {!! $section[1]->value !!}
 
                         <a href="{{ route('about') }}" class="btn btn-bustom">Learn More</a>
@@ -159,7 +159,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="sec5-text">
-                        <h1 data-aos="zoom-in">Follow Us on Instagram</h1> 
+                        <h1 data-aos="zoom-in">Follow Us on Instagram</h1>
                     </div>
                 </div>
 
