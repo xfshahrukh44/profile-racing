@@ -8,6 +8,7 @@
 .inner-drop {
     padding-left:1rem;
     display:none;
+    text-transform: uppercase;
 }
 .inner-drop-2 {
     padding-left:1rem;
