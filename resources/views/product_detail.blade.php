@@ -281,14 +281,15 @@ h3 strong{
 
                     ?>
 
-                    <select class="form-control" name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]>
+                    <select class="form-control select_option" name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]>
 
                         <option value="0">Choose an option</option>
                         @foreach($get_attribute_values as $key => $val_attr_value)
-                        <option value="{{ $val_attr_value->value }}"> {{ App\AttributeValue::find($val_attr_value->value)->value }} </option>
+                            <option value="{{ $val_attr_value->value }}"> {{ App\AttributeValue::find($val_attr_value->value)->value }} </option>
                         @endforeach
 
                     </select>
+                            <h3 class="span_selected_option_price text-white"></h3>
                     @endforeach
 
 
@@ -347,6 +348,15 @@ $(document).ready(function () {
     $(".inner-shop-2").click(function () {
         $(".inner-drop-2").show()
     })
+});
+
+$('.select_option').on('change', function () {
+    let option_label = $(this).find('option:selected').text();
+    if (option_label.includes('+$')) {
+        $(this).next('.span_selected_option_price').html('$'+option_label.split('+$')[1]);
+    } else {
+        $(this).next('.span_selected_option_price').html('');
+    }
 });
 
 
