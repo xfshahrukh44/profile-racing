@@ -266,7 +266,7 @@ h3 strong{
 
                 <div class="inner-product-details">
                     <!-- <h4>TECHDEV-PROFILERACING</h4> -->
-                    <h2> {{ $get_product_detail->product_title }} </h2>
+                    <h3 style="font-family: PEPSI_pl;"> {{ $get_product_detail->product_title }} </h3>
                     <h3>${{ $get_product_detail->price }} <?php if($get_product_detail->maximum_price != "" && $get_product_detail->maximum_price != "0"){ echo ' - $'.$get_product_detail->maximum_price; } ?></h3>
 
 
