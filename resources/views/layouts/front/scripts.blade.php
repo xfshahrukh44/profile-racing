@@ -112,7 +112,7 @@
 
   <script>
     var swiper = new Swiper(".mySwiper", {
-      loop: true,
+      loop: false,
       spaceBetween: 10,
       slidesPerView: 4,
       freeMode: true,
@@ -128,6 +128,7 @@
       thumbs: {
         swiper: swiper,
       },
+        effect: 'fade',
     });
   </script>
 

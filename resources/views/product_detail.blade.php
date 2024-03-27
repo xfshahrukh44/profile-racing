@@ -301,7 +301,8 @@ h3 strong{
                     <br>
 
                     <div class="cart-btn">
-                        <button type="submit" class="btn btn-custom" id="addCart" style="background: red; color: black;">Add to cart
+                        <button type="submit" class="btn btn-custom" id="addCart" style="background: red; color: white; font-weight: bold; font-size: 23px;">
+                            Add to cart
                         <!-- <a href="#" class="btn btn-custom white">Buy it now</a> -->
                     </div>
 
