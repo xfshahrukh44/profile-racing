@@ -38,7 +38,7 @@
             @foreach($global_members as $global_member)
                 <div class="col-lg-3 col-md-3 col-6">
                     <div class="opt-sec-2-main">
-                        <a href="#">
+                        <a href="{{$global_member->instagram}}" target="_blank">
                             <div class="opt-sec2-img">
                                 <figure>
                                     <img src="{{asset($global_member->image)}}" class="img-fluid" alt="">

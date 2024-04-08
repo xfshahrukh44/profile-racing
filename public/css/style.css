@@ -15,7 +15,8 @@ body {
   }
   
   h1,h2,h3,h4,h5,h6{
-      font-family: PEPSI_pl;
+      /*font-family: PEPSI_pl;*/
+      font-family: Roboto !important;
   }
   
   footer {
@@ -530,10 +531,10 @@ footer:before {
     
 }
 
-.opt-sec2-img img {
-    animation: scale 7s linear infinite;
-    transform: scale(1);
-}
+/*.opt-sec2-img img {*/
+/*    animation: scale 7s linear infinite;*/
+/*    transform: scale(1);*/
+/*}*/
 
 .opt-sec2-img {
     overflow: hidden;

@@ -11,7 +11,6 @@
 <!-- ============================================================== -->
 
 
-
 <section class="heading-sec">
     <div class="container">
         <div class="row">
@@ -38,7 +37,7 @@
             @foreach($us_members as $us_member)
                 <div class="col-lg-3 col-md-3 col-6">
                     <div class="opt-sec-2-main">
-                        <a href="#">
+                        <a href="{{$us_member->instagram}}" target="_blank">
                             <div class="opt-sec2-img">
                                 <figure>
                                     <img src="{{asset($us_member->image)}}" class="img-fluid" alt="">

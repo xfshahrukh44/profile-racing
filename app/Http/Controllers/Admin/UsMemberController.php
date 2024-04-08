@@ -30,7 +30,7 @@ class UsMemberController extends Controller
 //        $model = str_slug('usmember','-');
 //        if(auth()->user()->permissions()->where('name','=','view-'.$model)->first()!= null) {
             $keyword = $request->get('search');
-            $perPage = 25;
+            $perPage = 25000;
 
             if (!empty($keyword)) {
                 $usmember = UsMember::where('name', 'LIKE', "%$keyword%")

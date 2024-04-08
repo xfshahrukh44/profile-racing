@@ -191,10 +191,17 @@ a.plus-1 span {
 }
 
 .inner-product-details h3 {
+    /*color: #c0c0c0;*/
+    /*font-family: "Lato";*/
+    /*font-size: 24px;*/
+    /*margin-top: 30px;*/
+    
     color: #c0c0c0;
-    font-family: "Lato";
-    font-size: 24px;
+    font-family: arial !important;
+    font-size: 30px;
     margin-top: 30px;
+    font-weight: bold;
+    
 }
 
 .inner-product-details h6 {
