@@ -130,13 +130,12 @@
             @endphp
             @foreach($laravelAdminMenus->menus as $section)
                 @if(count(collect($section->items)) > 0)
-                    @foreach($section->items as $menu)
                     <li class="nav-item {{ ($url == $menu->url) ? 'active' : '' }}">
                         <a href="{{ url($menu->url) }}">{!! $menu->icon !!}
                             <span class="menu-title" data-i18n="eCommerce">{{ $menu->title }}</span>
                         </a>
                     </li>
-                    @endforeach
+{{--                    @endforeach--}}
                 @endif
             @endforeach
             <li class="nav-item">

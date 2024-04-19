@@ -2,7 +2,9 @@
 
 @section('css')
 <style>
-
+    .opt-sec5-text {
+        margin-left: -60px;
+    }
 </style>
 @endsection
 
@@ -72,7 +74,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="sec2-text">
-                        <h1 class="ml2">Our Products</h1>
+                        <h1 class="ml2">Highlighted Products</h1>
                     </div>
                 </div>
 
@@ -130,7 +132,11 @@
                         </a>
                     </div>
                 </div>
-                @endforeach
+                @endforeach<div class="col-lg-12 text-center">
+
+                    <a href="{{ route('blog') }}" class="btn btn-bustom" style="color: red; background: white; border: 4px solid white;">Load More</a>
+
+                </div>
 
 
             </div>
@@ -159,29 +165,96 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="sec5-text">
-                        <h1 data-aos="zoom-in">Follow Us on Instagram</h1>
+{{--                        <h1 data-aos="zoom-in">Follow Us on Instagram</h1>--}}
+                        <h1 data-aos="zoom-in">Follow Us</h1>
                     </div>
                 </div>
 
 
-                @foreach($instagram as $key => $val_instagram)
-                <div class="col p-0">
-                    <div class="opt-sec5-main">
-                        <div class="opt-sec5-img">
-                            <figure>
-                                <img src="{{ asset($val_instagram->image) }}" class="img-fluid" alt="">
-                            </figure>
-                        </div>
+{{--                @dd($instagram)--}}
+{{--                @foreach($instagram as $key => $val_instagram)--}}
+{{--                <div class="col p-0">--}}
+{{--                    <div class="opt-sec5-main">--}}
+{{--                        <div class="opt-sec5-img">--}}
+{{--                            <figure>--}}
+{{--                                <img src="{{ asset($val_instagram->image) }}" class="img-fluid" alt="">--}}
+{{--                            </figure>--}}
+{{--                        </div>--}}
 
-                        <div class="opt-sec5-text">
-                            <a href="{{ $val_instagram->link }}" style="text-decoration:none;" target="_blank">
-                                <i class="fa-brands fa-instagram"></i>
-                                <p>FOLLOW <span>NOW</span></p>
-                            </a>
+{{--                        <div class="opt-sec5-text">--}}
+{{--                            <a href="{{ $val_instagram->link }}" style="text-decoration:none;" target="_blank">--}}
+{{--                                <i class="fa-brands fa-google"></i>--}}
+{{--                                <p>FOLLOW <span>NOW</span></p>--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                @endforeach--}}
+
+                    <div class="col p-0">
+                        <div class="opt-sec5-main">
+                            <div class="opt-sec5-img">
+                                <figure>
+                                    <img src="{{ asset($instagram[0]->image) }}" class="img-fluid" alt="">
+                                </figure>
+                            </div>
+
+                            <div class="opt-sec5-text">
+                                <a href="{!! App\Http\Traits\HelperTrait::returnFlag(682) !!}" style="text-decoration:none;" target="_blank">
+                                    <i class="fa-brands fa-facebook"></i>
+                                    <p>FOLLOW <span>NOW</span></p>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                @endforeach
+                    <div class="col p-0">
+                        <div class="opt-sec5-main">
+                            <div class="opt-sec5-img">
+                                <figure>
+                                    <img src="{{ asset($instagram[1]->image) }}" class="img-fluid" alt="">
+                                </figure>
+                            </div>
+
+                            <div class="opt-sec5-text">
+                                <a href="{!! App\Http\Traits\HelperTrait::returnFlag(1960) !!}" style="text-decoration:none;" target="_blank">
+                                    <i class="fa-brands fa-twitter"></i>
+                                    <p>FOLLOW <span>NOW</span></p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col p-0">
+                        <div class="opt-sec5-main">
+                            <div class="opt-sec5-img">
+                                <figure>
+                                    <img src="{{ asset($instagram[2]->image) }}" class="img-fluid" alt="">
+                                </figure>
+                            </div>
+
+                            <div class="opt-sec5-text">
+                                <a href="{!! App\Http\Traits\HelperTrait::returnFlag(1962) !!}" style="text-decoration:none;" target="_blank">
+                                    <i class="fa-brands fa-instagram"></i>
+                                    <p>FOLLOW <span>NOW</span></p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col p-0">
+                        <div class="opt-sec5-main">
+                            <div class="opt-sec5-img">
+                                <figure>
+                                    <img src="{{ asset($instagram[3]->image) }}" class="img-fluid" alt="">
+                                </figure>
+                            </div>
+
+                            <div class="opt-sec5-text">
+                                <a href="{!! App\Http\Traits\HelperTrait::returnFlag(1973) !!}" style="text-decoration:none;" target="_blank">
+                                    <i class="fa-brands fa-youtube"></i>
+                                    <p>FOLLOW <span>NOW</span></p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
 
             </div>

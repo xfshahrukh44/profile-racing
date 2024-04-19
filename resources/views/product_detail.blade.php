@@ -271,7 +271,8 @@ h3 strong{
                 <div class="inner-product-details">
                     <!-- <h4>TECHDEV-PROFILERACING</h4> -->
                     <h3 style="font-family: PEPSI_pl;"> {{ $get_product_detail->product_title }} </h3>
-                    <h3>${{ $get_product_detail->price }} <?php if($get_product_detail->maximum_price != "" && $get_product_detail->maximum_price != "0"){ echo ' - $'.$get_product_detail->maximum_price; } ?></h3>
+                    <h3 id="h3_original">${{ $get_product_detail->price }} <?php if($get_product_detail->maximum_price != "" && $get_product_detail->maximum_price != "0"){ echo ' - $'.$get_product_detail->maximum_price; } ?></h3>
+                    <h3 id="h3_additional" hidden>${{ $get_product_detail->price }} <?php if($get_product_detail->maximum_price != "" && $get_product_detail->maximum_price != "0"){ echo ' - $'.$get_product_detail->maximum_price; } ?></h3>
 
 
                     @foreach($productAttributes_id as $key => $val_product_attribute)
@@ -356,9 +357,16 @@ $(document).ready(function () {
 $('.select_option').on('change', function () {
     let option_label = $(this).find('option:selected').text();
     if (option_label.includes('+$')) {
-        $(this).next('.span_selected_option_price').html('$'+option_label.split('+$')[1]);
+        let amount = option_label.split('+$')[1];
+        let price = '{{$get_product_detail->price}}';
+        $(this).next('.span_selected_option_price').html('$' + amount);
+        $('#h3_original').prop('hidden', true);
+        $('#h3_additional').prop('hidden', false);
+        $('#h3_additional').html('$' + (parseFloat(amount) + parseFloat(price)).toString());
     } else {
         $(this).next('.span_selected_option_price').html('');
+        $('#h3_original').prop('hidden', false);
+        $('#h3_additional').prop('hidden', true);
     }
 });
 
