@@ -310,7 +310,11 @@
                     <div class="">
 {{--                      <h2> SUBTOTAL <span> <p class="customp">  ${{ $subtotal }} </p> </span></h2>--}}
 {{--                      <h2> VARIATIONS <span> <p class="customp">  ${{ $variation }} </p> </span></h2>--}}
-                      <h3> Total <span> <p class="customp"> ${{ $subtotal + $variation }} </p> </span></h3>
+                      <h3>
+                          Total
+                          <hr style="color: white; height: 4px;">
+                          <span> <p class="customp"> ${{ $subtotal + $variation }} </p> </span>
+                      </h3>
 
                       <input type="hidden" name="total_price" value="{{ $subtotal + $variation }}" />
                       <input type="hidden" name="total_variation_price" value="{{ $variation }}" />
