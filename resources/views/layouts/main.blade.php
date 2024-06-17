@@ -135,6 +135,17 @@
         <!-- ============================================================== -->
         @include('layouts/front.scripts')
         @yield('js')
+        <script>
+            $(document).ready(function () {
+                @if(session()->has('added-to-cart') && session()->get('added-to-cart') == true)
+                    <?php session()->remove('added-to-cart'); ?>
+                    $('.offcanvasRight').each((i, item) => {
+                        item.click();
+                        item.trigger('click');
+                    });
+                @endif
+            });
+        </script>
 
     </body>
 </html>

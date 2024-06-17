@@ -1,3 +1,63 @@
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel">CART</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <form method="post" action="{{ route('update_cart') }}" id="update-cart">
+        @csrf
+        <div class="offcanvas-body">
+            <div class="sdie-modal">
+                <?php $subtotal2 = 0;
+                $addon_total2 =
+                $total_variation2 = 0; 0;?>
+                <div class="main-modal">
+                    @foreach (session()->get('cart') as $key => $value)
+                        <?php
+                            $prod_image = App\Product::where('id', $value['id'])->first();
+                        ?>
+                        <div class="product-img">
+                            <figure>
+                                <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
+                            </figure>
+                            <div class="product-discription">
+                                <h4>
+                                    {{ $value['name'] }}
+                                    <a onclick="window.location.href='{{ route('remove_cart', [$value['id']]) }}'"><i class="fa-solid fa-xmark"></i></a>
+                                </h4>
+    {{--                            <h6>Black</h6>--}}
+                                <div class="counter">
+                                    <div class="quantity">
+                                        <a href="#" class=" minus-1"><span>-</span></a>
+                                        <input name="row[]" type="number" class="quantity__input input-1" value="{{ $value['qty'] }}">
+                                        <a href="#" class=" plus-1"><span>+</span></a>
+                                    </div>
+                                    <?php $t_var = 0;?>
+                                    @foreach ($value['variation'] as $key => $values)
+                                        <?php $t_var += $values['attribute_price']; ?>
+                                    @endforeach
+                                    <span>${{ ($value['baseprice'] + $t_var) * $value['qty']  }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="product_id" id="" value="<?php echo $value['id']; ?>">
+                        <?php $subtotal2 += $value['baseprice'] * $value['qty'];
+                        $total_variation2 += $value['variation_price']; ?>
+                    @endforeach
+                </div>
+
+                <div class="subtotal">
+                    <h5>Total <span>${{ $subtotal2 + $total_variation2 }}</span></h5>
+                    <p>Shipping, taxes, and discounts calculated at checkout.</p>
+                    <button type="submit" class="btn btn-bustom" style="color: red; background: white; border: 4px solid white;">Update</button>
+                    <a href="{{route('checkout')}}" class="btn btn-bustom" style="color: red; background: white; border: 4px solid white;">Check out</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <footer>
         <div class="container">
             <div class="row">
@@ -115,3 +175,6 @@
             </div>
         </div>
     </footer>
+
+{{--<script>--}}
+{{--</script>--}}

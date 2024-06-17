@@ -29,11 +29,12 @@
       margin-bottom: 30px;
   }
   .YouOrder {
-      background-color: #c91d22;
+      background-color: black;
+      border: 1px solid white;
       color: white;
       padding: 25px;
       padding-bottom: 2px;
-      min-height: 300px;
+      /*min-height: 300px;*/
       border-radius: 3px;
       margin-bottom: 20px;
   }
@@ -279,10 +280,10 @@
                 <div class="YouOrder">
                     
                     @foreach($cart as $key=>$value)
-                    <p class="custompp"> {{ $value['name'] }} <span class="customp"> x {{ $value['qty'] }} = ${{ $value['baseprice'] * $value['qty'] }} </span> </p>
-                    <p class="custompp" style="margin-top: -15px;margin-left: 15px;"> > variation price 
-                      
-                      <span class="customp"> 
+{{--                    <p class="custompp"> {{ $value['name'] }} <span class="customp"> x {{ $value['qty'] }} = ${{ $value['baseprice'] * $value['qty'] }} </span> </p>--}}
+{{--                    <p class="custompp" style="margin-top: -15px;margin-left: 15px;"> > variation price --}}
+{{--                      --}}
+{{--                      <span class="customp"> --}}
 
                         <?php $t_var = 0;?>
                         @foreach ($value['variation'] as $key => $values)
@@ -291,23 +292,24 @@
                         ?>
                         @endforeach
 
-                        x {{ $value['qty'] }} = ${{ $t_var * $value['qty'] }}
+{{--                        x {{ $value['qty'] }} = ${{ $t_var * $value['qty'] }}--}}
 
                         <?php $variation += $t_var * $value['qty']; ?>
 
-                      </span>
-                    
-                    </p>
-                    
-                    <hr>
+{{--                      </span>--}}
+{{--                    --}}
+{{--                    </p>--}}
+{{--                    --}}
+{{--                    <hr>--}}
 
                     <?php $subtotal+= $value['baseprice'] * $value['qty'];
                     // $variation += $value['variation_price'];
                     ?>
                     @endforeach
-                    <div class="amount-wrapper">
-                      <h2> SUBTOTAL <span> <p class="customp">  ${{ $subtotal }} </p> </span></h2>
-                      <h2> VARIATIONS <span> <p class="customp">  ${{ $variation }} </p> </span></h2>
+{{--                    <div class="amount-wrapper">--}}
+                    <div class="">
+{{--                      <h2> SUBTOTAL <span> <p class="customp">  ${{ $subtotal }} </p> </span></h2>--}}
+{{--                      <h2> VARIATIONS <span> <p class="customp">  ${{ $variation }} </p> </span></h2>--}}
                       <h3> Total <span> <p class="customp"> ${{ $subtotal + $variation }} </p> </span></h3>
 
                       <input type="hidden" name="total_price" value="{{ $subtotal + $variation }}" />

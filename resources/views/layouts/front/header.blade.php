@@ -149,11 +149,12 @@ $logo = DB::table('imagetable')
 
                                     <?php if (Session::get('cart') && count(Session::get('cart')) > 0) { ?>
 
-                                        <a href="{{ route('cart') }}"> <i class="fa-solid fa-cart-shopping">  </i> </a>
+{{--                                        <a href="{{ route('cart') }}"> <i class="fa-solid fa-cart-shopping">  </i> </a>--}}
+                                        <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight"> <i class="fa-solid fa-cart-shopping">  </i> </a>
 
                                     <?php }else{ ?>
 
-                                        <a href="javascript:;"><i class="fa-solid fa-cart-shopping"></i></a>
+                                        <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight"><i class="fa-solid fa-cart-shopping"></i></a>
 
                                     <?php } ?>
 
