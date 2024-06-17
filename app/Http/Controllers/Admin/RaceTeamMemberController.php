@@ -38,9 +38,10 @@ class RaceTeamMemberController extends Controller
                 ->orWhere('facebook', 'LIKE', "%$keyword%")
                 ->orWhere('twitter', 'LIKE', "%$keyword%")
                 ->orWhere('instagram', 'LIKE', "%$keyword%")
+                ->where('status', 1)
                 ->paginate($perPage);
             } else {
-                $raceteammember = RaceTeamMember::paginate($perPage);
+                $raceteammember = RaceTeamMember::where('status', 1)->paginate($perPage);
             }
 
             return view('race-team-member.race-team-member.index', compact('raceteammember'));

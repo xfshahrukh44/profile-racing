@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="main-tabs">
-                    <div class="change-tabs">
+                    <div class="change-tabs" style="display: none">
                         <button class="clickabel" onclick="Opencity(event, 'all')" id="showonly">All</button>
                         <button class="clickabel" onclick="Opencity(event, 'news')">News</button>
                         <button class="clickabel" onclick="Opencity(event, 'event')">Event</button>

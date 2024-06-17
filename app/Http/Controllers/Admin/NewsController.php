@@ -37,9 +37,9 @@ class NewsController extends Controller
                 ->orWhere('description', 'LIKE', "%$keyword%")
                 ->orWhere('type', 'LIKE', "%$keyword%")
                 ->orWhere('image', 'LIKE', "%$keyword%")
-                ->paginate($perPage);
+                ->get();
             } else {
-                $news = News::paginate($perPage);
+                $news = News::get();
             }
 
             return view('news.news.index', compact('news'));

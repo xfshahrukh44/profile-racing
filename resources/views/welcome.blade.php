@@ -116,7 +116,24 @@
                 </div>
 
 
-                @foreach($blog as $key => $val_blog)
+                <!--@foreach($blog as $key => $val_blog)-->
+                <!--<div class="col-lg-4 col-md-6 col-12">-->
+                <!--    <div class="opt-sec3-main" data-aos="fade-up" data-aos-duration="3000">-->
+                <!--        <a href="{{ route('blog_detail',['id' => $val_blog->id]) }}">-->
+                <!--            <div class="opt-sec3-img" style="height: 250px; width: 387px;">-->
+                <!--                <figure>-->
+                <!--                    <img src="{{asset($val_blog->image)}}" alt="" style="height:100%; width:100%;">-->
+                <!--                </figure>-->
+                <!--            </div>-->
+                <!--            <div class="opt-sec3-text" >-->
+                <!--                <p> {{ $val_blog->name }} </p>-->
+                <!--                <span> {!! $val_blog->short_detail !!} </span>-->
+                <!--            </div>-->
+                <!--        </a>-->
+                <!--    </div>-->
+                <!--</div>-->
+                <!--@endforeach<div class="col-lg-12 text-center">-->
+                @foreach($news as $key => $val)
                 <div class="col-lg-4 col-md-6 col-12">
                     <div class="opt-sec3-main" data-aos="fade-up" data-aos-duration="3000">
                         <a href="{{ route('blog_detail',['id' => $val_blog->id]) }}">
@@ -126,15 +143,15 @@
                                 </figure>
                             </div>
                             <div class="opt-sec3-text" >
-                                <p> {{ $val_blog->name }} </p>
-                                <span> {!! $val_blog->short_detail !!} </span>
+                                <p>{{ Illuminate\Support\Str::limit($val->title, $limit = 35, $end = '...') }}</p>
+                                <!--<span> {!! $val->short_detail !!} </span>-->
                             </div>
                         </a>
                     </div>
                 </div>
                 @endforeach<div class="col-lg-12 text-center">
 
-                    <a href="{{ route('blog') }}" class="btn btn-bustom" style="color: red; background: white; border: 4px solid white;">Load More</a>
+                    <a href="{{ route('front.news') }}" class="btn btn-bustom" style="color: red; background: white; border: 4px solid white;">Load More</a>
 
                 </div>
 

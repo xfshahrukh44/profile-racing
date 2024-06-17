@@ -273,6 +273,7 @@ h3 strong{
                     <h3 style="font-family: PEPSI_pl;"> {{ $get_product_detail->product_title }} </h3>
                     <h3 id="h3_original">${{ $get_product_detail->price }} <?php if($get_product_detail->maximum_price != "" && $get_product_detail->maximum_price != "0"){ echo ' - $'.$get_product_detail->maximum_price; } ?></h3>
                     <h3 id="h3_additional" hidden>${{ $get_product_detail->price }} <?php if($get_product_detail->maximum_price != "" && $get_product_detail->maximum_price != "0"){ echo ' - $'.$get_product_detail->maximum_price; } ?></h3>
+                    <input type="hidden" name="exist_price" id="exist_price" value=0>
 
 
                     @foreach($productAttributes_id as $key => $val_product_attribute)
@@ -284,12 +285,15 @@ h3 strong{
                         $get_attribute_values = DB::table('product_attributes')->where('attribute_id',$val_product_attribute->attribute_id)->where('product_id',$val_product_attribute->product_id)->get();
 
                     ?>
+                    
+                    
 
-                    <select class="form-control select_option" name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]>
+                    <input type="hidden" name="select_price" class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}" value=0>
+                    <select class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option" name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]>
 
                         <option value="0">Choose an option</option>
                         @foreach($get_attribute_values as $key => $val_attr_value)
-                            <option value="{{ $val_attr_value->value }}"> {{ App\AttributeValue::find($val_attr_value->value)->value }} </option>
+                            <option data-price="{{$val_attr_value->price}}" value="{{ $val_attr_value->value }}"> {{ App\AttributeValue::find($val_attr_value->value)->value }} </option>
                         @endforeach
 
                     </select>
@@ -339,9 +343,74 @@ h3 strong{
 @endsection
 
 @section('js')
+
+<script>
+    let temp_id;
+    let temp_price_id;
+    var temp_price = 0;
+    var select_price = 0;
+    var f_select_price;
+    var totalPrice = parseFloat('{{$get_product_detail->price}}').toFixed(2);
+</script>
+@foreach($productAttributes_id as $key => $val_product_attribute)
+<script>
+    $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}').on('change', function () {
+      // Extract the number from the class to identify the dropdown
+      var text = $(this).attr('class');
+      var regex = /\d+/;
+      var number = text.match(regex)[0];
+      
+      // Get selected option and its price
+      var selectedOption = $(this).find('option:selected');
+      var optionPrice = selectedOption.data('price');
+      
+      // Check if a valid option is selected
+      if (optionPrice !== undefined && optionPrice != '0') {
+        // Update the displayed price for this dropdown
+        var amount = parseFloat(optionPrice).toFixed(2);
+        $('.select_price' + number).val(amount);
+        $(this).next('.span_selected_option_price').html('$' + amount);
+        
+        // Update the total price
+        totalPrice = parseFloat('{{$get_product_detail->price}}').toFixed(2);
+        $('.select_price' + number).each(function() {
+          totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
+            // console.log(totalPrice, $(this).val());
+        });
+        
+        // Update the total price display
+        $('#h3_original').prop('hidden', true);
+        $('#h3_additional').prop('hidden', false);
+        // $('#h3_additional').html('$' + totalPrice);
+      } else {
+        // If an invalid option is selected, reset the displayed price and total price
+        $(this).next('.span_selected_option_price').html('$0.00');
+        // $('#h3_original').prop('hidden', false);
+        // $('#h3_additional').prop('hidden', true);
+      }
+    });
+
+</script>
+@endforeach
+
 <script type="text/javascript">
-
-
+var t_price = parseFloat('{{$get_product_detail->price}}').toFixed(2);
+var temp_p = 0;
+$('.get_option').on('change', function () {
+    temp_p = 0;
+    $('.span_selected_option_price').each(function() {
+        if($(this).text() != ''){
+            var stringWithoutDollarSign = $(this).text().replace("$", "");
+            temp_p += parseFloat(stringWithoutDollarSign);
+        }else if($(this).text() == ''){
+            var stringWithoutDollarSign = 0;
+            temp_p += parseFloat(stringWithoutDollarSign);
+        }
+    });
+    t_price = parseFloat('{{$get_product_detail->price}}') + temp_p; // Update t_price
+    $('#exist_price').val(t_price);
+    $('#h3_additional').html('$' + t_price);
+});
 $(document).ready(function () {
     $(".inner-shop").click(function () {
         $(".inner-drop").show()
@@ -354,21 +423,23 @@ $(document).ready(function () {
     })
 });
 
-$('.select_option').on('change', function () {
-    let option_label = $(this).find('option:selected').text();
-    if (option_label.includes('+$')) {
-        let amount = option_label.split('+$')[1];
-        let price = '{{$get_product_detail->price}}';
-        $(this).next('.span_selected_option_price').html('$' + amount);
-        $('#h3_original').prop('hidden', true);
-        $('#h3_additional').prop('hidden', false);
-        $('#h3_additional').html('$' + (parseFloat(amount) + parseFloat(price)).toString());
-    } else {
-        $(this).next('.span_selected_option_price').html('');
-        $('#h3_original').prop('hidden', false);
-        $('#h3_additional').prop('hidden', true);
-    }
-});
+// $('.select_option').on('change', function () {
+//     let option_label = $(this).find('option:selected').text();
+//     if (option_label.includes('+$')) {
+//         let amount = parseFloat(option_label.split('+$')[1]);
+//         let price = parseFloat({{ $get_product_detail->price }});
+//         let additional_price = (amount + price).toFixed(2);
+//         $(this).next('.span_selected_option_price').html('$' + amount.toFixed(2));
+//         $('#h3_original').prop('hidden', true);
+//         $('#h3_additional').prop('hidden', false);
+//         $('#h3_additional').html('$' + additional_price);
+//     } else {
+//         $(this).next('.span_selected_option_price').html('');
+//         $('#h3_original').prop('hidden', false);
+//         $('#h3_additional').prop('hidden', true);
+//     }
+// });
+
 
 
  function opencity(evt, cityName) {

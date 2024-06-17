@@ -61,11 +61,12 @@ class HomeController extends Controller
        $section = DB::table('section')->where('page_id', 1)->get();
        $banner = DB::table('banners')->get(); 
        $blog = DB::table('blogs')->get();
+       $news = DB::table('news')->orderBy('id', 'DESC')->limit(3)->get();
        $instagram = DB::table('instagrams')->take(5)->get();
  
        $get_product = DB::table('products')->where('status', '1')->take(6)->get();
         
-       return view('welcome', compact('page', 'section', 'banner', 'blog', 'instagram', 'get_product'));
+       return view('welcome', compact('page', 'section', 'banner', 'blog', 'instagram', 'get_product', 'news'));
     
     }
 

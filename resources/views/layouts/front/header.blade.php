@@ -40,9 +40,9 @@ $logo = DB::table('imagetable')
                                                 <li>
                                                     <a class="nav-link" href="{{route('front.jobs')}}">Jobs</a>
                                                 </li>
-                                                <li>
-                                                    <a class="nav-link" href="{{route('front.warrantyInfo')}}">Warranty Info</a>
-                                                </li>
+                                                <!--<li>-->
+                                                <!--    <a class="nav-link" href="{{route('front.warrantyInfo')}}">Warranty Info</a>-->
+                                                <!--</li>-->
                                             </ul>
                                         </div>
                                     </li>
@@ -56,9 +56,9 @@ $logo = DB::table('imagetable')
 {{--                                            </ul>--}}
 {{--                                        </div>--}}
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('blog') }}">Blogs</a>
-                                    </li>
+                                    <!--<li class="nav-item">-->
+                                    <!--    <a class="nav-link" href="{{ route('blog') }}">Blogs</a>-->
+                                    <!--</li>-->
                                     <li class="nav-item hover-links">
                                         <a class="nav-link" href="{{route('front.news')}}">News</a>
                                         <div class="dropdown-links" style="display: none; height: 99px; padding-top: 20px; margin-top: 0px; padding-bottom: 20px; margin-bottom: 0px;">
@@ -66,9 +66,9 @@ $logo = DB::table('imagetable')
                                                 <li>
                                                     <a class="nav-link" href="{{route('front.news')}}">News</a>
                                                 </li>
-                                                <li>
-                                                    <a class="nav-link" href="{{route('front.bikeChecks')}}">Bike Checks</a>
-                                                </li>
+                                                <!--<li>-->
+                                                <!--    <a class="nav-link" href="{{route('front.bikeChecks')}}">Bike Checks</a>-->
+                                                <!--</li>-->
                                             </ul>
                                         </div>
                                     </li>

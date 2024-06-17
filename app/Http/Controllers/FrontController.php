@@ -46,7 +46,7 @@ class FrontController extends Controller
 
     public function factoryRaceTeam (Request $request)
     {
-        $race_team_members = RaceTeamMember::all();
+        $race_team_members = RaceTeamMember::where('status', 1)->get();
 
         return view('factory-race-team', compact('race_team_members'));
     }

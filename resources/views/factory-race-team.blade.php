@@ -39,7 +39,7 @@
             @foreach($race_team_members as $race_team_member)
                 <div class="col-lg-3 col-md-3 col-6">
                     <div class="opt-sec-2-main">
-                        <a href="#">
+                        <a href="{{ $race_team_member->instagram }}">
                             <div class="opt-sec2-img">
                                 <figure>
                                     <img src="{{asset($race_team_member->image)}}" class="img-fluid" alt="">
