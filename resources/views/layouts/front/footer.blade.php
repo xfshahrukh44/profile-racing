@@ -133,18 +133,18 @@
                         </div>
                         <div class="location">
                             <div class="locate-icon">
-                                <i class="fa-solid fa-phone"></i>
+                                <i class="fa-regular fa-envelope"></i>
                             </div>
                             <div class="locate-text">
-                                <a style="text-decoration:none; color:#fff;" href="tel:{!! App\Http\Traits\HelperTrait::returnFlag(59) !!}"> {!! App\Http\Traits\HelperTrait::returnFlag(59) !!} </a>
+                                <a style="text-decoration:none; color:#fff;" href="mailto:{!! App\Http\Traits\HelperTrait::returnFlag(218) !!}"> {!! App\Http\Traits\HelperTrait::returnFlag(218) !!} </a>
                             </div>
                         </div>
                         <div class="location">
                             <div class="locate-icon">
-                                <i class="fa-regular fa-envelope"></i>
+                                <i class="fa-solid fa-phone"></i>
                             </div>
                             <div class="locate-text">
-                                <a style="text-decoration:none; color:#fff;" href="mailto:{!! App\Http\Traits\HelperTrait::returnFlag(59) !!}"> {!! App\Http\Traits\HelperTrait::returnFlag(218) !!} </a>
+                                <a style="text-decoration:none; color:#fff;" href="tel:{!! App\Http\Traits\HelperTrait::returnFlag(59) !!}"> {!! App\Http\Traits\HelperTrait::returnFlag(59) !!} </a>
                             </div>
                         </div>
 

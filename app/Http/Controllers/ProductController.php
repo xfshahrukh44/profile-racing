@@ -209,6 +209,7 @@ class ProductController extends Controller
 		Session::put('cart', $cart);
 		Session::flash('message', 'Your Cart Updated Successfully');
 		Session::flash('alert-class', 'alert-success');
+        session()->put('added-to-cart', true);
 		return redirect('/checkout');
 	}
 
