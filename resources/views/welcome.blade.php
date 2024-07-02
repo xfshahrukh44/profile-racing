@@ -114,32 +114,13 @@
                     {!! $section[0]->value !!}
 
                 </div>
-
-
-                <!--@foreach($blog as $key => $val_blog)-->
-                <!--<div class="col-lg-4 col-md-6 col-12">-->
-                <!--    <div class="opt-sec3-main" data-aos="fade-up" data-aos-duration="3000">-->
-                <!--        <a href="{{ route('blog_detail',['id' => $val_blog->id]) }}">-->
-                <!--            <div class="opt-sec3-img" style="height: 250px; width: 387px;">-->
-                <!--                <figure>-->
-                <!--                    <img src="{{asset($val_blog->image)}}" alt="" style="height:100%; width:100%;">-->
-                <!--                </figure>-->
-                <!--            </div>-->
-                <!--            <div class="opt-sec3-text" >-->
-                <!--                <p> {{ $val_blog->name }} </p>-->
-                <!--                <span> {!! $val_blog->short_detail !!} </span>-->
-                <!--            </div>-->
-                <!--        </a>-->
-                <!--    </div>-->
-                <!--</div>-->
-                <!--@endforeach<div class="col-lg-12 text-center">-->
                 @foreach($news as $key => $val)
                 <div class="col-lg-4 col-md-6 col-12">
-                    <div class="opt-sec3-main" data-aos="fade-up" data-aos-duration="3000">
-                        <a href="{{ route('blog_detail',['id' => $val_blog->id]) }}">
+                    <div class="opt-sec3-main">
+                        <a href="{{ route('front.newsDetail',['id' => $val->id]) }}">
                             <div class="opt-sec3-img" style="height: 250px; width: 387px;">
                                 <figure>
-                                    <img src="{{asset($val_blog->image)}}" alt="" style="height:100%; width:100%;">
+                                    <img src="{{$val->image}}" alt="" class="img-fluid">
                                 </figure>
                             </div>
                             <div class="opt-sec3-text" >
@@ -182,7 +163,7 @@
                 <div class="col-lg-12">
                     <div class="sec5-text">
 {{--                        <h1 data-aos="zoom-in">Follow Us on Instagram</h1>--}}
-                        <h1 data-aos="zoom-in">Follow Us</h1>
+                        <h1>Follow Us</h1>
                     </div>
                 </div>
 

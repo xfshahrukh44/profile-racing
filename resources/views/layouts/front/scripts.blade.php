@@ -239,6 +239,15 @@ $('#contactform').on('submit',function(e){
 
 </script>
 
+<script>
+    document.getElementById('productSearchButton').addEventListener('click', function() {
+        let query = document.getElementById('productSearchInput').value;
+        if (query) {
+            window.location.href = `{{ url('product') }}?search=${encodeURIComponent(query)}`;
+        }
+    });
+</script>
+
 @if (!Auth::guest())
 @if(Auth::user()->isAdmin())
 <script>editableContent();</script>

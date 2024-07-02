@@ -62,8 +62,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-12">
-                    <div class="endl1" data-aos="fade-up"
-                    data-aos-duration="3000">
+                    <div class="endl1">
                         <div class="endl-img">
                             <figure>
                                 <img src="{{ asset($logo->img_path) }}" class="img-fluid" alt="">
@@ -87,8 +86,7 @@
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-12">
-                    <div class="endl-2" data-aos="fade-down"
-                    data-aos-duration="3000">
+                    <div class="endl-2">
                         <p>Quick Links</p>
                         <ul>
                             <li>
@@ -105,8 +103,7 @@
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-12">
-                    <div class="endl-2" data-aos="fade-up"
-                    data-aos-duration="3000">
+                    <div class="endl-2">
                         <p>Information</p>
                         <ul>
                             <li>
@@ -115,13 +112,15 @@
                             <li>
                                 <a href="{{ route('contact') }}"> CONTACT US </a>
                             </li>
+                            <li>
+                                <a href="{{ route('front.privacy') }}"> PRIVACY POLICY </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-12">
-                    <div class="endl-3" data-aos="fade-down"
-                    data-aos-duration="3000">
+                    <div class="endl-3">
                         <p class="for-size">Our Address</p>
                         <div class="location">
                             <div class="locate-icon">
@@ -145,6 +144,14 @@
                             </div>
                             <div class="locate-text">
                                 <a style="text-decoration:none; color:#fff;" href="tel:{!! App\Http\Traits\HelperTrait::returnFlag(59) !!}"> {!! App\Http\Traits\HelperTrait::returnFlag(59) !!} </a>
+                            </div>
+                        </div>
+                        <div class="location">
+                            <div class="locate-icon">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="locate-text">
+                                <a style="text-decoration:none; color:#fff;" href="javasscript:void()"> {!! App\Http\Traits\HelperTrait::returnFlag(1974) !!} </a>
                             </div>
                         </div>
 
@@ -175,6 +182,15 @@
             </div>
         </div>
     </footer>
-
+    <div class="modal fade" id="productSearchModal" tabindex="-1" aria-labelledby="productSearchModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body main-search">
+                    <input type="text" id="productSearchInput" class="form-control" placeholder="Search for products...">
+                    <button type="button" class="btn btn-bustom" id="productSearchButton">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {{--<script>--}}
 {{--</script>--}}

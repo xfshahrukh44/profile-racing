@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Mail;
 
 class JobApplicationController extends Controller
 {
@@ -36,6 +37,27 @@ class JobApplicationController extends Controller
             $job_application->resume = $job_application_path . $profileImage;
             $job_application->save();
         }
+
+        $data = [
+            'job_id' => $request->job_id,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'resume_path' => $resumePath,
+        ];
+
+        // Send the email
+        Mail::send([], [], function ($message) use ($data) {
+            $message->to($request->email)
+                ->subject('New Job Application Submission')
+                ->setBody(
+                    '<p>Job ID: ' . $data['job_id'] . '</p>' .
+                    '<p>Name: ' . $data['first_name'] . ' ' . $data['last_name'] . '</p>' .
+                    '<p>Email: ' . $data['email'] . '</p>' .
+                    '<p>Resume: <a href="' . url($data['resume_path']) . '">Download</a></p>',
+                    'text/html'
+                );
+        });
 
         Session::flash('message', 'Job application submitted!');
         Session::flash('alert-class', 'alert-success');

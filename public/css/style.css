@@ -38,7 +38,7 @@ header {
 }
 
 a.navbar-brand img {
-    height: 55px;
+    height: 61px;
 }
 
 nav.navbar.navbar-expand-lg {
@@ -48,10 +48,11 @@ nav.navbar.navbar-expand-lg {
 ul.navbar-nav li a {
     color: white;
     font-size: 15px;
-    font-weight: 400;
-    padding: 0px 18px !important;
-    font-family: PEPSI_pl;
+    font-weight: 600;
+    padding: 0px 15px !important;
+    /* font-family: PEPSI_pl; */
     letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .icon-header-style a i {

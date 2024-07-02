@@ -5,13 +5,19 @@ $logo = DB::table('imagetable')
     ->where('table_name', 'logo')
     ->first();
 ?>
+<style>
+    .modal-body.main-search {
+            display: flex;
+            gap: 10px;
+        }
+</style>
 <header>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="sec-header">
                         <nav class="navbar navbar-expand-lg navbar-dark">
-                            <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset($logo->img_path) }}" class="img-fluid" alt=""></a>
+                            <a class="navbar-brand" href="{{ route('home') }}" style="font-size: 3rem !important"><img src="{{ asset($logo->img_path) }}" class="img-fluid" alt=""></a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse"
                                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">
@@ -146,6 +152,8 @@ $logo = DB::table('imagetable')
 
                                 </ul>
                                 <div class="icon-header-style">
+                                    <a href="javascript:;" type="button" data-bs-toggle="modal" data-bs-target="#productSearchModal" class=""><i class="fa-solid fa-search"></i></a>
+
 
                                     <?php if (Session::get('cart') && count(Session::get('cart')) > 0) { ?>
 
@@ -157,6 +165,8 @@ $logo = DB::table('imagetable')
                                         <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight"><i class="fa-solid fa-cart-shopping"></i></a>
 
                                     <?php } ?>
+
+
 
 
                                 </div>
