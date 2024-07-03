@@ -10,6 +10,45 @@ $logo = DB::table('imagetable')
             display: flex;
             gap: 10px;
         }
+
+    #login_button {
+        background: white;
+        height: 50px;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 30px;
+        font-size: 20px;
+        color: black;
+        transition: all ease 0.3s;
+        font-size: smaller;
+    }
+
+    #cart_count {
+        position: absolute;
+        top: 14px;
+        width: 20px;
+        height: 20px;
+        background: red;
+        right: -2px;
+        color: white;
+        font-size: 75%;
+        font-weight: 900;
+        border-radius: 6px;
+    }
+
+    #marquee {
+        background: red;
+        height: 40px;
+    }
+
+    #marquee_span {
+        color: white;
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: 4px;
+    }
 </style>
 <header>
         <div class="container-fluid">
@@ -130,41 +169,64 @@ $logo = DB::table('imagetable')
                                     </li>
 
 
-                                    <li class="nav-item">
-                                        @if(Auth::check())
+{{--                                    <li class="nav-item">--}}
+{{--                                        @if(Auth::check())--}}
 
-                                           @if(auth()->user()->role == "1")
+{{--                                           @if(auth()->user()->role == "1")--}}
 
-                                                <a class="nav-link" href="{{ url('admin/dashboard') }}"> ADMIN DASHBOARD</a>
+{{--                                                <a class="nav-link" href="{{ url('admin/dashboard') }}"> ADMIN DASHBOARD</a>--}}
 
-                                           @elseif(auth()->user()->role == "2")
+{{--                                           @elseif(auth()->user()->role == "2")--}}
 
-                                                <a class="nav-link" href="{{ route('account') }}"> USER DASHBOARD</a>
+{{--                                                <a class="nav-link" href="{{ route('account') }}"> USER DASHBOARD</a>--}}
 
-                                           @endif
+{{--                                           @endif--}}
 
-                                        @else
+{{--                                        @else--}}
 
-                                            <a class="nav-link" href="{{ route('signin') }}">SIGNIN</a>
+{{--                                            <a class="nav-link" href="{{ route('signin') }}">Login</a>--}}
 
-                                        @endif
-                                    </li>
+{{--                                        @endif--}}
+{{--                                    </li>--}}
 
                                 </ul>
                                 <div class="icon-header-style">
+                                    @if(Auth::check())
+                                        @if(auth()->user()->role == "1")
+                                            <?php $href = url('admin/dashboard'); ?>
+                                        @elseif(auth()->user()->role == "2")
+                                            <?php $href = route('account'); ?>
+                                        @endif
+                                    @else
+                                        <?php $href = route('signin'); ?>
+                                    @endif
+                                    <a href="{{$href}}" type="button" class="text-red">
+{{--                                        <span id="login_button">--}}
+                                            <i class="fa-solid fa-sign-in">  </i>
+{{--                                            Login--}}
+{{--                                        </span>--}}
+                                    </a>
+
                                     <a href="javascript:;" type="button" data-bs-toggle="modal" data-bs-target="#productSearchModal" class=""><i class="fa-solid fa-search"></i></a>
 
+                                    <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                        <?php $cart_count = count(session()->get('cart')) ?? 0; ?>
+                                        <div id="cart_count" class="text-center">
+                                            {{$cart_count}}
+                                        </div>
+                                    </a>
 
-                                    <?php if (Session::get('cart') && count(Session::get('cart')) > 0) { ?>
+{{--                                    <?php if (Session::get('cart') && count(Session::get('cart')) > 0) { ?>--}}
 
-{{--                                        <a href="{{ route('cart') }}"> <i class="fa-solid fa-cart-shopping">  </i> </a>--}}
-                                        <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight"> <i class="fa-solid fa-cart-shopping">  </i> </a>
+{{--                                    --}}{{--                                        <a href="{{ route('cart') }}"> <i class="fa-solid fa-cart-shopping">  </i> </a>--}}
+{{--                                    <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight"> <i class="fa-solid fa-cart-shopping">  </i> </a>--}}
 
-                                    <?php }else{ ?>
+{{--                                    <?php }else{ ?>--}}
 
-                                        <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight"><i class="fa-solid fa-cart-shopping"></i></a>
+{{--                                    <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight"> <i class="fa-solid fa-cart-shopping"></i></a>--}}
 
-                                    <?php } ?>
+{{--                                    <?php } ?>--}}
 
 
 
@@ -174,6 +236,11 @@ $logo = DB::table('imagetable')
                         </nav>
                     </div>
                 </div>
+            </div>
+            <div class="row text-center" id="marquee">
+                <span class="align-items-center mt-2" id="marquee_span">
+                    Proudly Made in the USA
+                </span>
             </div>
         </div>
     </header>
