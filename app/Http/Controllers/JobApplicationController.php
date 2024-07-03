@@ -48,13 +48,13 @@ class JobApplicationController extends Controller
 
         // Send the email
         Mail::send([], [], function ($message) use ($data) {
-            $message->to($request->email)
+            $message->to($data['email'])
                 ->subject('New Job Application Submission')
                 ->setBody(
                     '<p>Job ID: ' . $data['job_id'] . '</p>' .
                     '<p>Name: ' . $data['first_name'] . ' ' . $data['last_name'] . '</p>' .
                     '<p>Email: ' . $data['email'] . '</p>' .
-                    '<p>Resume: <a href="' . url($data['resume_path']) . '">Download</a></p>',
+                    '<p>Resume: <a href="' . $data['resume_path'] . '">Download</a></p>',
                     'text/html'
                 );
         });
