@@ -162,7 +162,7 @@ class HomeController extends Controller
         ];
 
         Mail::send([], [], function ($message) use ($data) {
-            $message->to($request->email)
+            $message->to($data['email'])
                 ->subject('New Inquiry Submission')
                 ->setBody(
                     '<p>Name: ' . $data['fname'] . '</p>' .
