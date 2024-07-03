@@ -35,7 +35,7 @@ $logo = DB::table('imagetable')
         color: white;
         font-size: 75%;
         font-weight: 900;
-        border-radius: 6px;
+        border-radius: 8px;
     }
 
     #marquee {
