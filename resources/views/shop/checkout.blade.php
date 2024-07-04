@@ -321,7 +321,7 @@
 
                     </div>
                 </div>
-                <div id="accordion" class="payment-accordion">
+                <div id="accordion" class="payment-accordion" {!! auth() ->check() ? '' : 'hidden' !!}>
                   
                 
                   <div class="card">
