@@ -19,6 +19,7 @@ use Session;
 use App\Http\Traits\HelperTrait;
 use App\orders;
 use App\orders_products;
+use GuzzleHttp\Client;
 use Illuminate\Contracts\Session\Session as SessionSession;
 
 class ProductController extends Controller
@@ -100,20 +101,20 @@ class ProductController extends Controller
 	public function saveCart(Request $request)
 	{
 
-		
+
 		$var_item = $request->variation;
-		
+
 		// dd($var_item);
-		
+
 		$result = array();
-		
-		
+
+
 		$product_detail = DB::table('products')->where('id', $request->product_id)->first();
-		
-		
+
+
 		$id = isset($request->product_id) ? $request->product_id : '';
 		$qty = isset($request->qty) ? intval($request->qty) : '1';
-		
+
 		// dd($qty);
 
 		$cart = array();
@@ -149,7 +150,7 @@ class ProductController extends Controller
 				$cart[$cartId]['variation'][$data->id]['attribute_val'] = 	$data->attributesValues->value;
 				$cart[$cartId]['variation'][$data->id]['attribute_price'] = 	$data->price;
 				$cart[$cartId]['variation_price'] += $data->price;
-			
+
 			}
 
 			// dd($cart);
@@ -311,6 +312,303 @@ class ProductController extends Controller
 
 		//return redirect('shop-detail/1', ['test'=>$test]);
 	}
+
+    public function upsservices(Request $request)
+    {
+        $tax = 0.00;
+        $description = "Domestic Tax"; // Default description
+
+        if ($request->input('country') == 'US') {
+            if ($request->input('postal')) {
+                $ch = curl_init('https://api.api-ninjas.com/v1/salestax?zip_code=' . $request->input('postal'));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'X-Api-Key: u9uJPdSpJl4pjoQvputyQg==Xp3H6aBKFpo5Zocj',
+                ]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $apiResponse = curl_exec($ch);
+                if ($apiResponse === false) {
+                    return response()->json(['message' => 'Curl error: ' . curl_error($ch), 'status' => false]);
+                }
+                $apiResponse = json_decode($apiResponse);
+            } else {
+                $ch = curl_init('https://api.api-ninjas.com/v1/zipcode?city=' . $request->input('city') . '&state=' . $request->input('state'));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'X-Api-Key: u9uJPdSpJl4pjoQvputyQg==Xp3H6aBKFpo5Zocj',
+                ]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $apiResponse = curl_exec($ch);
+                if ($apiResponse === false) {
+                    return response()->json(['message' => 'Curl error: ' . curl_error($ch), 'status' => false]);
+                }
+                $apiResponse = json_decode($apiResponse);
+
+                $ch = curl_init('https://api.api-ninjas.com/v1/salestax?zip_code=' . $apiResponse[0]->zip_code);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'X-Api-Key: u9uJPdSpJl4pjoQvputyQg==Xp3H6aBKFpo5Zocj',
+                ]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $apiResponse = curl_exec($ch);
+                if ($apiResponse === false) {
+                    return response()->json(['message' => 'Curl error: ' . curl_error($ch), 'status' => false]);
+                }
+                $apiResponse = json_decode($apiResponse);
+            }
+
+            $tax = (float) $apiResponse[0]->total_rate * 100;
+        } else {
+            $description = "International Custom Tax";
+        }
+
+        $weight = 1;
+        $cart = Session::get('cart');
+        foreach ($cart as $key => $value) {
+            $proweight = Product::find($value['id'])->weight * $value['qty'];
+            $weight += $proweight;
+        }
+
+        $service = $request->get('shipping_method') ?? '11';
+
+        $clientID = 'TQAtFnYgzZIcGJJGLyXyEMBrDYYV9q30A0duyCVvfrWd4owo';
+        $clientSecret = 'VElikvdTAF4AHDPwQno1HG81sOWSMoUYiBFIWfDOAYAw7uPSy3gVYDsdITZaZyqc';
+
+        // Create a Guzzle client
+        $client = new Client([
+            'base_uri' => 'https://onlinetools.ups.com/',
+            'timeout'  => 5.0,
+        ]);
+
+        try {
+            $response = $client->request('POST', 'security/v1/oauth/token', [
+                'headers' => [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'auth' => [
+                    $clientID,
+                    $clientSecret
+                ],
+                'form_params' => [
+                    'grant_type' => 'client_credentials'
+                ],
+            ]);
+
+            $body = json_decode($response->getBody(), true);
+            // return $body;
+            $accessToken = $body['access_token'];
+        } catch (\Exception $e) {
+            // Handle the error accordingly
+            return response()->json(['error' => 'Failed to retrieve access token: ' . $e->getMessage()], 500);
+        }
+
+        // Use the access token to make an API request to the UPS Rating API
+        try {
+            $response = $client->request('POST', 'api/rating/v2403/Rate', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "Bearer $accessToken",
+                ],
+                'json' => [
+                    "RateRequest" => [
+                        "Request" => [
+                            "SubVersion" => "1703",
+                            "TransactionReference" => ["CustomerContext" => " "],
+                        ],
+                        "Shipment" => [
+                            "ShipmentRatingOptions" => ["UserLevelDiscountIndicator" => "TRUE"],
+                            "Shipper" => [
+                                "Name" => "Richards",
+                                "ShipperNumber" => "C60W34",
+                                "Address" => [
+                                    "AddressLine" => "123 Main St",
+                                    "City" => "New York",
+                                    "StateProvinceCode" => "NY",
+                                    "PostalCode" => "10001",
+                                    "CountryCode" => "US",
+
+                                ],
+                            ],
+                            "ShipTo" => [
+                                "Name" => $request->input('first_name') . ' ' . $request->input('last_name'),
+                                "Address" => [
+                                    "AddressLine" => $request->input('address'),
+                                    "City" => $request->input('city'),
+                                    "StateProvinceCode" => $request->input('state'),
+                                    "PostalCode" => $request->input('postal'),
+                                    "CountryCode" => $request->input('country'),
+                                ],
+                            ],
+                            "ShipFrom" => [
+                                "Name" => "Richards",
+                                "ShipperNumber" => "C60W34",
+                                "Address" => [
+                                    "AddressLine" => "123 Main St",
+                                    "City" => "New York",
+                                    "StateProvinceCode" => "NY",
+                                    "PostalCode" => "10001",
+                                    "CountryCode" => "US",
+                                ],
+                            ],
+                            "Service" => ["Code" => $service],
+                            "ShipmentTotalWeight" => [
+                                "UnitOfMeasurement" => [
+                                    "Code" => "LBS"
+                                ],
+                                "Weight" => (intval($weight) < 1) ? "1" : ((string) $weight),
+                            ],
+                            "Package" => [
+                                "PackagingType" => ["Code" => "02", "Description" => "Package"],
+                                "Dimensions" => [
+                                    "UnitOfMeasurement" => ["Code" => "IN"],
+                                    "Length" => "10",
+                                    "Width" => "7",
+                                    "Height" => "5",
+                                ],
+                                "PackageWeight" => [
+                                    "UnitOfMeasurement" => ["Code" => "LBS"],
+                                    "Weight" => number_format((float)$weight, 2, '.', ''),
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ]);
+
+
+             $apiResponse = json_decode($response->getBody(), true);
+        } catch (\Exception $e) {
+            // Handle the error accordingly
+            return response()->json(['error' => 'Failed to retrieve rate: ' . $e->getMessage()], 500);
+        }
+
+        if (isset($apiResponse['RateResponse']['Response']['ResponseStatus']['Description']) &&
+            $apiResponse['RateResponse']['Response']['ResponseStatus']['Description'] === 'Success') {
+
+            // Extract total charges from the response
+            $totalCharges = $apiResponse['RateResponse']['RatedShipment']['TotalCharges']['MonetaryValue'];
+
+            // Assuming $tax and $description are defined earlier in your code
+            return response()->json([
+                'upsamount' => $totalCharges,
+                'tax' => $tax,
+                'description' => $description,
+                'status' => true,
+            ]);
+
+        } elseif (isset($apiResponse['RateResponse']['Response']['Alert'][0]['Description'])) {
+
+            // Extract error message from the response alert
+            $errorMessage = $apiResponse['RateResponse']['Response']['Alert'][0]['Description'];
+
+            return response()->json([
+                'message' => $errorMessage,
+                'status' => false,
+            ]);
+
+        } else {
+            return response()->json([
+                'message' => 'Could not verify your address or UPS service unavailable',
+                'status' => false,
+            ]);
+        }
+
+    }
+
+    public function upsapi(Request $request)
+    {
+        $clientID = 'TQAtFnYgzZIcGJJGLyXyEMBrDYYV9q30A0duyCVvfrWd4owo';
+        $clientSecret = 'VElikvdTAF4AHDPwQno1HG81sOWSMoUYiBFIWfDOAYAw7uPSy3gVYDsdITZaZyqc';
+
+        // Create a Guzzle client
+        $client = new Client([
+            'base_uri' => 'https://onlinetools.ups.com/',
+            'timeout'  => 5.0,
+        ]);
+        // https://onlinetools.ups.com/api/rating/v2403/Rate
+        // Get an access token
+        try {
+            $response = $client->request('POST', 'security/v1/oauth/token', [
+                'headers' => [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'auth' => [
+                    $clientID,
+                    $clientSecret
+                ],
+                'form_params' => [
+                    'grant_type' => 'client_credentials'
+                ],
+            ]);
+
+            $body = json_decode($response->getBody(), true);
+            // return $body;
+            $accessToken = $body['access_token'];
+        } catch (\Exception $e) {
+            // Handle the error accordingly
+            return response()->json(['error' => 'Failed to retrieve access token: ' . $e->getMessage()], 500);
+        }
+
+        // Use the access token to make an API request to the UPS Rating API
+        try {
+            $response = $client->request('POST', 'api/rating/v2403/Rate', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "Bearer $accessToken",
+                ],
+                'json' => [
+                    'RateRequest' => [
+                        'Request' => [
+                            'RequestOption' => 'Rate',
+                            'TransactionReference' => [
+                                'CustomerContext' => 'Rating and Service'
+                            ]
+                        ],
+                        'Shipment' => [
+                            'Shipper' => [
+                                'Name' => 'Shipper Name',
+                                'ShipperNumber' => 'ShipperNumber',
+                                'Address' => [
+                                    'AddressLine' => ['Address Line 1'],
+                                    'City' => 'City',
+                                    'StateProvinceCode' => 'State',
+                                    'PostalCode' => 'Postal Code',
+                                    'CountryCode' => 'Country'
+                                ]
+                            ],
+                            'ShipTo' => [
+                                'Name' => 'Receiver Name',
+                                'Address' => [
+                                    'AddressLine' => ['Address Line 1'],
+                                    'City' => 'City',
+                                    'StateProvinceCode' => 'State',
+                                    'PostalCode' => 'Postal Code',
+                                    'CountryCode' => 'Country'
+                                ]
+                            ],
+                            'Package' => [
+                                'PackagingType' => [
+                                    'Code' => '02',
+                                    'Description' => 'Rate'
+                                ],
+                                'PackageWeight' => [
+                                    'UnitOfMeasurement' => [
+                                        'Code' => 'LBS',
+                                        'Description' => 'Pounds'
+                                    ],
+                                    'Weight' => '10'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+
+            $rateResponse = json_decode($response->getBody(), true);
+            return $rateResponse;
+        } catch (\Exception $e) {
+            // Handle the error accordingly
+            return response()->json(['error' => 'Failed to retrieve rate: ' . $e->getMessage()], 500);
+        }
+    }
+
 
 	public function shipping(Request $request)
 	{
