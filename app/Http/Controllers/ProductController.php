@@ -415,13 +415,13 @@ class ProductController extends Controller
                         "Shipment" => [
                             "ShipmentRatingOptions" => ["UserLevelDiscountIndicator" => "TRUE"],
                             "Shipper" => [
-                                "Name" => "Richards",
-                                "ShipperNumber" => "C60W34",
+                                "Name" => "Justine Siragusa",
+                                "ShipperNumber" => "367009",
                                 "Address" => [
-                                    "AddressLine" => "123 Main St",
-                                    "City" => "New York",
-                                    "StateProvinceCode" => "NY",
-                                    "PostalCode" => "10001",
+                                    "AddressLine" => "4803 95th St N, St. Petersburg",
+                                    "City" => "St. Petersburg",
+                                    "StateProvinceCode" => "FL",
+                                    "PostalCode" => "33708",
                                     "CountryCode" => "US",
 
                                 ],
@@ -437,13 +437,13 @@ class ProductController extends Controller
                                 ],
                             ],
                             "ShipFrom" => [
-                                "Name" => "Richards",
-                                "ShipperNumber" => "C60W34",
+                                "Name" => "Justine Siragusa",
+                                "ShipperNumber" => "367009",
                                 "Address" => [
-                                    "AddressLine" => "123 Main St",
-                                    "City" => "New York",
-                                    "StateProvinceCode" => "NY",
-                                    "PostalCode" => "10001",
+                                    "AddressLine" => "4803 95th St N, St. Petersburg",
+                                    "City" => "St. Petersburg",
+                                    "StateProvinceCode" => "FL",
+                                    "PostalCode" => "33708",
                                     "CountryCode" => "US",
                                 ],
                             ],

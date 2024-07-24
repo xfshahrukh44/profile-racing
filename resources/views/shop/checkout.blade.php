@@ -478,7 +478,8 @@
 
                             </div>
                         </div>
-                        <div id="accordion" class="payment-accordion" {!! auth()->check() ? '' : 'hidden' !!}>
+{{--                        <div id="accordion" class="payment-accordion" {!! auth()->check() ? '' : 'hidden' !!}>--}}
+                        <div id="accordion" class="payment-accordion" hidden>
 
 
                             <div class="card">
@@ -672,6 +673,7 @@
                         },
                         success: function(response) {
                             if (response.status) {
+                                $('#accordion').prop('hidden', false);
                                 $('#li_hidden').prop('hidden', false);
                                 console.clear();
                                 console.log(response);
