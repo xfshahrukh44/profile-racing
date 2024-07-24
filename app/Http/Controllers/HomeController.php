@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Product;
 use Illuminate\Http\Request;
 use App\inquiry;
 use App\schedule;
@@ -87,18 +88,19 @@ class HomeController extends Controller
         $search = $request->input('search');
 
         if ($search) {
-            $get_product = DB::table('products')
-                ->where('product_title', 'LIKE', "%{$search}%")
+            $get_product = Product::
+                where('product_title', 'LIKE', "%{$search}%")
                 ->where('status', '1')
+                ->orderBy('created_at', 'ASC')
                 ->paginate(12);
         } else if ($cat != "" && $subcat == "" && $childsubcat == "") {
-            $get_product = DB::table('products')->where('category', $cat)->where('status', '1')->paginate(12);
+            $get_product = DB::table('products')->where('category', $cat)->where('status', '1')->orderBy('created_at', 'ASC')->paginate(12);
         } else if ($cat != "" && $subcat != "" && $childsubcat == "") {
-            $get_product = DB::table('products')->where('category', $cat)->where('subcategory', $subcat)->where('status', '1')->paginate(12);
+            $get_product = DB::table('products')->where('category', $cat)->where('subcategory', $subcat)->where('status', '1')->orderBy('created_at', 'ASC')->paginate(12);
         } else if ($cat != "" && $subcat != "" && $childsubcat != "") {
-            $get_product = DB::table('products')->where('category', $cat)->where('subcategory', $subcat)->where('childsubcategory', $childsubcat)->where('status', '1')->paginate(12);
+            $get_product = DB::table('products')->where('category', $cat)->where('subcategory', $subcat)->where('childsubcategory', $childsubcat)->where('status', '1')->orderBy('created_at', 'ASC')->paginate(12);
         } else {
-            $get_product = DB::table('products')->where('status', '1')->paginate(12);
+            $get_product = DB::table('products')->where('status', '1')->orderBy('created_at', 'ASC')->paginate(12);
         }
 
         return view('product', compact('page', 'get_product'));

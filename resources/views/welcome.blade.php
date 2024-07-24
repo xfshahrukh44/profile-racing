@@ -89,7 +89,8 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="sec2-text">
-                        <h1 class="ml2">Highlighted Products</h1>
+{{--                        <h1 class="ml2">Highlighted Products</h1>--}}
+                        <h1>Highlighted Products</h1>
                     </div>
                 </div>
 
@@ -167,7 +168,7 @@
 
                         {!! $section[1]->value !!}
 
-                        <a href="{{ route('about') }}" class="btn btn-bustom">Learn More</a>
+                        <a href="{{ route('front.history') }}" class="btn btn-bustom">Learn More</a>
                     </div>
                 </div>
             </div>

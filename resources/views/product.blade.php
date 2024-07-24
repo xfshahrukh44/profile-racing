@@ -111,7 +111,7 @@
                                         <div class="inner-drop" style="<?php if($route_category == $val_subcategory->category){ echo 'display:block;'; } ?>" >
                                             <ul>
                                                 <li class="inner-shop-2">
-                                                    <a href="{{ URL('product/'.$route_category.'/'.$val_subcategory->id) }}" style="<?php if($route_subcategory == $val_subcategory->id){ echo 'color:red'; } ?>" > {{ $val_subcategory->subcategory }} </a>
+                                                    <a href="{{ URL('product/'.$val_category->id.'/'.$val_subcategory->id) }}" style="<?php if($route_subcategory == $val_subcategory->id){ echo 'color:red'; } ?>" > {{ $val_subcategory->subcategory }} </a>
 
                                                         <?php $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?>
 
@@ -119,7 +119,7 @@
                                                         <div class="inner-drop-2" style="<?php if($route_subcategory == $val_childsubcategory->subcategory){ echo 'display:block;'; } ?>" >
                                                             <ul>
                                                                 <li>
-                                                                    <a href="{{ URL('product/'.$route_category.'/'.$val_subcategory->id.'/'.$val_childsubcategory->id) }}"  style="<?php if($route_child_subcategory == $val_childsubcategory->id){ echo 'color:red'; } ?>" > {{ $val_childsubcategory->childsubcategory }} </a>
+                                                                    <a href="{{ URL('product/'.$val_category->id.'/'.$val_subcategory->id.'/'.$val_childsubcategory->id) }}"  style="<?php if($route_child_subcategory == $val_childsubcategory->id){ echo 'color:red'; } ?>" > {{ $val_childsubcategory->childsubcategory }} </a>
                                                                 </li>
                                                             </ul>
                                                         </div>
