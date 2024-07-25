@@ -254,8 +254,12 @@ h3 strong{
 
 
             <?php
+            if($get_product_detail->id == 455){
+                $productAttributes_id = DB::table('product_attributes')->select('product_id', 'attribute_id')->where('product_id', $get_product_detail->id)->groupBy('attribute_id')->orderBy('attribute_id', 'desc')->get();
+            }else{
                 $productAttributes_id = DB::table('product_attributes')->select('product_id', 'attribute_id')->where('product_id', $get_product_detail->id)->groupBy('attribute_id')->get();
-                // dump($productAttributes);
+            }
+                // dump($productAttributes_id);
             ?>
 
 
@@ -285,8 +289,8 @@ h3 strong{
                         $get_attribute_values = DB::table('product_attributes')->where('attribute_id',$val_product_attribute->attribute_id)->where('product_id',$val_product_attribute->product_id)->get();
 
                     ?>
-                    
-                    
+
+
 
                     <input type="hidden" name="select_price" class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}" value=0>
                     <select class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option" name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]>
@@ -359,25 +363,25 @@ h3 strong{
       var text = $(this).attr('class');
       var regex = /\d+/;
       var number = text.match(regex)[0];
-      
+
       // Get selected option and its price
       var selectedOption = $(this).find('option:selected');
       var optionPrice = selectedOption.data('price');
-      
+
       // Check if a valid option is selected
       if (optionPrice !== undefined && optionPrice != '0') {
         // Update the displayed price for this dropdown
         var amount = parseFloat(optionPrice).toFixed(2);
         $('.select_price' + number).val(amount);
         $(this).next('.span_selected_option_price').html('$' + amount);
-        
+
         // Update the total price
         totalPrice = parseFloat('{{$get_product_detail->price}}').toFixed(2);
         $('.select_price' + number).each(function() {
           totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
             // console.log(totalPrice, $(this).val());
         });
-        
+
         // Update the total price display
         $('#h3_original').prop('hidden', true);
         $('#h3_additional').prop('hidden', false);

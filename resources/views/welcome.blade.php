@@ -68,7 +68,7 @@
     </section>
 
 
-    <section class="section1">
+    {{-- <section class="section1">
         <div class="container-fluid p-0">
             <div class="row">
                 <div class="col-lg-4">
@@ -81,7 +81,7 @@
                     <img class="img-fluid" src="{{asset('images/Picture3.jpg')}}" alt="" style="max-height: 500px;">
                 </div>
             </div>
-    </section>
+    </section> --}}
 
 
     <section class="section2">
