@@ -211,7 +211,9 @@ $logo = DB::table('imagetable')
 
                                     <a href="javascript:;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="offcanvasRight">
                                         <i class="fa-solid fa-cart-shopping"></i>
-                                        <?php $cart_count = count(session()->get('cart')) ?? 0; ?>
+                                        <?php 
+                                        $cart_count = count(session()->get('cart') ?? []);
+                                        ?>
                                         <div id="cart_count" class="text-center">
                                             {{$cart_count}}
                                         </div>
