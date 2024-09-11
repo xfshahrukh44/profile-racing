@@ -38,7 +38,7 @@
                                                 </video>
                                             </div>
                                             <div class="sec1-text">
-                                            {!! $val_banner->description !!}
+                                            <!--{!! $val_banner->description !!}-->
                                             <!-- <div class="youtube">
                             <figure>
                                 <img src="images/youtube.png" class="img-fluid" alt="">
@@ -49,7 +49,7 @@
                                     @else
                                         <div class="swiper-slide swipper-banner banner-{{ $key+1 }}">
                                             <div class="sec1-text">
-                                                {!! $val_banner->description !!}
+                                                <!--{!! $val_banner->description !!}-->
                                             </div>
                                         </div>
                                     @endif
