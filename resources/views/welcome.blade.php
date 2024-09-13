@@ -32,7 +32,7 @@
                                         <div class="swiper-slide swipper-banner banner-{{ $key+1 }}">
 
                                             <div class="video-banner">
-                                                <video width="100%" height="100%" autoplay muted>
+                                                <video width="100%" height="100%" autoplay muted class="mySwiperVideo">
                                                     <source src="{{ asset($val_banner->image) }}" type="video/mp4">
                                                     Your browser does not support the video tag.
                                                 </video>

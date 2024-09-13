@@ -97,19 +97,25 @@
 
   <!-- Initialize Swiper -->
 <script>
-    var swiper = new Swiper(".mySwiper-banner", {
-      spaceBetween: 30,
-      loop: true,
-      autoplay: true,
-      effect: "flip",
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
+    // Initialize Swiper without autoplay
+    let swiper_obj = new Swiper(".mySwiper-banner", {
+        spaceBetween: 30,
+        loop: true,
+        effect: "flip",
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        autoplay: false,  // Disable autoplay initially
+    });
+
+    $('.mySwiperVideo').on('ended', function () {
+        alert();
+        swiper_obj.autoplay.start();
     });
   </script>
 
