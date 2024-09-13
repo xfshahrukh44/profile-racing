@@ -100,7 +100,8 @@
     var swiper = new Swiper(".mySwiper-banner", {
       spaceBetween: 30,
       loop: true,
-      effect: "fade",
+      autoplay: true,
+      effect: "flip",
       navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
