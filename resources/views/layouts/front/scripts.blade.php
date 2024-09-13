@@ -114,7 +114,6 @@
     });
 
     $('.mySwiperVideo').on('ended', function () {
-        alert();
         swiper_obj.autoplay.start();
     });
   </script>
