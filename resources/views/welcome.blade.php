@@ -16,7 +16,7 @@
     <!-- ============================================================== -->
 
     <!-- data-aos="zoom-in" -->
-    <section class="section1">
+    <section class="section1" style="overflow-y: hidden;">
         <div class="container-fluid p-0">
             <div class="row">
                 <div class="col-lg-12">
