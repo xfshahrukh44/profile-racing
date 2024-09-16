@@ -13,7 +13,7 @@
 
     <!-- ============================================================== -->
     <!-- BODY START HERE -->
-    <!-- ============================================================== -->
+    <!-- ==================================wel============================ -->
 
     <!-- data-aos="zoom-in" -->
     <section class="section1" style="overflow-y: hidden;">
@@ -47,7 +47,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        <div class="swiper-slide swipper-banner banner-{{ $key+1 }}">
+                                        <div class="swiper-slide swipper-banner banner-{{ $key+1 }}" style="background-image: url({{asset($val_banner->image)}}) !important;">
                                             <div class="sec1-text">
                                                 <!--{!! $val_banner->description !!}-->
                                             </div>
