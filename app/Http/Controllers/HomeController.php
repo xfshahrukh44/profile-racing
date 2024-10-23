@@ -164,7 +164,8 @@ class HomeController extends Controller
         ];
 
         Mail::send([], [], function ($message) use ($data) {
-            $message->to($data['email'])
+//            $message->to($data['email'])
+            $message->to('info@profileracing.com')
                 ->subject('New Inquiry Submission')
                 ->setBody(
                     '<p>Name: ' . $data['fname'] . '</p>' .

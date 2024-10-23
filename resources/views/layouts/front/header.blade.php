@@ -202,7 +202,7 @@ $logo = DB::table('imagetable')
                                     @endif
                                     <a href="{{$href}}" type="button" class="text-red">
 {{--                                        <span id="login_button">--}}
-                                            <i class="fa-solid fa-sign-in">  </i>
+                                            <i class="far fa-user">  </i>
 {{--                                            Login--}}
 {{--                                        </span>--}}
                                     </a>
