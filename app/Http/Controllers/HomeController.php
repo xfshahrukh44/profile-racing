@@ -82,7 +82,7 @@ class HomeController extends Controller
     }
 
 
-    public function product($cat = "", $subcat = "", $childsubcat = "", Request $request)
+    public function product(Request $request, $cat = "", $subcat = "", $childsubcat = "")
     {
         $page = DB::table('pages')->where('id', 1)->first();
         $search = $request->input('search');
