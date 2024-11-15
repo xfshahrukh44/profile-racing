@@ -50,7 +50,7 @@ class JobApplicationController extends Controller
         Mail::send([], [], function ($message) use ($data) {
             $message->to($data['email'])
                 ->subject('New Job Application Submission')
-                ->setBody(
+                ->html(
                     '<p>Job ID: ' . $data['job_id'] . '</p>' .
                     '<p>Name: ' . $data['first_name'] . ' ' . $data['last_name'] . '</p>' .
                     '<p>Email: ' . $data['email'] . '</p>' .

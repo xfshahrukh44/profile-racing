@@ -164,15 +164,13 @@ class HomeController extends Controller
         ];
 
         Mail::send([], [], function ($message) use ($data) {
-//            $message->to($data['email'])
             $message->to('info@profileracing.com')
-                ->subject('New Inquiry Submission')
-                ->setBody(
-                    '<p>Name: ' . $data['fname'] . '</p>' .
-                    '<p>Email: ' . $data['email'] . '</p>' .
-                    '<p>Notes: ' . $data['notes'] . '</p>',
-                    'text/html'
-                );
+                    ->subject('New Inquiry Submission')
+                    ->html('
+                        <p>Name: ' . e($data['fname']) . '</p>
+                        <p>Email: ' . e($data['email']) . '</p>
+                        <p>Notes: ' . e($data['notes']) . '</p>
+                    ');
         });
 
         return response()->json(['message'=>'Thank you for contacting us. We will get back to you asap', 'status' => true]);
