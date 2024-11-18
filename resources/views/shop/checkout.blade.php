@@ -339,7 +339,7 @@
                                     </div>
                                     <div class="form-group">
                                         <select name="shipping_method" id="shipping_method" class="form-control">
-                                            <option value="01">Next Day Air</option>
+                                            {{-- <option value="01">Next Day Air</option>
                                             <option value="02">2nd Day Air</option>
                                             <option value="03" selected>Ground</option>
                                             <option value="07">Express</option>
@@ -368,7 +368,7 @@
                                             <option value="84">UPS Today Intercity</option>
                                             <option value="85">UPS Today Express</option>
                                             <option value="86">UPS Today Express Saver</option>
-                                            <option value="96">UPS Worldwide Express Freight.</option>
+                                            <option value="96">UPS Worldwide Express Freight.</option> --}}
                                         </select>
                                     </div>
                                 </div>
@@ -468,7 +468,7 @@
                                     Total
                                     <hr style="color: white; height: 4px;">
                                     <span>
-                                        <p class="customp" id="grandtotal"> ${{ $subtotal + $variation }} </p>
+                                        <p class="customp" id="grandtotal"> ${{ number_format($subtotal + $variation, 2) }} </p>
                                     </span>
                                 </h3>
 
@@ -573,7 +573,6 @@
             var autocomplete = new google.maps.places.Autocomplete(input);
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
                 var place = autocomplete.getPlace();
-                console.log(place);
                 var searchAddressComponents = place.address_components,
                     searchPostalCode = "",
                     searchAddress = "",
@@ -620,8 +619,31 @@
                 $('#addressdiv').slideDown();
                 $('#fedex-checker').val(1);
 
+                updateShippingMethods(searchCountryName);
+
 
             });
+        }
+
+        function updateShippingMethods(country) {
+            const shippingMethodSelect = $('#shipping_method');
+            shippingMethodSelect.empty(); // Clear existing options
+
+            if (country.toLowerCase() === 'usa' || country.toLowerCase() === 'united states') {
+                // Add options for USA
+                shippingMethodSelect.append(new Option("Standard", "11", true, true));
+                shippingMethodSelect.append(new Option("UPS 2nd Day Air®", "02"));
+                shippingMethodSelect.append(new Option("UPS 3 Day Select®", "12")); // Set as default
+                shippingMethodSelect.append(new Option("UPS Next Day Air®", "14"));
+            } else {
+                // Add options for other countries
+                shippingMethodSelect.append(new Option("UPS Standard", "11"));
+                shippingMethodSelect.append(new Option("UPS Worldwide Expedited®", "17"));
+                shippingMethodSelect.append(new Option("UPS Worldwide Saver®", "86"));
+                shippingMethodSelect.append(new Option("UPS Worldwide Express®", "72"));
+            }
+
+            $('#shippingdiv').slideDown(); // Show the shipping dropdown
         }
     </script>
 
@@ -709,9 +731,48 @@
                                 $('#error').hide();
 
                             } else {
-                                $('#error').text(response.message);
-                                $('#error').show();
+                                $.toast({
+                                    heading: 'Alert!',
+                                    position: 'bottom-right',
+                                    text: response.message,
+                                    loaderBg: '#ff6849',
+                                    icon: 'error',
+                                    hideAfter: 5000,
+                                    stack: 6
+                                });
                             }
+                        },
+                        error: function(xhr) {
+                            // console.error(xhr);
+                            let errorMessage = "An error occurred while processing your request.";
+
+                            const errorString = xhr.responseJSON.error;
+
+                            // Extract the JSON part from the error string using regex
+                            const jsonStringMatch = errorString.match(/{.*}/);
+
+                            if (jsonStringMatch) {
+                                try {
+                                    // Parse the JSON string
+                                    const response = JSON.parse(jsonStringMatch[0]);
+                                    // Extract the message from the errors array
+                                    if (response.response && response.response.errors && response.response.errors[0].message) {
+                                        errorMessage = response.response.errors[0].message;
+                                    }
+                                } catch (e) {
+                                    console.error("Error parsing the JSON string:", e);
+                                }
+                            }
+
+                            $.toast({
+                                heading: 'Alert!',
+                                position: 'bottom-right',
+                                text: errorMessage,
+                                loaderBg: '#ff6849',
+                                icon: 'error',
+                                hideAfter: 5000,
+                                stack: 6
+                            });
                         }
                     });
                 } else {
@@ -771,9 +832,48 @@
                                 $('#error').hide();
 
                             } else {
-                                $('#error').text(response.message);
-                                $('#error').show();
+                                $.toast({
+                                    heading: 'Alert!',
+                                    position: 'bottom-right',
+                                    text: response.message,
+                                    loaderBg: '#ff6849',
+                                    icon: 'error',
+                                    hideAfter: 5000,
+                                    stack: 6
+                                });
                             }
+                        },
+                        error: function(xhr) {
+                            // console.error(xhr);
+                            let errorMessage = "An error occurred while processing your request.";
+
+                            const errorString = xhr.responseJSON.error;
+
+                            // Extract the JSON part from the error string using regex
+                            const jsonStringMatch = errorString.match(/{.*}/);
+
+                            if (jsonStringMatch) {
+                                try {
+                                    // Parse the JSON string
+                                    const response = JSON.parse(jsonStringMatch[0]);
+                                    // Extract the message from the errors array
+                                    if (response.response && response.response.errors && response.response.errors[0].message) {
+                                        errorMessage = response.response.errors[0].message;
+                                    }
+                                } catch (e) {
+                                    console.error("Error parsing the JSON string:", e);
+                                }
+                            }
+
+                            $.toast({
+                                heading: 'Alert!',
+                                position: 'bottom-right',
+                                text: errorMessage,
+                                loaderBg: '#ff6849',
+                                icon: 'error',
+                                hideAfter: 5000,
+                                stack: 6
+                            });
                         }
                     });
                 }
