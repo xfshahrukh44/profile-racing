@@ -37,7 +37,7 @@
                                     @foreach ($value['variation'] as $key => $values)
                                         <?php $t_var += $values['attribute_price']; ?>
                                     @endforeach
-                                    <span>${{ ($value['baseprice'] + $t_var) * $value['qty']  }}</span>
+                                    <span>${{ number_format(($value['baseprice'] + $t_var) * $value['qty'], 2) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="subtotal">
-                    <h5>Total <span>${{ $subtotal2 + $total_variation2 }}</span></h5>
+                    <h5>Total <span>${{ number_format($subtotal2 + $total_variation2, 2) }}</span></h5>
                     <p>Shipping, taxes, and discounts calculated at checkout.</p>
                     <button type="submit" class="btn btn-bustom" style="color: red; background: white; border: 4px solid white;">Update</button>
                     <a href="{{route('checkout')}}" class="btn btn-bustom" style="color: red; background: white; border: 4px solid white;">Check out</a>
