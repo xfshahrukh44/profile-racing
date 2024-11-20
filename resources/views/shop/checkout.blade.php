@@ -635,12 +635,14 @@
                 shippingMethodSelect.append(new Option("UPS 2nd Day Air®", "02"));
                 shippingMethodSelect.append(new Option("UPS 3 Day Select®", "12")); // Set as default
                 shippingMethodSelect.append(new Option("UPS Next Day Air®", "14"));
+                shippingMethodSelect.append(new Option("UPS SurePost", "93"));
             } else {
                 // Add options for other countries
                 shippingMethodSelect.append(new Option("UPS Standard", "11"));
                 shippingMethodSelect.append(new Option("UPS Worldwide Expedited®", "17"));
                 shippingMethodSelect.append(new Option("UPS Worldwide Saver®", "86"));
                 shippingMethodSelect.append(new Option("UPS Worldwide Express®", "72"));
+                shippingMethodSelect.append(new Option("UPS SurePost", "93"));
             }
 
             $('#shippingdiv').slideDown(); // Show the shipping dropdown
