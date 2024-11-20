@@ -102,11 +102,16 @@
                             <span data-i18n="eCommerce">Orders</span>
                         </a>
                     </li>
-                    {{-- <li class="{{ (request()->is('discount/discount') || request()->is('discount/discount/*')) ? 'active' : '' }}">
+                    <li class="{{ (request()->is('giftcards/giftcards') || request()->is('giftcards/giftcards/*')) ? 'active' : '' }}">
+                        <a class="menu-item" href="{{url('giftcards/giftcards')}}"><i></i>
+                            <span data-i18n="eCommerce">Giftcards</span>
+                        </a>
+                    </li>
+                    <li class="{{ (request()->is('discount/discount') || request()->is('discount/discount/*')) ? 'active' : '' }}">
                         <a class="menu-item" href="{{url('discount/discount')}}"><i></i>
                             <span data-i18n="eCommerce">Discount</span>
                         </a>
-                    </li> --}}
+                    </li>
                 </ul>
             </li>
             <li class="nav-item">

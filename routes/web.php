@@ -434,3 +434,6 @@ Route::resource('admin/how-to', 'Admin\HowToController');
 Route::resource('admin/faq', 'Admin\FaqController');
 
 Route::resource('admin/news', 'Admin\NewsController');
+
+Route::resource('giftcards/giftcards', 'Giftcards\GiftcardsController');
+Route::resource('discount/discount', 'Discount\DiscountController');
