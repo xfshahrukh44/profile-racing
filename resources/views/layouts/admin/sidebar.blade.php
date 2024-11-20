@@ -102,6 +102,11 @@
                             <span data-i18n="eCommerce">Orders</span>
                         </a>
                     </li>
+                    {{-- <li class="{{ (request()->is('discount/discount') || request()->is('discount/discount/*')) ? 'active' : '' }}">
+                        <a class="menu-item" href="{{url('discount/discount')}}"><i></i>
+                            <span data-i18n="eCommerce">Discount</span>
+                        </a>
+                    </li> --}}
                 </ul>
             </li>
             <li class="nav-item">
