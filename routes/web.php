@@ -377,6 +377,8 @@ Route::post('/new-order', 'OrderController@newOrder')->name('new.place');
 Route::post('shipping', 'ProductController@shipping')->name('shipping');
 Route::post('upsservices', 'ProductController@upsservices')->name('upsservices');
 Route::get('ups-api', 'ProductController@upsapi')->name('upsapi');
+Route::post('apply-discount', 'ProductController@applyDiscount')->name('applyDiscount');
+Route::post('apply-gift', 'ProductController@applyGift')->name('applyGift');
 
 /*wishlist*/
 Route::get('/wishlist', 'WishlistController@index')->name('customer.wishlist.list');

@@ -54,7 +54,8 @@ class OrderController extends Controller
 
 	public function checkout()
 	{
-
+        session()->forget('discount');
+        session()->forget('percentage');
 		$language = Session::get('language');
 		$product_detail = DB::table('products')->first();
 
@@ -306,7 +307,7 @@ class OrderController extends Controller
 
 	public function placeOrder(Request $request)
 	{
-		
+
 		// dd($request->all());
 
 		$validateArr = array();
@@ -383,6 +384,8 @@ class OrderController extends Controller
 		$order->order_notes = $request->order_notes;
 		$order->order_company = $request->company_name;
 		$order->payment_method = $request->payment_method;
+		$order->discount = $request->discount;
+		$order->gift = $request->gift;
 
 		$order->order_items = count(Session::get('cart'));
 
@@ -438,7 +441,7 @@ class OrderController extends Controller
 				return redirect()->back()->with('stripe_error', $e->getMessage());
 			}
 			$chargeJson = $charge->jsonSerialize();
-			// Check whether the charge is successful 
+			// Check whether the charge is successful
 			if ($chargeJson['amount_refunded'] == 0 && empty($chargeJson['failure_code']) && $chargeJson['paid'] == 1 && $chargeJson['captured'] == 1) {
 				$transactionID = $chargeJson['balance_transaction'];
 				$payment_status = $chargeJson['status'];

@@ -106,10 +106,10 @@
                                 <div class="d-none d-sm-block col-3">{{$order_product->order_products_name}}</div>
                                 <div class="d-none d-sm-block col-3">
 
-                                    <?php 
-                                        
+                                    <?php
+
                                         $variants = json_decode($order_product->variants);
-                                        
+
                                     ?>
 
                                     @foreach($variants as $key => $value)
@@ -156,15 +156,27 @@
                                 </div>
                                 @endif
 
+                                @if($order->discount != 0)
                                 <div class="row my-2">
                                     <div class="col-7 text-right">
                                         Discount
                                     </div>
                                     <div class="col-5">
-                                        <span class="text-110 text-secondary-d1">${{$order->discount}}</span>
+                                        <span class="text-110 text-secondary-d1">{{$order->discount}}%</span>
                                     </div>
                                 </div>
+                                @endif
 
+                                @if($order->gift != 0)
+                                <div class="row my-2">
+                                    <div class="col-7 text-right">
+                                        Gift Card
+                                    </div>
+                                    <div class="col-5">
+                                        <span class="text-110 text-secondary-d1">-${{$order->gift}}</span>
+                                    </div>
+                                </div>
+                                @endif
 
                                 <div class="row my-2">
                                     <div class="col-7 text-right">
@@ -181,7 +193,7 @@
                                         Total Amount
                                     </div>
                                     <div class="col-5">
-                                        <?php 
+                                        <?php
                                             $shipping = $order->order_shipping ;
                                         ?>
                                         <span class="text-150 text-success-d3 opacity-2">${{$order->order_total  + $shipping }}</span>

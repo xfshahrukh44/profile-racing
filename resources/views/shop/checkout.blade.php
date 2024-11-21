@@ -442,6 +442,12 @@
                                 ?>
                             @endforeach
                             {{--                    <div class="amount-wrapper"> --}}
+                                @php
+                                    $discount = session()->get('percentage', 0);
+                                    if($discount != 0){
+                                        $subtotal = ($subtotal * ($discount->percentage / 100));
+                                    }
+                                @endphp
                             <div id="shippingdiv" class="grand-total-wrap mb-40 shippingdiv"style="display:none">
                                 <ul id="upsli">
                                     <li>
@@ -454,9 +460,22 @@
                                         <h4 id="totalshippingh4">$0.00</h4>
                                     </li>
 
-                                    <li id="li_discount" hidden>
-                                        Discount
-                                        <h4 id="h4_discount">asd asd ($0.00)</h4>
+                                    <li id="li_discount" style="display: none">
+                                            <input type="checkbox" id="toggle_discount" @if(session()->get('discount')) checked @endif />
+                                            <input type="hidden" name="discount" id="discount">
+                                            Apply Discount
+                                        <div id="discount_content" style="display: {{ session()->get('discount') ? 'block' : 'none' }};">
+                                            <h4 id="h4_discount">{{ $discount ?? 0 }}</h4>
+                                        </div>
+                                    </li>
+
+                                    <li id="li_gift" style="display: none">
+                                            <input type="checkbox" id="toggle_gift" />
+                                            <input type="hidden" name="gift" id="gift">
+                                            Apply GiftCard
+                                        <div id="gift_content" style="display: none">
+                                            <h4 id="h4_gift"></h4>
+                                        </div>
                                     </li>
 
 
@@ -558,6 +577,171 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
+        document.getElementById("toggle_discount").addEventListener("change", function () {
+            const discountContent = document.getElementById("discount_content");
+            if (this.checked) {
+                discountContent.style.display = "block";
+
+                // Check if the input already exists
+                if (!document.getElementById("discount_input")) {
+                    // Create and append the input field
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.id = "discount_input";
+                    input.placeholder = "Enter discount code";
+                    discountContent.appendChild(input);
+
+                    // Create and append the Apply button with an icon
+                    const applyButton = document.createElement("button");
+                    applyButton.id = "apply_discount";
+                    applyButton.innerHTML = '<i class="fas fa-check"></i> Apply';
+                    discountContent.appendChild(applyButton);
+
+                    // Add click event listener to Apply button
+                    applyButton.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        const discountCode = input.value;
+                        const baseprice = $('#total_price').val();
+                        if (discountCode) {
+                            // Send AJAX request to apply discount code
+                            applyDiscount(discountCode, baseprice);
+                        } else {
+                            alert("Please enter a discount code.");
+                        }
+                    });
+                }
+            } else {
+                discountContent.style.display = "none";
+
+                // Remove the input field and Apply button if they exist
+                const input = document.getElementById("discount_input");
+                if (input) {
+                    input.remove();
+                }
+
+                const applyButton = document.getElementById("apply_discount");
+                if (applyButton) {
+                    applyButton.remove();
+                }
+            }
+        });
+
+        // Function to send AJAX request to apply discount
+        function applyDiscount(discountCode, baseprice = 0) {
+            $.ajax({
+                url: "{{ route('applyDiscount') }}",  // Route to apply discount in Laravel
+                method: 'POST',
+                data: {
+                    discount_code: discountCode,
+                    baseprice: baseprice,
+                    _token: '{{ csrf_token() }}'  // Add CSRF token for security
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#total_price').val(response.discount);
+                        $('#total_price').text('$'+response.discount);
+                        $('#grandtotal').text('$'+response.discount);
+                        $('.grandtotalstripe').text('Pay Now $' + response.discount);
+                        $('#discount_input').hide();
+                        $('#apply_discount').hide();
+                        $('#toggle_discount').hide();
+                        $('#h4_discount').text(response.percentage+'%');
+                        $('#discount').val(response.percentage);
+                        alert("Discount applied successfully!");
+                        // You can update the cart details on the page here using the response
+                    } else {
+                        alert("Failed to apply discount. " + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        }
+
+        document.getElementById("toggle_gift").addEventListener("change", function () {
+            const giftContent = document.getElementById("gift_content");
+            if (this.checked) {
+                giftContent.style.display = "block";
+
+                // Check if the input already exists
+                if (!document.getElementById("gift_input")) {
+                    // Create and append the input field
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.id = "gift_input";
+                    input.placeholder = "Enter gift code";
+                    giftContent.appendChild(input);
+
+                    // Create and append the Apply button with an icon
+                    const applyButton = document.createElement("button");
+                    applyButton.id = "apply_gift";
+                    applyButton.innerHTML = '<i class="fas fa-check"></i> Apply';
+                    giftContent.appendChild(applyButton);
+
+                    // Add click event listener to Apply button
+                    applyButton.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        const giftCode = input.value;
+                        const baseprice = $('#total_price').val();
+                        if (giftCode) {
+                            // Send AJAX request to apply gift code
+                            applygift(giftCode, baseprice);
+                        } else {
+                            alert("Please enter a gift code.");
+                        }
+                    });
+                }
+            } else {
+                giftContent.style.display = "none";
+
+                // Remove the input field and Apply button if they exist
+                const input = document.getElementById("gift_input");
+                if (input) {
+                    input.remove();
+                }
+
+                const applyButton = document.getElementById("apply_gift");
+                if (applyButton) {
+                    applyButton.remove();
+                }
+            }
+        });
+
+        // Function to send AJAX request to apply gift
+        function applygift(giftCode, baseprice = 0) {
+            $.ajax({
+                url: "{{ route('applyGift') }}",  // Route to apply gift in Laravel
+                method: 'POST',
+                data: {
+                    gift_code: giftCode,
+                    baseprice: baseprice,
+                    _token: '{{ csrf_token() }}'  // Add CSRF token for security
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#total_price').val(response.gift);
+                        $('#total_price').text('$'+response.gift);
+                        $('#grandtotal').text('$'+response.gift);
+                        $('.grandtotalstripe').text('Pay Now $' + response.gift);
+                        $('#gift_input').hide();
+                        $('#apply_gift').hide();
+                        $('#toggle_gift').hide();
+                        $('#h4_gift').text('$'+baseprice+' - $'+response.balance);
+                        $('#gift').val(response.balance);
+                        alert("Gift applied successfully!");
+                        // You can update the cart details on the page here using the response
+                    } else {
+                        alert("Failed to apply gift. " + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        }
+
+
         $("#searchTextField").keydown(function() {
             $('#fedex-checker').val(0);
             $('#accordion').slideUp();
@@ -697,10 +881,11 @@
                         },
                         success: function(response) {
                             if (response.status) {
+                                $('#li_discount').show();
+                                $('#li_gift').show();
                                 $('#accordion').prop('hidden', false);
                                 $('#li_hidden').prop('hidden', false);
-                                console.clear();
-                                console.log(response);
+
                                 var tax = Number('{{ $subtotal }}') + ((Number(response.tax) /
                                     100) * Number('{{ $subtotal }}'));
                                 $("#ordertotalli h4").text('$' + tax.toString());
@@ -799,9 +984,10 @@
                         },
                         success: function(response) {
                             if (response.status) {
+                                $('#li_discount').show();
+                                $('#li_gift').show();
                                 $('#li_hidden').prop('hidden', false);
                                 console.clear();
-                                console.log(response);
                                 var tax = Number('{{ $subtotal }}') + ((Number(response.tax) /
                                     100) * Number('{{ $subtotal }}'));
                                 $("#ordertotalli h4").text('$' + tax.toString());

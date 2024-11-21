@@ -19,6 +19,8 @@ use Session;
 use App\Http\Traits\HelperTrait;
 use App\orders;
 use App\orders_products;
+use App\Models\Discount;
+use App\Models\GiftCard;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Session\Session as SessionSession;
 
@@ -694,4 +696,88 @@ class ProductController extends Controller
 		}
 		return view('shop.cart', ['messgae' => $messgae, 'cart' => $cart]);
 	}
+
+    public function applyDiscount(Request $request)
+    {
+        session()->forget('discount');
+        session()->forget('percentage');
+
+        $validated = $request->validate([
+            'discount_code' => 'required',
+            'baseprice' => 'required',
+        ]);
+
+        $discountCode = $validated['discount_code'];
+
+        // Retrieve the discount from the database
+        $discount = Discount::where('code', $discountCode)
+                            ->where('expiry_date', '>=', now()) // Check if the discount is still valid
+                            ->first();
+
+        if (!$discount) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or expired discount code.',
+            ]);
+        }
+
+        // Retrieve the cart from the session
+        $cart = session()->get('cart', []);
+        if($request->baseprice != 0){
+            $baseprice = $request->baseprice - ($request->baseprice * ($discount->percentage / 100));
+            session()->put('discount', $baseprice);
+            session()->put('percentage', $discount->percentage);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Discount applied successfully!',
+            'discount' => number_format($baseprice, 2),
+            'percentage' => (int)$discount->percentage
+        ]);
+    }
+
+    public function applyGift(Request $request)
+    {
+        // session()->forget('gift');
+        // session()->forget('balance');
+
+        $validated = $request->validate([
+            'gift_code' => 'required',
+            'baseprice' => 'required',
+        ]);
+
+        $giftCode = $validated['gift_code'];
+
+        // Retrieve the gift from the database
+        $giftCard = GiftCard::where('code', $giftCode)
+                            ->where('expiry_date', '>=', now()) // Check if the gift is still valid
+                            ->first();
+
+        if (!$giftCard) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or expired gift code.',
+            ]);
+        }
+
+        if($request->baseprice != 0 && ($request->baseprice >= $giftCard->balance)){
+            $baseprice = $request->baseprice;
+            $baseprice -= $giftCard->balance;
+            // session()->put('gift', $baseprice);
+            // session()->put('balance', $gift->balance);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'You does not apply on this product.',
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Gift applied successfully!',
+            'gift' => number_format($baseprice, 2),
+            'balance' => (int)$giftCard->balance
+        ]);
+    }
 }
