@@ -7,11 +7,6 @@
     </div>
 </div><div class="col-md-12">
     <div class="form-group">
-    	{!! Form::label('amount', 'Amount') !!}
-    	    	{!! Form::number('amount', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    </div>
-</div><div class="col-md-12">
-    <div class="form-group">
     	{!! Form::label('percentage', 'Percentage') !!}
     	    	{!! Form::number('percentage', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     </div>
