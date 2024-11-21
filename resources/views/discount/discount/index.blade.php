@@ -47,7 +47,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Code</th><th>Amount</th><th>Percentage</th>
+                                        <th>Code</th><th>Percentage</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -55,19 +55,19 @@
                                     @foreach($discount as $item)
                                     <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->code }}</td><td>{{ $item->amount }}</td><td>{{ $item->percentage }}</td>
+                                    <td>{{ $item->code }}</td><td>{{ $item->percentage }}</td>
                                     <td>
 
-                                        
+
                                             <a href="{{ url('/discount/discount/' . $item->id . '/edit') }}"
                                                title="Edit Discount">
                                                 <button class="btn btn-primary btn-sm">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"> </i> Edit
                                                 </button>
                                             </a>
-                                        
 
-                                        
+
+
                                             {!! Form::open([
                                        'method'=>'DELETE',
                                        'url' => ['/discount/discount', $item->id],
@@ -79,7 +79,7 @@
                                                     'title' => 'Delete Discount',
                                                     'onclick'=>'return confirm("Confirm delete?")'
                                             )) !!}
-                                        
+
                                         {!! Form::close() !!}
                                     </td>
                                 </tr>
@@ -88,7 +88,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>#</th>
-                                        <th>Code</th><th>Amount</th><th>Percentage</th>
+                                        <th>Code</th><th>Percentage</th>
                                         <th>Actions</th>
                                     </tr>
                                 </tfoot>
