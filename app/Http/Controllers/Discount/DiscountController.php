@@ -32,7 +32,6 @@ class DiscountController extends Controller
 
         if (!empty($keyword)) {
             $discount = Discount::where('code', 'LIKE', "%$keyword%")
-            ->orWhere('amount', 'LIKE', "%$keyword%")
             ->orWhere('percentage', 'LIKE', "%$keyword%")
             ->orWhere('expiry_date', 'LIKE', "%$keyword%")
             ->paginate($perPage);
@@ -65,7 +64,6 @@ class DiscountController extends Controller
     {
         $this->validate($request, [
             'code' => 'required',
-            'amount' => 'required',
             'percentage' => 'required',
             'expiry_date' => 'required'
         ]);
@@ -128,7 +126,6 @@ class DiscountController extends Controller
     {
         $this->validate($request, [
             'code' => 'required',
-            'amount' => 'required',
             'percentage' => 'required',
             'expiry_date' => 'required'
         ]);

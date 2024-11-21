@@ -25,7 +25,7 @@ class Discount extends Model
      *
      * @var array
      */
-    protected $fillable = ['code', 'amount', 'percentage', 'expiry_date'];
+    protected $fillable = ['code', 'percentage', 'expiry_date'];
 
-    
+
 }
