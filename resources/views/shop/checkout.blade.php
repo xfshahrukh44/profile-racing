@@ -813,21 +813,67 @@
             const shippingMethodSelect = $('#shipping_method');
             shippingMethodSelect.empty(); // Clear existing options
 
-            if (country.toLowerCase() === 'usa' || country.toLowerCase() === 'united states') {
-                // Add options for USA
-                shippingMethodSelect.append(new Option("Standard", "11", true, true));
-                shippingMethodSelect.append(new Option("UPS 2nd Day Air®", "02"));
-                shippingMethodSelect.append(new Option("UPS 3 Day Select®", "12")); // Set as default
-                shippingMethodSelect.append(new Option("UPS Next Day Air®", "14"));
-                shippingMethodSelect.append(new Option("UPS SurePost", "93"));
-            } else {
-                // Add options for other countries
-                shippingMethodSelect.append(new Option("UPS Standard", "11"));
-                shippingMethodSelect.append(new Option("UPS Worldwide Expedited®", "17"));
-                shippingMethodSelect.append(new Option("UPS Worldwide Saver®", "86"));
-                shippingMethodSelect.append(new Option("UPS Worldwide Express®", "72"));
-                shippingMethodSelect.append(new Option("UPS SurePost", "93"));
-            }
+            // Define an array of shipping methods for different countries
+            const shippingMethodsUSA = [
+                { text: "Standard", code: "11" },
+                { text: "UPS 2nd Day Air®", code: "02" },
+                { text: "UPS 3 Day Select®", code: "12" },
+                { text: "UPS Next Day Air®", code: "14" },
+                { text: "UPS SurePost", code: "93" }
+            ];
+
+            const shippingMethodsOthers = [
+                { text: "UPS Standard", code: "11" },
+                { text: "UPS Worldwide Expedited®", code: "17" },
+                { text: "UPS Worldwide Saver®", code: "86" },
+                { text: "UPS Worldwide Express®", code: "72" },
+                { text: "UPS SurePost", code: "93" }
+            ];
+
+            // Determine shipping methods based on the country
+            const selectedShippingMethods = (country.toLowerCase() === 'usa' || country.toLowerCase() === 'united states')
+                ? shippingMethodsUSA
+                : shippingMethodsOthers;
+
+
+            var country = $('#country').val();
+            var address = $('#address').val();
+            var postal = $('#postal').val();
+
+            var city = $('#city').val();
+            var state = $('#state').val();
+
+            // Append options and make AJAX requests for each method
+            selectedShippingMethods.forEach(method => {
+                $.ajax({
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    url: "{{ route('upsservices') }}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        country: country,
+                        address: address,
+                        state: state,
+                        postal: postal,
+                        city: city,
+                        shipping_method: method.code
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            // Append the option with upsamount in the text
+                            shippingMethodSelect.append(
+                                new Option(`${method.text} (${response.upsamount})`, method.code)
+                            );
+                        } else {
+                            console.error('Error in response:', response);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX error:', error);
+                    }
+                });
+            });
+
 
             $('#shippingdiv').slideDown(); // Show the shipping dropdown
         }
