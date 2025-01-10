@@ -86,26 +86,49 @@ class HomeController extends Controller
     {
         $page = DB::table('pages')->where('id', 1)->first();
         $search = $request->input('search');
-
+        $excludedIds = [464]; // IDs to exclude
+    
         if ($search) {
             $get_product = Product::
                 where('product_title', 'LIKE', "%{$search}%")
                 ->where('status', '1')
+                ->whereNotIn('id', $excludedIds) // Exclude specified IDs
                 ->orderBy('created_at', 'ASC')
                 ->paginate(12);
         } else if ($cat != "" && $subcat == "" && $childsubcat == "") {
-            $get_product = DB::table('products')->where('category', $cat)->where('status', '1')->orderBy('created_at', 'ASC')->paginate(12);
+            $get_product = DB::table('products')
+                ->where('category', $cat)
+                ->where('status', '1')
+                ->whereNotIn('id', $excludedIds) // Exclude specified IDs
+                ->orderBy('created_at', 'ASC')
+                ->paginate(12);
         } else if ($cat != "" && $subcat != "" && $childsubcat == "") {
-            $get_product = DB::table('products')->where('category', $cat)->where('subcategory', $subcat)->where('status', '1')->orderBy('created_at', 'ASC')->paginate(12);
+            $get_product = DB::table('products')
+                ->where('category', $cat)
+                ->where('subcategory', $subcat)
+                ->where('status', '1')
+                ->whereNotIn('id', $excludedIds) // Exclude specified IDs
+                ->orderBy('created_at', 'ASC')
+                ->paginate(12);
         } else if ($cat != "" && $subcat != "" && $childsubcat != "") {
-            $get_product = DB::table('products')->where('category', $cat)->where('subcategory', $subcat)->where('childsubcategory', $childsubcat)->where('status', '1')->orderBy('created_at', 'ASC')->paginate(12);
+            $get_product = DB::table('products')
+                ->where('category', $cat)
+                ->where('subcategory', $subcat)
+                ->where('childsubcategory', $childsubcat)
+                ->where('status', '1')
+                ->whereNotIn('id', $excludedIds) // Exclude specified IDs
+                ->orderBy('created_at', 'ASC')
+                ->paginate(12);
         } else {
-            $get_product = DB::table('products')->where('status', '1')->orderBy('created_at', 'ASC')->paginate(12);
+            $get_product = DB::table('products')
+                ->where('status', '1')
+                ->whereNotIn('id', $excludedIds) // Exclude specified IDs
+                ->orderBy('created_at', 'ASC')
+                ->paginate(12);
         }
-
+    
         return view('product', compact('page', 'get_product'));
     }
-
 
 
     public function product_detail($id = '' , $cat = "" , $subcat = "", $childsubcat = "")
