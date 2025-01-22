@@ -162,86 +162,82 @@
         </div>
 
         @foreach($product->attributes as $pro_att_edits)
-        <div class="col-md-12">
-            <div data-repeater-list="attribute">
-                <div data-repeater-item="" class="row">
-                    <input type="hidden" value="{{ $pro_att_edits->id}}" name="product_attribute[]">
+            <div class="col-md-12">
+                <div data-repeater-list="attribute">
+                    <div data-repeater-item="" class="row">
+                        <input type="hidden" value="{{ $pro_att_edits->id}}" name="product_attribute[]">
                         <div class="form-group mb-1 col-sm-12 col-md-3">
                             <label for="email-addr">Attribute</label>
                             <br>
                             <select class="form-control" id="attribute_id" name="attribute_id[]" onchange="getval(this)" disabled>
-                            <option value="{{ $pro_att_edits->attribute_id }}">{{ $pro_att_edits->attribute->name }}</option>
-                                <!-- @foreach($att as $atts)
+                                <option value="{{ $pro_att_edits->attribute_id }}">{{ $pro_att_edits->attribute->name }}</option>
+                            <!-- @foreach($att as $atts)
                                 <option value="{{ $atts->id}}">{{ $atts->name}}</option>
                                 @endforeach -->
                             </select>
                         </div>
-                        <div class="form-group mb-1 col-sm-12 col-md-4">
+                        <div class="form-group mb-1 col-sm-12 col-md-3">
                             <label for="pass">value</label>
                             <br>
-                             <select class="form-control value" id="value" name="value[]" disabled>
+                            <select class="form-control value" id="value" name="value[]" disabled>
                                 <option value="{{ $pro_att_edits->value }}">{{ $pro_att_edits->attributesValues->value }}</option>
                             </select>
                         </div>
-
-
-                        <div class="form-group mb-1 col-sm-12 col-md-3">
+                        <div class="form-group mb-1 col-sm-12 col-md-2">
                             <label for="bio" class="cursor-pointer">Price</label>
                             <br>
                             <input type="number" name="v_price[]" class="form-control" id="price" value="{{ $pro_att_edits->price }}">
                         </div>
-
-                        <!--<div class="form-group mb-1 col-sm-12 col-md-2">-->
-                            <!--<label for="bio" class="cursor-pointer">qty</label>-->
-                            <!--<br>-->
-                            <!--<input type="number" name="qty[]" class="form-control" id="qty" value="{{ $pro_att_edits->qty }}">-->
-                        <!--</div>-->
-
+                        <div class="form-group mb-1 col-sm-12 col-md-2">
+                            <label for="bio" class="cursor-pointer">qty</label>
+                            <br>
+                            <input type="number" name="qty[]" class="form-control" id="qty" value="{{ $pro_att_edits->qty }}">
+                        </div>
                         <div class="form-group col-sm-12 col-md-2 text-center mt-2">
                             <button onclick="deleteAttr({{ $pro_att_edits->id }}, this)" type="button" class="btn btn-danger" data-repeater-delete=""> <i class="ft-x"></i>
                                 Delete</button>
                         </div>
 
-                    <hr>
+                        <hr>
+                    </div>
                 </div>
             </div>
-        </div>
         @endforeach
 
         <div class="repeater-default col-md-12">
             <div data-repeater-list="attribute">
                 <div data-repeater-item="" class="row">
 
-                        <div class="form-group mb-1 col-sm-12 col-md-3">
-                            <label for="email-addr">Attribute</label>
-                            <br>
-                            <select class="form-control" id="attribute_id" name="attribute_id" onchange="getval(this)">
-                                @foreach($att as $atts)
+                    <div class="form-group mb-1 col-sm-12 col-md-3">
+                        <label for="email-addr">Attribute</label>
+                        <br>
+                        <select class="form-control" id="attribute_id" name="attribute_id" onchange="getval(this)">
+                            @foreach($att as $atts)
                                 <option value="{{ $atts->id}}">{{ $atts->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mb-1 col-sm-12 col-md-4">
-                            <label for="pass">value</label>
-                            <br>
-                             <select class="form-control value" id="value" name="value">
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group mb-1 col-sm-12 col-md-3">
+                        <label for="pass">value</label>
+                        <br>
+                        <select class="form-control value" id="value" name="value">
 
-                            </select>
-                        </div>
-                        <div class="form-group mb-1 col-sm-12 col-md-3">
-                            <label for="bio" class="cursor-pointer">Price</label>
-                            <br>
-                            <input type="num`ber" name="v-price" class="form-control" id="price" value="">
-                        </div>
-                        <!--<div class="form-group mb-1 col-sm-12 col-md-2">-->
-                            <!--<label for="bio" class="cursor-pointer">qty</label>-->
-                            <!--<br>-->
-                            <input type="hidden" name="qty" class="form-control" id="qty" value="1">
-                        <!--</div>-->
-                        <div class="form-group col-sm-12 col-md-2 text-center mt-2">
-                            <button type="button" class="btn btn-danger" data-repeater-delete=""> <i class="ft-x"></i>
-                                Delete</button>
-                        </div>
+                        </select>
+                    </div>
+                    <div class="form-group mb-1 col-sm-12 col-md-2">
+                        <label for="bio" class="cursor-pointer">Price</label>
+                        <br>
+                        <input type="number" name="v-price" class="form-control" id="price"  value="{{ $pro_att_edits->attributesValues->price }}">
+                    </div>
+                    <div class="form-group mb-1 col-sm-12 col-md-2">
+                        <label for="bio" class="cursor-pointer">qty</label>
+                        <br>
+                        <input type="number" name="qty" class="form-control" id="qty" >
+                    </div>
+                    <div class="form-group col-sm-12 col-md-2 text-center mt-2">
+                        <button type="button" class="btn btn-danger" data-repeater-delete=""> <i class="ft-x"></i>
+                            Delete</button>
+                    </div>
 
                     <hr>
                 </div>

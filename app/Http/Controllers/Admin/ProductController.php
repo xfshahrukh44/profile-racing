@@ -298,6 +298,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        dd($request->all());
         $model = str_slug('product','-');
         if(auth()->user()->permissions()->where('name','=','edit-'.$model)->first()!= null) {
             $this->validate($request, [
@@ -393,21 +394,22 @@ class ProductController extends Controller
 
 
             $attval = $request->attribute;
-            $product_attribute_id = $request->product_attribute;
-            $oldatt = $request->attribute_id;
-            $oldval = $request->value;
-            $oldprice = $request->v_price;
-            $oldqty = $request->qty;
-
-            for($j = 0; $j < count((array)$oldatt); $j++){
-                $product_attribute = ProductAttribute::find($product_attribute_id[$j]);
-                $product_attribute->attribute_id = $oldatt[$j];
-                $product_attribute->value = $oldval[$j];
-                $product_attribute->price = $oldprice[$j];
-                $product_attribute->qty = $oldqty[$j];
-                $product_attribute->save();
-            }
-
+//            $product_attribute_id = $request->product_attribute;
+//            $oldatt = $request->attribute_id;
+//            $oldval = $request->value;
+//            $oldprice = $request->v_price;
+//            $oldqty = $request->qty;
+//
+//            for($j = 0; $j < count((array)$oldatt); $j++){
+//                $product_attribute = ProductAttribute::find($product_attribute_id[$j]);
+//                $product_attribute->attribute_id = $oldatt[$j];
+//                $product_attribute->value = $oldval[$j];
+//                $product_attribute->price = $oldprice[$j];
+//                $product_attribute->qty = $oldqty[$j];
+//                $product_attribute->save();
+//            }
+//
+            //create new attributes
             for($i = 0; $i < count((array)$attval); $i++)
             {
                 $product_attributes = new ProductAttribute;
@@ -417,6 +419,19 @@ class ProductController extends Controller
                 $product_attributes->qty = $attval[$i]['qty'];
                 $product_attributes->product_id = $id;
                 $product_attributes->save();
+            }
+
+            //update old attributes
+            if ($request->has('product_attribute')) {
+                $count = 0;
+                foreach ($request->get('product_attribute') as $product_attribute_id) {
+                    $product_attribute = ProductAttribute::find($product_attribute_id);
+                    $product_attribute->qty = $request->get('qty')[$count] ?? 0;
+                    $product_attribute->price = $request->get('v_price')[$count] ?? 0;
+                    $product_attribute->save();
+
+                    $count += 1;
+                }
             }
 
          /*
