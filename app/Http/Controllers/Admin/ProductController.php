@@ -425,10 +425,11 @@ class ProductController extends Controller
             if ($request->has('product_attribute')) {
                 $count = 0;
                 foreach ($request->get('product_attribute') as $product_attribute_id) {
-                    $product_attribute = ProductAttribute::find($product_attribute_id);
-                    $product_attribute->qty = $request->get('qty')[$count] ?? 0;
-                    $product_attribute->price = $request->get('v_price')[$count] ?? 0;
-                    $product_attribute->save();
+                    if ($product_attribute = ProductAttribute::find($product_attribute_id)) {
+                        $product_attribute->qty = $request->get('qty')[$count] ?? 0;
+                        $product_attribute->price = $request->get('v_price')[$count] ?? 0;
+                        $product_attribute->save();
+                    }
 
                     $count += 1;
                 }
