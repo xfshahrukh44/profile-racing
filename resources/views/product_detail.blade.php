@@ -254,10 +254,36 @@ h3 strong{
 
 
             <?php
+                $custom_ordering_products_map = [
+                    116 => [50, 51, 52, 53, 55, 56, 25, 26],
+                    126 => [50, 51, 52, 53, 55, 56, 25, 26],
+                    146 => [50, 26],
+                    148 => [50, 27, 25, 26],
+                    151 => [50, 7, 26],
+                    153 => [50, 58, 55, 27, 25, 26],
+                    155 => [50, 51, 55, 27, 25, 26],
+                    157 => [66, 5, 27, 25, 26],
+                    165 => [50, 67, 53, 27],
+                    167 => [50, 67, 52, 27]
+                ];
+
+                $custom_ordering_products_array = null;
+                if (array_key_exists($get_product_detail->id, $custom_ordering_products_map)) {
+                    $custom_ordering_products_array = $custom_ordering_products_map[$get_product_detail->id];
+                }
+
+
             if($get_product_detail->id == 455){
                 $productAttributes_id = DB::table('product_attributes')->select('product_id', 'attribute_id')->where('product_id', $get_product_detail->id)->groupBy('attribute_id')->orderBy('attribute_id', 'desc')->get();
             }else{
-                $productAttributes_id = DB::table('product_attributes')->select('product_id', 'attribute_id')->where('product_id', $get_product_detail->id)->groupBy('attribute_id')->get();
+                $productAttributes_id = DB::table('product_attributes')
+                    ->select('product_id', 'attribute_id')
+                    ->where('product_id', $get_product_detail->id)
+                    ->groupBy('attribute_id')
+                    ->when(!is_null($custom_ordering_products_array), function ($q) use ($custom_ordering_products_array) {
+                        return $q->orderByRaw('FIELD(id, ' . implode(',', $custom_ordering_products_array) . ')');
+                    })
+                    ->get();
             }
                 // dump($productAttributes_id);
             ?>
@@ -392,7 +418,7 @@ h3 strong{
         // $('#h3_additional').prop('hidden', true);
       }
     }
-    
+
     @foreach($productAttributes_id as $key => $val_product_attribute)
     var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
 
