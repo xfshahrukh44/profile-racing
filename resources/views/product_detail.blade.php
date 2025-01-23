@@ -264,7 +264,8 @@ h3 strong{
                     155 => [50, 51, 55, 27, 25, 26],
                     157 => [66, 5, 27, 25, 26],
                     165 => [50, 67, 53, 27],
-                    167 => [50, 67, 52, 27]
+                    167 => [50, 67, 52, 27],
+                    5 => [9, 10]
                 ];
 
                 $custom_ordering_products_array = null;
@@ -281,7 +282,7 @@ h3 strong{
                     ->where('product_id', $get_product_detail->id)
                     ->groupBy('attribute_id')
                     ->when(!is_null($custom_ordering_products_array), function ($q) use ($custom_ordering_products_array) {
-                        return $q->orderByRaw('FIELD(id, ' . implode(',', $custom_ordering_products_array) . ')');
+                        return $q->orderByRaw('FIELD(attribute_id, ' . implode(',', $custom_ordering_products_array) . ')');
                     })
                     ->get();
             }
