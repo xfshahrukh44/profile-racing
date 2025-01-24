@@ -186,7 +186,7 @@
                         <div class="form-group mb-1 col-sm-12 col-md-2">
                             <label for="bio" class="cursor-pointer">Price</label>
                             <br>
-                            <input type="number" name="v_price[]" class="form-control" id="price" value="{{ $pro_att_edits->price }}">
+                            <input type="number" name="v_price[]" class="form-control" step=".01" id="price" value="{{ $pro_att_edits->price }}">
                         </div>
                         <div class="form-group mb-1 col-sm-12 col-md-2">
                             <label for="bio" class="cursor-pointer">qty</label>
