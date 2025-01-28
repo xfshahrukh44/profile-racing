@@ -267,7 +267,10 @@ h3 strong{
                     167 => [50, 67, 52, 27],
                     5 => [9, 10],
                     201 => [21, 14],
-                    236 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75]
+                    236 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    246 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    262 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    313 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75]
                 ];
 
                 $custom_ordering_products_array = null;
@@ -322,9 +325,9 @@ h3 strong{
 
 
                     <input type="hidden" name="select_price" class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}" value=0>
-                    <select class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option" name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]>
+                    <select class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option" name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]">
 
-                        <option value="0">Choose an option</option>
+                        <option value="">Choose an option</option>
                         @foreach($get_attribute_values as $key => $val_attr_value)
                             <option data-price="{{$val_attr_value->price}}" value="{{ $val_attr_value->value }}"> {{ App\AttributeValue::find($val_attr_value->value)->value }} </option>
                         @endforeach
