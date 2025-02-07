@@ -2,37 +2,35 @@
 
 @section('css')
 <style>
+    .inner-drop {
+        padding-left: 1rem;
+        display: none;
+        text-transform: uppercase;
+    }
 
+    .inner-drop-2 {
+        padding-left: 1rem;
+        display: none;
+    }
 
-.inner-drop {
-    padding-left:1rem;
-    display:none;
-    text-transform: uppercase;
-}
-.inner-drop-2 {
-    padding-left:1rem;
-    display:none;
-}
+    .category ul li a {
+        color: #c0c0c0;
+        font-family: 'Lato';
+        font-size: 18px !important;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
 
-.category ul li a {
-    color: #c0c0c0;
-    font-family: 'Lato';
-    font-size: 18px !important;
-    text-decoration: none;
-    text-transform: uppercase;
-}
+    .page-link {
+        color: #141414 !important;
+    }
 
-.page-link {
-    color: #141414 !important;
-}
-
-.page-item.active .page-link {
-    z-index: 1 !important;
-    color: #fff !important;
-    background-color: #c00a27 !important;
-    border-color: #c00a27 !important;
-}
-
+    .page-item.active .page-link {
+        z-index: 1 !important;
+        color: #fff !important;
+        background-color: #c00a27 !important;
+        border-color: #c00a27 !important;
+    }
 </style>
 @endsection
 
@@ -46,10 +44,10 @@
 
 <?php
 
-    $get_category = DB::table('categories')->get();
-    $route_category = Request::segment(2);
-    $route_subcategory = Request::segment(3);
-    $route_child_subcategory = Request::segment(4);
+$get_category = DB::table('categories')->get();
+$route_category = Request::segment(2);
+$route_subcategory = Request::segment(3);
+$route_child_subcategory = Request::segment(4);
 
 ?>
 
@@ -61,19 +59,19 @@
 <!--            <div class="col-lg-12">-->
 <!--                <div class="inner-headings">-->
 
-<!--                    <?php if($route_category != "" && $route_subcategory == "" && $route_child_subcategory == ""){ ?>-->
+<!--                    <?php if ($route_category != "" && $route_subcategory == "" && $route_child_subcategory == "") { ?>-->
 
 <!--                        <h2> {{ App\Category::find($route_category)->name }} </h2>-->
 
-<!--                    <?php }elseif($route_category != "" && $route_subcategory != "" && $route_child_subcategory == ""){ ?>-->
+<!--                    <?php } elseif ($route_category != "" && $route_subcategory != "" && $route_child_subcategory == "") { ?>-->
 
 <!--                        <h2> {{ App\Models\Subcategory::find($route_category)->subcategory }} </h2>-->
 
-<!--                    <?php }elseif($route_category != "" && $route_subcategory != "" && $route_child_subcategory != ""){ ?>-->
+<!--                    <?php } elseif ($route_category != "" && $route_subcategory != "" && $route_child_subcategory != "") { ?>-->
 
 <!--                       <h2> {{ App\Models\Childsubcategory::find($route_category)->childsubcategory }} </h2>-->
 
-<!--                    <?php }else{ ?>-->
+<!--                    <?php } else { ?>-->
 
 <!--                        <h2>PRODUCTS</h2>-->
 
@@ -94,111 +92,133 @@
 
 
 
-                <div class="col-md-3">
+            <div class="col-md-3">
 
-                    <div class="category">
-                        <h4>Category</h4>
-                            <ul>
+                <div class="category">
+                    <h4>Category</h4>
+                    <ul>
 
-                                @foreach($get_category as $key1 => $val_category)
-                                <li class="inner-shop">
+                        @foreach($get_category as $key1 => $val_category)
+                        @if($val_category->id != 2) {{-- Category ID 2 ko hide karna --}}
+                        <li class="inner-shop">
+                            <a href="{{ URL('product/'.$val_category->id) }}"
+                                style="<?php if ($route_category == $val_category->id) {
+                                            echo 'color:red';
+                                        } ?>">
+                                {{ $val_category->name }}
+                            </a>
 
-                                    <a href="{{ URL('product/'.$val_category->id) }}" style="<?php if($route_category == $val_category->id){ echo 'color:red'; } ?>" > {{ $val_category->name }} </a>
+                            <?php $get_subcategory = DB::table('subcategories')->where('category', $val_category->id)->get(); ?>
 
-                                        <?php $get_subcategory = DB::table('subcategories')->where('category',$val_category->id)->get(); ?>
+                            @foreach($get_subcategory as $key2 => $val_subcategory)
+                            <div class="inner-drop"
+                                style="<?php if ($route_category == $val_subcategory->category) {
+                                            echo 'display:block;';
+                                        } ?>">
+                                <ul>
+                                    <li class="inner-shop-2">
+                                        <a href="{{ URL('product/'.$val_category->id.'/'.$val_subcategory->id) }}"
+                                            style="<?php if ($route_subcategory == $val_subcategory->id) {
+                                                        echo 'color:red';
+                                                    } ?>">
+                                            {{ $val_subcategory->subcategory }}
+                                        </a>
 
-                                        @foreach($get_subcategory as $key2 => $val_subcategory)
-                                        <div class="inner-drop" style="<?php if($route_category == $val_subcategory->category){ echo 'display:block;'; } ?>" >
+                                        <?php $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?>
+
+                                        @foreach($get_childsubcategory as $key2 => $val_childsubcategory)
+                                        <div class="inner-drop-2"
+                                            style="<?php if ($route_subcategory == $val_childsubcategory->subcategory) {
+                                                        echo 'display:block;';
+                                                    } ?>">
                                             <ul>
-                                                <li class="inner-shop-2">
-                                                    <a href="{{ URL('product/'.$val_category->id.'/'.$val_subcategory->id) }}" style="<?php if($route_subcategory == $val_subcategory->id){ echo 'color:red'; } ?>" > {{ $val_subcategory->subcategory }} </a>
-
-                                                        <?php $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?>
-
-                                                        @foreach($get_childsubcategory as $key2 => $val_childsubcategory)
-                                                        <div class="inner-drop-2" style="<?php if($route_subcategory == $val_childsubcategory->subcategory){ echo 'display:block;'; } ?>" >
-                                                            <ul>
-                                                                <li>
-                                                                    <a href="{{ URL('product/'.$val_category->id.'/'.$val_subcategory->id.'/'.$val_childsubcategory->id) }}"  style="<?php if($route_child_subcategory == $val_childsubcategory->id){ echo 'color:red'; } ?>" > {{ $val_childsubcategory->childsubcategory }} </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        @endforeach
-
+                                                <li>
+                                                    <a href="{{ URL('product/'.$val_category->id.'/'.$val_subcategory->id.'/'.$val_childsubcategory->id) }}"
+                                                        style="<?php if ($route_child_subcategory == $val_childsubcategory->id) {
+                                                                    echo 'color:red';
+                                                                } ?>">
+                                                        {{ $val_childsubcategory->childsubcategory }}
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
                                         @endforeach
+                                    </li>
+                                </ul>
+                            </div>
+                            @endforeach
+                        </li>
+                        @endif
+                        @endforeach
 
-                                </li>
-                                @endforeach
-
-                        </ul>
-                    </div>
-
+                    </ul>
                 </div>
 
-                <div class="col-md-9">
+            </div>
+
+            <div class="col-md-9">
 
 
 
-                        <div class="row">
+                <div class="row">
 
-                            @foreach($get_product as $key => $val_product)
-                            <div class="col-lg-4">
-                                <div class="opt-sec-2-main">
+                    @foreach($get_product as $key => $val_product)
+                    <div class="col-lg-4">
+                        <div class="opt-sec-2-main">
 
-                                    @if($route_category != "" && $route_subcategory == "" && $route_child_subcategory == "")
+                            @if($route_category != "" && $route_subcategory == "" && $route_child_subcategory == "")
 
-                                    <a href="{{ URL('product_detail/'.$val_product->id.'/'.$route_category) }}">
+                            <a href="{{ URL('product_detail/'.$val_product->id.'/'.$route_category) }}">
 
-                                    @elseif($route_category != "" && $route_subcategory != "" && $route_child_subcategory == "")
+                                @elseif($route_category != "" && $route_subcategory != "" && $route_child_subcategory == "")
 
-                                    <a href="{{ URL('product_detail/'.$val_product->id.'/'.$route_category.'/'.$route_subcategory) }}">
+                                <a href="{{ URL('product_detail/'.$val_product->id.'/'.$route_category.'/'.$route_subcategory) }}">
 
                                     @elseif($route_category != "" && $route_subcategory != "" && $route_child_subcategory != "")
 
                                     <a href="{{ URL('product_detail/'.$val_product->id.'/'.$route_category.'/'.$route_subcategory.'/'.$route_child_subcategory) }}">
 
-                                    @elseif($route_category == "" && $route_subcategory == "" && $route_child_subcategory == "")
+                                        @elseif($route_category == "" && $route_subcategory == "" && $route_child_subcategory == "")
 
-                                    <a href="{{ URL('product_detail/'.$val_product->id.'/'.$val_product->category.'/'.$val_product->subcategory.'/'.$val_product->childsubcategory) }}">
+                                        <a href="{{ URL('product_detail/'.$val_product->id.'/'.$val_product->category.'/'.$val_product->subcategory.'/'.$val_product->childsubcategory) }}">
 
-                                    @endif
+                                            @endif
 
-                                        <div class="opt-sec2-img">
-                                            <figure>
-                                                <img src="{{asset($val_product->image)}}" class="img-fluid" alt="" style="height: 260px; width: 260px;" >
-                                            </figure>
-                                        </div>
-                                        <div class="opt-sec2-text">
-                                            <p> {{ \Illuminate\Support\Str::limit($val_product->product_title, 50, $end='...') }} </p>
-                                            <h6>${{ $val_product->price }} <?php if($val_product->maximum_price != "" && $val_product->maximum_price != "0"){ echo ' - $'.$val_product->maximum_price; } ?> </h6>
-                                            <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
-                                        </div>
-                                    </a>
-
-                                </div>
-                            </div>
-                            @endforeach
-
+                                            <div class="opt-sec2-img">
+                                                <figure>
+                                                    <img src="{{asset($val_product->image)}}" class="img-fluid" alt="" style="height: 260px; width: 260px;">
+                                                </figure>
+                                            </div>
+                                            <div class="opt-sec2-text">
+                                                <p> {{ \Illuminate\Support\Str::limit($val_product->product_title, 50, $end='...') }} </p>
+                                                <h6>${{ $val_product->price }} <?php if ($val_product->maximum_price != "" && $val_product->maximum_price != "0") {
+                                                                                    echo ' - $' . $val_product->maximum_price;
+                                                                                } ?> </h6>
+                                                <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
+                                            </div>
+                                        </a>
 
                         </div>
-
-
-                        <div class="row">
-
-                            <div class="col-lg-12">
-
-                                <center> {{ $get_product->links() }} </center>
-
-                            </div>
-
-                        </div>
-
+                    </div>
+                    @endforeach
 
 
                 </div>
+
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                        <center> {{ $get_product->links() }} </center>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
 
 
 
@@ -213,19 +233,16 @@
 
 @section('js')
 <script type="text/javascript">
+    // $(document).ready(function () {
+    //     $(".inner-shop").click(function () {
+    //         $(".inner-drop").show()
+    //     })
+    // });
 
-// $(document).ready(function () {
-//     $(".inner-shop").click(function () {
-//         $(".inner-drop").show()
-//     })
-// });
-
-// $(document).ready(function () {
-//     $(".inner-shop-2").click(function () {
-//         $(".inner-drop-2").show()
-//     })
-// });
-
-
+    // $(document).ready(function () {
+    //     $(".inner-shop-2").click(function () {
+    //         $(".inner-drop-2").show()
+    //     })
+    // });
 </script>
 @endsection

@@ -139,47 +139,58 @@
                     <ul>
 
                         @foreach($get_category as $key1 => $val_category)
+                        @if($val_category->id != 2) {{-- Category ID 2 ko hide karna --}}
                         <li class="inner-shop">
-
-                            <a href="{{ URL('product/'.$val_category->id) }}" style="<?php if ($route_category == $val_category->id) {
-                                                                                            echo 'color:red';
-                                                                                        } ?>"> {{ $val_category->name }} </a>
+                            <a href="{{ URL('product/'.$val_category->id) }}"
+                                style="<?php if ($route_category == $val_category->id) {
+                                            echo 'color:red';
+                                        } ?>">
+                                {{ $val_category->name }}
+                            </a>
 
                             <?php $get_subcategory = DB::table('subcategories')->where('category', $val_category->id)->get(); ?>
 
                             @foreach($get_subcategory as $key2 => $val_subcategory)
-                            <div class="inner-drop" style="<?php if ($route_category == $val_subcategory->category) {
-                                                                echo 'display:block;';
-                                                            } ?>">
+                            <div class="inner-drop"
+                                style="<?php if ($route_category == $val_subcategory->category) {
+                                            echo 'display:block;';
+                                        } ?>">
                                 <ul>
                                     <li class="inner-shop-2">
-                                        <a href="{{ URL('product/'.$route_category.'/'.$val_subcategory->id) }}" style="<?php if ($route_subcategory == $val_subcategory->id) {
-                                                                                                                            echo 'color:red';
-                                                                                                                        } ?>"> {{ $val_subcategory->subcategory }} </a>
+                                        <a href="{{ URL('product/'.$val_category->id.'/'.$val_subcategory->id) }}"
+                                            style="<?php if ($route_subcategory == $val_subcategory->id) {
+                                                        echo 'color:red';
+                                                    } ?>">
+                                            {{ $val_subcategory->subcategory }}
+                                        </a>
 
                                         <?php $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?>
 
                                         @foreach($get_childsubcategory as $key2 => $val_childsubcategory)
-                                        <div class="inner-drop-2" style="<?php if ($route_subcategory == $val_childsubcategory->subcategory) {
-                                                                                echo 'display:block;';
-                                                                            } ?>">
+                                        <div class="inner-drop-2"
+                                            style="<?php if ($route_subcategory == $val_childsubcategory->subcategory) {
+                                                        echo 'display:block;';
+                                                    } ?>">
                                             <ul>
                                                 <li>
-                                                    <a href="{{ URL('product/'.$route_category.'/'.$val_subcategory->id.'/'.$val_childsubcategory->id) }}" style="<?php if ($route_child_subcategory == $val_childsubcategory->id) {
-                                                                                                                                                                        echo 'color:red';
-                                                                                                                                                                    } ?>"> {{ $val_childsubcategory->childsubcategory }} </a>
+                                                    <a href="{{ URL('product/'.$val_category->id.'/'.$val_subcategory->id.'/'.$val_childsubcategory->id) }}"
+                                                        style="<?php if ($route_child_subcategory == $val_childsubcategory->id) {
+                                                                    echo 'color:red';
+                                                                } ?>">
+                                                        {{ $val_childsubcategory->childsubcategory }}
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
                                         @endforeach
-
                                     </li>
                                 </ul>
                             </div>
                             @endforeach
-
                         </li>
+                        @endif
                         @endforeach
+
 
                     </ul>
                 </div>
@@ -299,7 +310,15 @@
                 270 => [87, 86],
                 418 => [9, 14],
                 428 => [14, 9],
-                265 => [14, 9]
+                265 => [14, 9],
+                293 => [14, 58, 44, 27],
+                295 => [14, 58, 44, 27],
+                295 => [14, 58, 44, 27, 60],
+                143 => [14, 58, 60, 44],
+                143 => [14, 58, 44, 27, 61, 26],
+                133 => [14, 58, 44, 27],
+                135 => [14, 58, 44, 27, 25, 26],
+                131 => [14, 57, 27, 25, 38]
             ];
 
             $custom_ordering_products_array = null;
@@ -403,7 +422,11 @@
                         <script>
                             document.getElementById('add_price_checkbox').addEventListener('change', function() {
                                 let priceElement = document.getElementById('h3_original');
-                                let basePrice = {{ $get_product_detail->price }};
+                                let basePrice = {
+                                    {
+                                        $get_product_detail - > price
+                                    }
+                                };
                                 let additionalPrice = parseFloat(this.value);
 
                                 if (this.checked) {
