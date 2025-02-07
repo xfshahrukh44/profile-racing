@@ -125,8 +125,8 @@ $route_child_subcategory = Request::segment(4);
                                         </a>
 
                                         <?php $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?>
-
                                         @foreach($get_childsubcategory as $key2 => $val_childsubcategory)
+                                        @if ($val_childsubcategory->id != 3)
                                         <div class="inner-drop-2"
                                             style="<?php if ($route_subcategory == $val_childsubcategory->subcategory) {
                                                         echo 'display:block;';
@@ -142,6 +142,7 @@ $route_child_subcategory = Request::segment(4);
                                                 </li>
                                             </ul>
                                         </div>
+                                        @endif
                                         @endforeach
                                     </li>
                                 </ul>
