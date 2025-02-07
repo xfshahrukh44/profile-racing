@@ -21,299 +21,312 @@ use App\orders;
 use App\orders_products;
 use App\Models\Discount;
 use App\Models\GiftCard;
+use App\Section;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Session\Session as SessionSession;
 
 class ProductController extends Controller
 {
-	use HelperTrait;
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	// use Helper;
+    use HelperTrait;
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    // use Helper;
 
-	public function __construct()
-	{
-		//$this->middleware('auth');
-		$logo = imagetable::select('img_path')
-			->where('table_name', '=', 'logo')
-			->first();
+    public function __construct()
+    {
+        //$this->middleware('auth');
+        $logo = imagetable::select('img_path')
+            ->where('table_name', '=', 'logo')
+            ->first();
 
-		$favicon = imagetable::select('img_path')
-			->where('table_name', '=', 'favicon')
-			->first();
+        $favicon = imagetable::select('img_path')
+            ->where('table_name', '=', 'favicon')
+            ->first();
 
-		View()->share('logo', $logo);
-		View()->share('favicon', $favicon);
-		//View()->share('config',$config);
-	}
+        View()->share('logo', $logo);
+        View()->share('favicon', $favicon);
+        //View()->share('config',$config);
+    }
 
-	public function index()
-	{
-		$products = new Product;
-		if (isset($_GET['q']) && $_GET['q'] != '') {
+    public function index()
+    {
+        $products = new Product;
+        if (isset($_GET['q']) && $_GET['q'] != '') {
 
-			$keyword = $_GET['q'];
+            $keyword = $_GET['q'];
 
-			$products = $products->where(function ($query)  use ($keyword) {
-				$query->where('product_title', 'like', $keyword);
-			});
-		}
-		$products = $products->orderBy('id', 'asc')->get();
-		return view('products', ['products' => $products]);
-	}
+            $products = $products->where(function ($query)  use ($keyword) {
+                $query->where('product_title', 'like', $keyword);
+            });
+        }
+        $products = $products->orderBy('id', 'asc')->get();
+        return view('products', ['products' => $products]);
+    }
 
-	public function productDetail($id)
-	{
+    public function productDetail($id)
+    {
 
-		$product = new Product;
-		$product_detail = $product->where('id', $id)->first();
-		$products = DB::table('products')->get()->take(10);
-		return view('product_detail', ['product_detail' => $product_detail, 'products' => $products]);
-	}
+        $product = new Product;
+        $product_detail = $product->where('id', $id)->first();
+        $products = DB::table('products')->get()->take(10);
+        return view('product_detail', ['product_detail' => $product_detail, 'products' => $products]);
+    }
 
-	public function categoryDetail($id)
-	{
+    public function categoryDetail($id)
+    {
 
-		$category = new Category;
+        $category = new Category;
 
-		$category = DB::table('products')->where('category', '=', $id)->get()->toArray();
-		return view('shop.category_detail', ['category' => $category]);
-	}
-
-
-	public function cart()
-	{
-
-		$page = DB::table('pages')->where('id', 2)->first();
-		$cartCount = COUNT(Session::get('cart'));
-		$language = Session::get('language');
-		$product_detail = DB::table('products')->first();
-		if (Session::get('cart') && count(Session::get('cart')) > 0) {
-			return view('shop.cart', ['cart' => Session::get('cart'), 'language' => $language, 'product_detail' => $product_detail, 'page' => $page]);
-		} else {
-			Session::flash('flash_message', 'No Product found');
-			Session::flash('alert-class', 'alert-success');
-			return redirect('/');
-		}
-	}
-
-	public function saveCart(Request $request)
-	{
+        $category = DB::table('products')->where('category', '=', $id)->get()->toArray();
+        return view('shop.category_detail', ['category' => $category]);
+    }
 
 
-		$var_item = $request->variation;
+    public function cart()
+    {
 
-		// dd($var_item);
+        $page = DB::table('pages')->where('id', 2)->first();
+        $cartCount = COUNT(Session::get('cart'));
+        $language = Session::get('language');
+        $product_detail = DB::table('products')->first();
+        if (Session::get('cart') && count(Session::get('cart')) > 0) {
+            return view('shop.cart', ['cart' => Session::get('cart'), 'language' => $language, 'product_detail' => $product_detail, 'page' => $page]);
+        } else {
+            Session::flash('flash_message', 'No Product found');
+            Session::flash('alert-class', 'alert-success');
+            return redirect('/');
+        }
+    }
 
-		$result = array();
-
-
-		$product_detail = DB::table('products')->where('id', $request->product_id)->first();
-
-
-		$id = isset($request->product_id) ? $request->product_id : '';
-		$qty = isset($request->qty) ? intval($request->qty) : '1';
-
-		// dd($qty);
-
-		$cart = array();
-		$cartId = $id;
-		if (Session::has('cart')) {
-
-			$cart = Session::get('cart');
-		}
-
-		$price = $product_detail->price;
+    public function saveCart(Request $request)
+    {
 
 
-		if ($id != "" && intval($qty) > 0) {
+        $var_item = $request->variation;
 
-			if (array_key_exists($cartId, $cart)) {
-				unset($cart[$cartId]);
-			}
+        // dd($var_item);
 
-			$productFirstrow = Product::where('id', $id)->first();
+        $result = array();
 
 
-			$cart[$cartId]['id'] = $id;
-			$cart[$cartId]['name'] = $productFirstrow->product_title;
-			$cart[$cartId]['baseprice'] = $price;
-			$cart[$cartId]['qty'] = $qty;
-			$cart[$cartId]['variation_price'] = 0;
+        $product_detail = DB::table('products')->where('id', $request->product_id)->first();
 
-			foreach ($var_item as $key => $value) {
 
-				$data = ProductAttribute::where('product_id', $_POST['product_id'])->where('value', $value)->first();
+        $id = isset($request->product_id) ? $request->product_id : '';
+        $qty = isset($request->qty) ? intval($request->qty) : '1';
 
-				$cart[$cartId]['variation'][$data->id]['attribute'] = 	$data->attribute->name;
-				$cart[$cartId]['variation'][$data->id]['attribute_val'] = 	$data->attributesValues->value;
-				$cart[$cartId]['variation'][$data->id]['attribute_price'] = 	$data->price;
-				$cart[$cartId]['variation_price'] += $data->price;
+        // dd($qty);
 
-			}
+        $cart = array();
+        $cartId = $id;
+        if (Session::has('cart')) {
 
-			// dd($cart);
+            $cart = Session::get('cart');
+        }
 
-			Session::put('cart', $cart);
+        $price = $product_detail->price;
 
-			Session::flash('message', 'Product Added to cart Successfully');
-			Session::flash('alert-class', 'alert-success');
-//			return redirect('/cart');
-			session()->put('added-to-cart', true);
+
+        if ($id != "" && intval($qty) > 0) {
+
+            if (array_key_exists($cartId, $cart)) {
+                unset($cart[$cartId]);
+            }
+
+            $productFirstrow = Product::where('id', $id)->first();
+
+
+
+            if ($id == 332 && $request->has('bundle_selected_optional_1')) {
+                $additionalProduct = Product::find(335);
+                if ($additionalProduct) {
+                    $cart[335] = [
+                        'id' => 335,
+                        'name' => $additionalProduct->product_title,
+                        'baseprice' => $additionalProduct->price,
+                        'qty' => $qty,
+                        'variation_price' => 0,
+                        'variation' => []
+                    ];
+                }
+            }
+                $cart[$cartId]['id'] = $id;
+                $cart[$cartId]['name'] = $productFirstrow->product_title;
+                $cart[$cartId]['baseprice'] = $price;
+                $cart[$cartId]['qty'] = $qty;
+                $cart[$cartId]['variation_price'] = 0;
+
+
+            foreach ($var_item as $key => $value) {
+
+                $data = ProductAttribute::where('product_id', $_POST['product_id'])->where('value', $value)->first();
+
+                $cart[$cartId]['variation'][$data->id]['attribute'] =     $data->attribute->name;
+                $cart[$cartId]['variation'][$data->id]['attribute_val'] =     $data->attributesValues->value;
+                $cart[$cartId]['variation'][$data->id]['attribute_price'] =     $data->price;
+                $cart[$cartId]['variation_price'] += $data->price;
+            }
+
+
+            // dd(Session::get('cart'));    
+
+            Session::put('cart', $cart);
+
+            Session::flash('message', 'Product Added to cart Successfully');
+            Session::flash('alert-class', 'alert-success');
+            //			return redirect('/cart');
+            session()->put('added-to-cart', true);
             return redirect()->back();
+        } else {
 
-		} else {
+            Session::flash('flash_message', 'Sorry! You can not proceed with 0 quantity');
+            Session::flash('alert-class', 'alert-success');
+            return back();
+        }
+    }
+    public function updateCart()
+    {
 
-			Session::flash('flash_message', 'Sorry! You can not proceed with 0 quantity');
-			Session::flash('alert-class', 'alert-success');
-			return back();
-
-		}
-
-	}
-	public function updateCart()
-	{
-
-		$cart = Session::get('cart');
-		$pro_id = $_POST['product_id'];
-		$qty = $_POST['qty'];
-		$count = 0;
-		if (sizeof($_POST['row']) >= 1) {
-			foreach ($cart as $key => $value) {
-				foreach ($value as $key_item => $value_item) {
-					if ($key_item == 'qty') {
-						$cart[$key][$key_item] = (int)($_POST['row'][$count]);
-					}
-				}
-				$count = $count + 1;
-			}
-		}
+        $cart = Session::get('cart');
+        $pro_id = $_POST['product_id'];
+        $qty = $_POST['qty'];
+        $count = 0;
+        if (sizeof($_POST['row']) >= 1) {
+            foreach ($cart as $key => $value) {
+                foreach ($value as $key_item => $value_item) {
+                    if ($key_item == 'qty') {
+                        $cart[$key][$key_item] = (int)($_POST['row'][$count]);
+                    }
+                }
+                $count = $count + 1;
+            }
+        }
 
 
 
-		// $productFirstrow = Product::where('id', $pro_id)->first();
-		// $cart[$pro_id]['id'] = $pro_id;
-		// $cart[$pro_id]['name'] = $productFirstrow->product_title;
-		// $cart[$pro_id]['baseprice'] = $productFirstrow->price;
-		// $cart[$pro_id]['qty'] = $qty;
+        // $productFirstrow = Product::where('id', $pro_id)->first();
+        // $cart[$pro_id]['id'] = $pro_id;
+        // $cart[$pro_id]['name'] = $productFirstrow->product_title;
+        // $cart[$pro_id]['baseprice'] = $productFirstrow->price;
+        // $cart[$pro_id]['qty'] = $qty;
 
 
-		$variation_total = 0;
-		foreach ($cart[$pro_id]['variation'] as $key => $value) {
-			$variation_total += $value['attribute_price'];
-		}
+        $variation_total = 0;
+        foreach ($cart[$pro_id]['variation'] as $key => $value) {
+            $variation_total += $value['attribute_price'];
+        }
 
-		$cart[$pro_id]['variation_price'] = $variation_total * $qty;
+        $cart[$pro_id]['variation_price'] = $variation_total * $qty;
 
 
-		Session::put('cart', $cart);
-		Session::flash('message', 'Your Cart Updated Successfully');
-		Session::flash('alert-class', 'alert-success');
+        Session::put('cart', $cart);
+        Session::flash('message', 'Your Cart Updated Successfully');
+        Session::flash('alert-class', 'alert-success');
         session()->put('added-to-cart', true);
-		return redirect('/checkout');
-	}
+        return redirect('/checkout');
+    }
 
 
-	public function removeCart($id)
-	{
+    public function removeCart($id)
+    {
 
-		//$id = isset($_POST['ArrayofArrays'][0]) ? $_POST['ArrayofArrays'][0] : '';
+        //$id = isset($_POST['ArrayofArrays'][0]) ? $_POST['ArrayofArrays'][0] : '';
 
-		if ($id != "") {
+        if ($id != "") {
 
-			if (Session::has('cart')) {
+            if (Session::has('cart')) {
 
-				$cart = Session::get('cart');
-			}
+                $cart = Session::get('cart');
+            }
 
-			if (array_key_exists($id, $cart)) {
+            if (array_key_exists($id, $cart)) {
 
-				unset($cart[$id]);
-			}
+                unset($cart[$id]);
+            }
 
-			Session::put('cart', $cart);
-		}
+            Session::put('cart', $cart);
+        }
 
-		// echo 'success';
-		Session::flash('flash_message', 'Product item removed successfully');
-		Session::flash('alert-class', 'alert-success');
+        // echo 'success';
+        Session::flash('flash_message', 'Product item removed successfully');
+        Session::flash('alert-class', 'alert-success');
         session()->put('added-to-cart', true);
-		return back();
-	}
+        return back();
+    }
 
-	public function shop()
-	{
-		$page = DB::table('pages')->where('id', 2)->first();
+    public function shop()
+    {
+        $page = DB::table('pages')->where('id', 2)->first();
 
-		$shops = DB::table('products')
-			->join('categories', 'products.category', '=', 'categories.id')
-			->select('products.*', 'categories.name as category_title')
-			->get();
-
-
-		return view('shop.shop', compact('shops', 'page'));
-	}
-
-	public function shopDetail($id)
-	{
-
-		$product = new Product;
-		$product_detail = $product->where('id', $id)->first();
-		$att_model = ProductAttribute::groupBy('attribute_id')->where('product_id', $id)->get();
-		$att_id = DB::table('product_attributes')->where('product_id', $id)->get();
-		$shops = DB::table('products')
-			->join('categories', 'products.category', '=', 'categories.id')
-			->select('products.*', 'categories.name as category_title')->take(3)->get();
+        $shops = DB::table('products')
+            ->join('categories', 'products.category', '=', 'categories.id')
+            ->select('products.*', 'categories.name as category_title')
+            ->get();
 
 
-		return view('shop.detail', compact('product_detail', 'shops', 'att_id', 'att_model'));
-	}
+        return view('shop.shop', compact('shops', 'page'));
+    }
+
+    public function shopDetail($id)
+    {
+
+        $product = new Product;
+        $product_detail = $product->where('id', $id)->first();
+        $att_model = ProductAttribute::groupBy('attribute_id')->where('product_id', $id)->get();
+        $att_id = DB::table('product_attributes')->where('product_id', $id)->get();
+        $shops = DB::table('products')
+            ->join('categories', 'products.category', '=', 'categories.id')
+            ->select('products.*', 'categories.name as category_title')->take(3)->get();
 
 
-	public function invoice($id)
-	{
-
-		$order_id = $id;
-		$order = orders::where('id', $order_id)->first();
-		$order_products = orders_products::where('orders_id', $order_id)->get();
-
-		return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);;
-	}
-
-	public function checkout()
-	{
-
-		dd(Session::get('cart'));
-
-		if (Session::get('cart') && count(Session::get('cart')) > 0) {
-			$countries = DB::table('countries')
-				->get();
-			return view('checkout', ['cart' => Session::get('cart'), 'countries' => $countries]);
-		} else {
-			Session::flash('flash_message', 'No Product found');
-			Session::flash('alert-class', 'alert-success');
-			return redirect('/');
-		}
-	}
+        return view('shop.detail', compact('product_detail', 'shops', 'att_id', 'att_model'));
+    }
 
 
-	public function language()
-	{
-		$languages = $_POST['id'];
+    public function invoice($id)
+    {
 
-		Session::put('language', $languages);
+        $order_id = $id;
+        $order = orders::where('id', $order_id)->first();
+        $order_products = orders_products::where('orders_id', $order_id)->get();
 
-		Session::put('is_select_dropdown', 1);
-		// Session::put('language',$languages);
-		// $test = Session::get('language');
+        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);;
+    }
 
-		// Session::put('test',$test);
+    public function checkout()
+    {
 
-		//return redirect('shop-detail/1', ['test'=>$test]);
-	}
+        dd(Session::get('cart'));
+
+        if (Session::get('cart') && count(Session::get('cart')) > 0) {
+            $countries = DB::table('countries')
+                ->get();
+            return view('checkout', ['cart' => Session::get('cart'), 'countries' => $countries]);
+        } else {
+            Session::flash('flash_message', 'No Product found');
+            Session::flash('alert-class', 'alert-success');
+            return redirect('/');
+        }
+    }
+
+
+    public function language()
+    {
+        $languages = $_POST['id'];
+
+        Session::put('language', $languages);
+
+        Session::put('is_select_dropdown', 1);
+        // Session::put('language',$languages);
+        // $test = Session::get('language');
+
+        // Session::put('test',$test);
+
+        //return redirect('shop-detail/1', ['test'=>$test]);
+    }
 
     public function upsservices(Request $request)
     {
@@ -475,14 +488,16 @@ class ProductController extends Controller
             ]);
 
 
-             $apiResponse = json_decode($response->getBody(), true);
+            $apiResponse = json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             // Handle the error accordingly
             return response()->json(['error' => 'Failed to retrieve rate: ' . $e->getMessage()], 500);
         }
 
-        if (isset($apiResponse['RateResponse']['Response']['ResponseStatus']['Description']) &&
-            $apiResponse['RateResponse']['Response']['ResponseStatus']['Description'] === 'Success') {
+        if (
+            isset($apiResponse['RateResponse']['Response']['ResponseStatus']['Description']) &&
+            $apiResponse['RateResponse']['Response']['ResponseStatus']['Description'] === 'Success'
+        ) {
 
             // Extract total charges from the response
             $totalCharges = $apiResponse['RateResponse']['RatedShipment']['TotalCharges']['MonetaryValue'];
@@ -494,7 +509,6 @@ class ProductController extends Controller
                 'description' => $description,
                 'status' => true,
             ]);
-
         } elseif (isset($apiResponse['RateResponse']['Response']['Alert'][0]['Description'])) {
 
             // Extract error message from the response alert
@@ -504,14 +518,12 @@ class ProductController extends Controller
                 'message' => $errorMessage,
                 'status' => false,
             ]);
-
         } else {
             return response()->json([
                 'message' => 'Could not verify your address or UPS service unavailable',
                 'status' => false,
             ]);
         }
-
     }
 
     public function upsapi(Request $request)
@@ -612,90 +624,90 @@ class ProductController extends Controller
     }
 
 
-	public function shipping(Request $request)
-	{
+    public function shipping(Request $request)
+    {
 
-		$PostalCode = $request->country; // Zipcode you are shipping To
+        $PostalCode = $request->country; // Zipcode you are shipping To
 
-		define("ENV", "demo"); // demo OR live
+        define("ENV", "demo"); // demo OR live
 
-		if (ENV == 'demo') {
-			$client = new SoapClient("https://staging.postaplus.net/APIService/PostaWebClient.svc?wsdl");
-			$Password =  '123456';
-			$ShipperAccount =  'DXB51487';
-			$UserName =  'DXB51487';
-			$CodeStation =  'DXB';
-		} else {
-			$client = new SoapClient("https://etrack.postaplus.net/APIService/PostaWebClient.svc?singleWsdl");
-			$Password =  '';
-			$ShipperAccount =  '';
-			$UserName =  '';
-			$CodeStation =  '';
-		}
+        if (ENV == 'demo') {
+            $client = new SoapClient("https://staging.postaplus.net/APIService/PostaWebClient.svc?wsdl");
+            $Password =  '123456';
+            $ShipperAccount =  'DXB51487';
+            $UserName =  'DXB51487';
+            $CodeStation =  'DXB';
+        } else {
+            $client = new SoapClient("https://etrack.postaplus.net/APIService/PostaWebClient.svc?singleWsdl");
+            $Password =  '';
+            $ShipperAccount =  '';
+            $UserName =  '';
+            $CodeStation =  '';
+        }
 
-		$params = array(
-			'ShipmentCostCalculation' => array(
-				'CI' => array(
-					'Password' => $Password,
-					'ShipperAccount' => $ShipperAccount,
-					'UserName' => $UserName,
-					'CodeStation' => $CodeStation,
-				),
-				"OriginCountryCode" => 'AE',
-				"DestinationCountryCode" => $PostalCode,
-				"RateSheetType" => 'DOC',
-				"Width" => 1,
-				"Height" => 1,
-				"Length" => 1,
-				"ScaleWeight" => 1,
-			),
-		);
-
-
-		try {
-
-			$d = $client->__SoapCall("ShipmentCostCalculation", $params);
-			$d = json_decode(json_encode($d), true);
-
-			if (isset($d['ShipmentCostCalculationResult']['Message']) and ($d['ShipmentCostCalculationResult']['Message'] == 'SUCCESS')) {
-				$status = true;
-				$rate = $d['ShipmentCostCalculationResult']['Amount'];
-			} else {
-				$status = false;
-				$messgae = $d['ShipmentCostCalculationResult']['Message'];
-			}
-		} catch (SoapFault $exception) {
-			$status = false;
-			$messgae = "Error Found Please try Again";
-		}
-
-		//if($status):
-		//	echo $rate;
-		//else:
-		//	echo $messgae;
-		//endif;
-
-		//}
-		//$cart = Session::get('cart');
+        $params = array(
+            'ShipmentCostCalculation' => array(
+                'CI' => array(
+                    'Password' => $Password,
+                    'ShipperAccount' => $ShipperAccount,
+                    'UserName' => $UserName,
+                    'CodeStation' => $CodeStation,
+                ),
+                "OriginCountryCode" => 'AE',
+                "DestinationCountryCode" => $PostalCode,
+                "RateSheetType" => 'DOC',
+                "Width" => 1,
+                "Height" => 1,
+                "Length" => 1,
+                "ScaleWeight" => 1,
+            ),
+        );
 
 
+        try {
 
-		if ($status) {
+            $d = $client->__SoapCall("ShipmentCostCalculation", $params);
+            $d = json_decode(json_encode($d), true);
 
-			$cart = Session::get('cart');
-			$cart['shipping'] = $rate;
-			//$cart['shipping_address'] = $_POST['shipping_address'];
-			Session::put('cart', $cart);
+            if (isset($d['ShipmentCostCalculationResult']['Message']) and ($d['ShipmentCostCalculationResult']['Message'] == 'SUCCESS')) {
+                $status = true;
+                $rate = $d['ShipmentCostCalculationResult']['Amount'];
+            } else {
+                $status = false;
+                $messgae = $d['ShipmentCostCalculationResult']['Message'];
+            }
+        } catch (SoapFault $exception) {
+            $status = false;
+            $messgae = "Error Found Please try Again";
+        }
 
-			// return view('shop.cart', ['rate'=> $rate, 'cart'=> $cart]);
-			return redirect('/cart');
-		} else {
-			Session::flash('flash_message', 'Error');
-			Session::flash('alert-class', 'alert-success');
-			return view('shop.cart', ['messgae' => $messgae]);
-		}
-		return view('shop.cart', ['messgae' => $messgae, 'cart' => $cart]);
-	}
+        //if($status):
+        //	echo $rate;
+        //else:
+        //	echo $messgae;
+        //endif;
+
+        //}
+        //$cart = Session::get('cart');
+
+
+
+        if ($status) {
+
+            $cart = Session::get('cart');
+            $cart['shipping'] = $rate;
+            //$cart['shipping_address'] = $_POST['shipping_address'];
+            Session::put('cart', $cart);
+
+            // return view('shop.cart', ['rate'=> $rate, 'cart'=> $cart]);
+            return redirect('/cart');
+        } else {
+            Session::flash('flash_message', 'Error');
+            Session::flash('alert-class', 'alert-success');
+            return view('shop.cart', ['messgae' => $messgae]);
+        }
+        return view('shop.cart', ['messgae' => $messgae, 'cart' => $cart]);
+    }
 
     public function applyDiscount(Request $request)
     {
@@ -711,8 +723,8 @@ class ProductController extends Controller
 
         // Retrieve the discount from the database
         $discount = Discount::where('code', $discountCode)
-                            ->where('expiry_date', '>=', now()) // Check if the discount is still valid
-                            ->first();
+            ->where('expiry_date', '>=', now()) // Check if the discount is still valid
+            ->first();
 
         if (!$discount) {
             return response()->json([
@@ -723,7 +735,7 @@ class ProductController extends Controller
 
         // Retrieve the cart from the session
         $cart = session()->get('cart', []);
-        if($request->baseprice != 0){
+        if ($request->baseprice != 0) {
             $baseprice = $request->baseprice - ($request->baseprice * ($discount->percentage / 100));
             session()->put('discount', $baseprice);
             session()->put('percentage', $discount->percentage);
@@ -751,8 +763,8 @@ class ProductController extends Controller
 
         // Retrieve the gift from the database
         $giftCard = GiftCard::where('code', $giftCode)
-                            ->where('expiry_date', '>=', now()) // Check if the gift is still valid
-                            ->first();
+            ->where('expiry_date', '>=', now()) // Check if the gift is still valid
+            ->first();
 
         if (!$giftCard) {
             return response()->json([
@@ -761,12 +773,12 @@ class ProductController extends Controller
             ]);
         }
 
-        if($request->baseprice != 0 && ($request->baseprice >= $giftCard->balance)){
+        if ($request->baseprice != 0 && ($request->baseprice >= $giftCard->balance)) {
             $baseprice = $request->baseprice;
             $baseprice -= $giftCard->balance;
             // session()->put('gift', $baseprice);
             // session()->put('balance', $gift->balance);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'You does not apply on this product.',

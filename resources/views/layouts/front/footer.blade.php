@@ -26,7 +26,6 @@
                                     {{ $value['name'] }}
                                     <a onclick="window.location.href='{{ route('remove_cart', [$value['id']]) }}'"><i class="fa-solid fa-xmark"></i></a>
                                 </h4>
-    {{--                            <h6>Black</h6>--}}
                                 <div class="counter">
                                     <div class="quantity">
                                         <a href="#" class=" minus-1"><span>-</span></a>
