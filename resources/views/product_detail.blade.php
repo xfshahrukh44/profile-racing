@@ -499,44 +499,46 @@
 
 <script>
     function updateOptionPrice(selector) {
-        // Extract the number from the class to identify the dropdown
         var text = selector.attr('class');
         var regex = /\d+/;
         var number = text.match(regex)[0];
 
-        // Get selected option and its price
         var selectedOption = selector.find('option:selected');
         var optionPrice = selectedOption.data('price');
 
-        // Check if a valid option is selected
-        if (optionPrice !== undefined && optionPrice != '0') {
-            // Update the displayed price for this dropdown
-            var amount = parseFloat(optionPrice).toFixed(2);
-            $('.select_price' + number).val(amount);
-            selector.next('.span_selected_option_price').html('$' + amount).show();
+        // Check if the selected option is the first option (Choose an option)
+        if (selectedOption.index() === 0) {
+            selector.next('.span_selected_option_price').html('').hide();
+            return; // Stop execution if "Choose an option" is selected
+        }
 
-            // Update the total price
+        // Check if a valid option is selected
+        if (optionPrice !== undefined) {
+            var amount = parseFloat(optionPrice).toFixed(2);
+
+            if (amount == '0.00') {
+                selector.next('.span_selected_option_price').html('$0.00').show();
+            } else {
+                $('.select_price' + number).val(amount);
+                selector.next('.span_selected_option_price').html('$' + amount).show();
+            }
+
             var totalPrice = parseFloat('{{$get_product_detail->price}}').toFixed(2);
             $('.select_price' + number).each(function() {
                 totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
             });
 
-            // Update the total price display
             $('#h3_original').prop('hidden', true);
             $('#h3_additional').prop('hidden', false);
-            // $('#h3_additional').html('$' + totalPrice);
         } else {
-            // If an invalid option is selected, reset the displayed price and total price
-            selector.next('.span_selected_option_price').html('$0.00').hide();
-            // $('#h3_original').prop('hidden', false);
-            // $('#h3_additional').prop('hidden', true);
+            selector.next('.span_selected_option_price').html('$0.00').show();
         }
     }
 
     @foreach($productAttributes_id as $key => $val_product_attribute)
     var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
 
-    // Initialize the dropdown on page load
+    // Initialize on page load
     updateOptionPrice(dropdown);
 
     // Add event listener for changes
@@ -545,6 +547,9 @@
     });
     @endforeach
 </script>
+
+
+
 
 
 
