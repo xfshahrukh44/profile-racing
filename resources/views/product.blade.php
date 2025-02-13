@@ -44,6 +44,8 @@
 
 <?php
 
+use Illuminate\Support\Facades\DB;
+
 $get_category = DB::table('categories')->get();
 $route_category = Request::segment(2);
 $route_subcategory = Request::segment(3);
