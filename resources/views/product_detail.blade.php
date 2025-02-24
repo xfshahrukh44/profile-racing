@@ -102,16 +102,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="inner-headings">
-                        <h2>PRODUCTS</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="inner-headings">
+                            <h2>PRODUCTS</h2>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section> -->
+        </section> -->
 
 
 
@@ -457,7 +457,7 @@
                                     </div>
 
 
-                                    <script>
+                                    {{-- <script>
                                         document.getElementById('add_price_checkbox').addEventListener('change', function() {
                                             let priceElement = document.getElementById('h3_original');
                                             let basePrice = parseFloat("{{ $get_product_detail->price }}"); // Laravel se price lena
@@ -469,7 +469,7 @@
                                                 priceElement.innerText = `$${basePrice.toFixed(2)}`;
                                             }
                                         });
-                                    </script>
+                                    </script> --}}
                                 @endif
 
                                 <h3 class="span_selected_option_price text-white"></h3>
@@ -523,44 +523,72 @@
         var f_select_price;
         var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
     </script>
-
     <script>
-        function updateOptionPrice(selector) {
-            var text = selector.attr('class');
-            var regex = /\d+/;
-            var number = text.match(regex)[0];
+        let productId = {!! $get_product_detail->id !!}; // Laravel se product ID le rahe hain
 
-            var selectedOption = selector.find('option:selected');
-            var optionPrice = selectedOption.data('price');
+        if (productId === 332) {
+        document.addEventListener("DOMContentLoaded", function() {
+                let checkbox = document.getElementById('add_price_checkbox');
+                let priceElement = document.getElementById('h3_original');
+                let basePrice = parseFloat("{{ $get_product_detail->price }}"); // Laravel price
 
-            // Check if the selected option is the first option (Choose an option)
-            if (selectedOption.index() === 0) {
-                selector.next('.span_selected_option_price').html('').hide();
-                return; // Stop execution if "Choose an option" is selected
-            }
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
+                        console.log(selectvalue);
+                        
+                        let additionalPrice = parseFloat(selectvalue) || 0;
 
-            // Check if a valid option is selected
-            if (optionPrice !== undefined) {
-                var amount = parseFloat(optionPrice).toFixed(2);
-
-                if (amount == '0.00') {
-                    selector.next('.span_selected_option_price').html('$0.00').show();
-                } else {
-                    $('.select_price' + number).val(amount);
-                    selector.next('.span_selected_option_price').html('$' + amount).show();
+                        if (this.checked) {
+                            console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
+                            
+                            priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
+                        } else {
+                            priceElement.innerText = `$${basePrice.toFixed(2)}`;
+                        }
+                    });
                 }
+            });
+        }else{
 
-                var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
-                $('.select_price' + number).each(function() {
-                    totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
-                });
-
-                $('#h3_original').prop('hidden', true);
-                $('#h3_additional').prop('hidden', false);
-            } else {
-                selector.next('.span_selected_option_price').html('$0.00').show();
+            function updateOptionPrice(selector) {
+                var text = selector.attr('class');
+                var regex = /\d+/;
+                var number = text.match(regex)[0];
+    
+                var selectedOption = selector.find('option:selected');
+                var optionPrice = selectedOption.data('price');
+    
+                // Check if the selected option is the first option (Choose an option)
+                if (selectedOption.index() === 0) {
+                    selector.next('.span_selected_option_price').html('').hide();
+                    return; // Stop execution if "Choose an option" is selected
+                }
+    
+                // Check if a valid option is selected
+                if (optionPrice !== undefined) {
+                    var amount = parseFloat(optionPrice).toFixed(2);
+    
+                    if (amount == '0.00') {
+                        selector.next('.span_selected_option_price').html('$0.00').show();
+                    } else {
+                        $('.select_price' + number).val(amount);
+                        selector.next('.span_selected_option_price').html('$' + amount).show();
+                    }
+    
+                    var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
+                    $('.select_price' + number).each(function() {
+                        totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
+                    });
+    
+                    $('#h3_original').prop('hidden', true);
+                    $('#h3_additional').prop('hidden', false);
+                } else {
+                    selector.next('.span_selected_option_price').html('$0.00').show();
+                }
             }
         }
+
 
         @foreach ($productAttributes_id as $key => $val_product_attribute)
             var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
@@ -574,10 +602,6 @@
             });
         @endforeach
     </script>
-
-
-
-
 
 
     <script type="text/javascript">
