@@ -140,6 +140,12 @@ class ProductController extends Controller
 
 
 
+            $cart[$cartId]['id'] = $id;
+            $cart[$cartId]['name'] = $productFirstrow->product_title;
+            $cart[$cartId]['baseprice'] = $price;
+            $cart[$cartId]['qty'] = $qty;
+            $cart[$cartId]['variation_price'] = 0;
+
             if ($id == 332 && $request->has('bundle_selected_optional_1')) {
                 $additionalProduct = Product::find(335);
                 if ($additionalProduct) {
@@ -153,11 +159,6 @@ class ProductController extends Controller
                     ];
                 }
             }
-                $cart[$cartId]['id'] = $id;
-                $cart[$cartId]['name'] = $productFirstrow->product_title;
-                $cart[$cartId]['baseprice'] = $price;
-                $cart[$cartId]['qty'] = $qty;
-                $cart[$cartId]['variation_price'] = 0;
 
 
             foreach ($var_item as $key => $value) {

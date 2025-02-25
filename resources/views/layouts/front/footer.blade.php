@@ -23,7 +23,9 @@
                         <div class="product-discription">
                             <h4>
                                 {{ $value['name'] }}
-                                <a onclick="window.location.href='{{ route('remove_cart', [$value['id']]) }}'"><i class="fa-solid fa-xmark"></i></a>
+                                @if($value && isset($value['id']))
+                                    <a onclick="window.location.href='{{ route('remove_cart', $value['id']) }}'"><i class="fa-solid fa-xmark"></i></a>
+                                @endif
                             </h4>
                             {{-- <h6>Black</h6>--}}
                             <div class="counter">

@@ -535,7 +535,6 @@
                 if (checkbox) {
                     checkbox.addEventListener('change', function() {
                         let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
-                        console.log(selectvalue);
                         
                         let additionalPrice = parseFloat(selectvalue) || 0;
 
