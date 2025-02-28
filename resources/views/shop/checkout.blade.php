@@ -303,30 +303,20 @@
                                                     @endif
                                                 </h3>
 
-                                                @foreach ($productAttributes as $productId => $attributes)
-                                                    @foreach ($attributes as $val_product_attribute)
-                                                        <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }}
-                                                        </h6>
-
-                                                        <?php
-                                                        $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get();
-                                                        ?>
-
-                                                        <input type="hidden" name="select_price"
-                                                            class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}"
-                                                            value=0>
-                                                        <select
-                                                            class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option"
-                                                            name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]">
-                                                            <option value="">Choose an option</option>
-                                                            @foreach ($get_attribute_values as $key => $val_attr_value)
-                                                                <option data-price="{{ $val_attr_value->price }}"
-                                                                    value="{{ $val_attr_value->value }}">
-                                                                    {{ App\AttributeValue::find($val_attr_value->value)->value }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    @endforeach
+                                                @php
+                                                    $att_models = \App\ProductAttribute::groupBy('attribute_id')->where('product_id', $get_product_detail->id)->get();
+                                                @endphp
+                                                @foreach ($att_models as $att_model)
+                                                    <h6> {{ $att_model->attribute->name }}</h6>
+                                                    @php
+                                                        $pro_att = \App\ProductAttribute::where(['attribute_id' => $att_model->attribute_id, 'product_id' => $get_product_detail->id])->get();
+                                                    @endphp
+                                                    <select name="variation[{{ $att_model->attribute->name }}]">
+                                                        @foreach ($pro_att as $pro_atts)
+                                                            <option value="{{ $pro_atts->attributesValues->id }}">
+                                                                {{ $pro_atts->attributesValues->value }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 @endforeach
 
 
