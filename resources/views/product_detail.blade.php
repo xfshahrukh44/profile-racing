@@ -121,14 +121,14 @@
 
 
                 <?php
-                
+
                 use App\Product;
-                
+
                 $get_category = DB::table('categories')->get();
                 $route_category = Request::segment(3);
                 $route_subcategory = Request::segment(4);
                 $route_child_subcategory = Request::segment(5);
-                
+
                 ?>
 
                 <div class="col-md-3">
@@ -322,12 +322,12 @@
                     131 => [14, 57, 27, 25, 38],
                     460 => [83, 5],
                 ];
-                
+
                 $custom_ordering_products_array = null;
                 if (array_key_exists($get_product_detail->id, $custom_ordering_products_map)) {
                     $custom_ordering_products_array = $custom_ordering_products_map[$get_product_detail->id];
                 }
-                
+
                 if ($get_product_detail->id == 455) {
                     $productAttributes_id = DB::table('product_attributes')->select('product_id', 'attribute_id')->where('product_id', $get_product_detail->id)->groupBy('attribute_id')->orderBy('attribute_id', 'desc')->get();
                 } else {
@@ -340,17 +340,15 @@
                         })
                         ->get();
                 }
-                // dump($productAttributes_id);
                 ?>
+                {{-- @dd($productAttributes_id); --}}
 
 
 
                 <div class="col-lg-4">
 
                     <form method="POST" action="{{ route('save_cart') }}" id="add-cart">
-
                         @csrf
-
                         <input type="hidden" name="product_id" id="product_id" value="{{ $get_product_detail->id }}">
 
                         <div class="inner-product-details">
@@ -378,12 +376,10 @@
                                 <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }} </h6>
 
                                 <?php
-                                
+
                                 $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get();
-                                
+
                                 ?>
-
-
 
                                 <input type="hidden" name="select_price"
                                     class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}"
@@ -536,12 +532,12 @@
                     checkbox.addEventListener('change', function() {
                         let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
                         console.log(selectvalue);
-                        
+
                         let additionalPrice = parseFloat(selectvalue) || 0;
 
                         if (this.checked) {
                             console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
-                            
+
                             priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
                         } else {
                             priceElement.innerText = `$${basePrice.toFixed(2)}`;
@@ -555,32 +551,32 @@
                 var text = selector.attr('class');
                 var regex = /\d+/;
                 var number = text.match(regex)[0];
-    
+
                 var selectedOption = selector.find('option:selected');
                 var optionPrice = selectedOption.data('price');
-    
+
                 // Check if the selected option is the first option (Choose an option)
                 if (selectedOption.index() === 0) {
                     selector.next('.span_selected_option_price').html('').hide();
                     return; // Stop execution if "Choose an option" is selected
                 }
-    
+
                 // Check if a valid option is selected
                 if (optionPrice !== undefined) {
                     var amount = parseFloat(optionPrice).toFixed(2);
-    
+
                     if (amount == '0.00') {
                         selector.next('.span_selected_option_price').html('$0.00').show();
                     } else {
                         $('.select_price' + number).val(amount);
                         selector.next('.span_selected_option_price').html('$' + amount).show();
                     }
-    
+
                     var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
                     $('.select_price' + number).each(function() {
                         totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
                     });
-    
+
                     $('#h3_original').prop('hidden', true);
                     $('#h3_additional').prop('hidden', false);
                 } else {

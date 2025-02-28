@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -14,10 +15,10 @@ class Product extends Model
     protected $table = 'products';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -25,7 +26,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $fillable = ['product_title', 'description','price'];
+    protected $fillable = ['product_title', 'description', 'price'];
 
     public function categorys()
     {
@@ -34,7 +35,8 @@ class Product extends Model
 
     public function attributes()
     {
-        return $this->hasMany('App\ProductAttribute', 'product_id', 'id');
+        // return $this->hasMany('App\ProductAttribute', 'product_id', 'id');
+        return $this->hasMany(ProductAttribute::class, 'product_id', 'id')->with(['attribute', 'attributeValue']);
     }
 
 }

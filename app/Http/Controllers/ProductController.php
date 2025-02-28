@@ -58,7 +58,7 @@ class ProductController extends Controller
 
             $keyword = $_GET['q'];
 
-            $products = $products->where(function ($query)  use ($keyword) {
+            $products = $products->where(function ($query) use ($keyword) {
                 $query->where('product_title', 'like', $keyword);
             });
         }
@@ -103,17 +103,13 @@ class ProductController extends Controller
 
     public function saveCart(Request $request)
     {
-
-
         $var_item = $request->variation;
 
         // dd($var_item);
 
         $result = array();
 
-
         $product_detail = DB::table('products')->where('id', $request->product_id)->first();
-
 
         $id = isset($request->product_id) ? $request->product_id : '';
         $qty = isset($request->qty) ? intval($request->qty) : '1';
@@ -153,25 +149,25 @@ class ProductController extends Controller
                     ];
                 }
             }
-                $cart[$cartId]['id'] = $id;
-                $cart[$cartId]['name'] = $productFirstrow->product_title;
-                $cart[$cartId]['baseprice'] = $price;
-                $cart[$cartId]['qty'] = $qty;
-                $cart[$cartId]['variation_price'] = 0;
+            $cart[$cartId]['id'] = $id;
+            $cart[$cartId]['name'] = $productFirstrow->product_title;
+            $cart[$cartId]['baseprice'] = $price;
+            $cart[$cartId]['qty'] = $qty;
+            $cart[$cartId]['variation_price'] = 0;
 
 
             foreach ($var_item as $key => $value) {
 
                 $data = ProductAttribute::where('product_id', $_POST['product_id'])->where('value', $value)->first();
 
-                $cart[$cartId]['variation'][$data->id]['attribute'] =     $data->attribute->name;
-                $cart[$cartId]['variation'][$data->id]['attribute_val'] =     $data->attributesValues->value;
-                $cart[$cartId]['variation'][$data->id]['attribute_price'] =     $data->price;
+                $cart[$cartId]['variation'][$data->id]['attribute'] = $data->attribute->name;
+                $cart[$cartId]['variation'][$data->id]['attribute_val'] = $data->attributesValues->value;
+                $cart[$cartId]['variation'][$data->id]['attribute_price'] = $data->price;
                 $cart[$cartId]['variation_price'] += $data->price;
             }
 
 
-            // dd(Session::get('cart'));    
+            // dd(Session::get('cart'));
 
             Session::put('cart', $cart);
 
@@ -187,6 +183,59 @@ class ProductController extends Controller
             return back();
         }
     }
+
+    public function datacart(Request $request)
+    {
+        $cart = Session::get('cart', []);
+        $product_id = $request->product_id;
+
+        // If product already exists in cart, increase quantity
+        if (isset($cart[$product_id])) {
+            $cart[$product_id]['qty'] += $request->qty;
+        } else {
+            $cart[$product_id] = [
+                'id' => $request->product_id,
+                'name' => $request->name,
+                'baseprice' => $request->price,
+                'qty' => $request->qty
+            ];
+        }
+
+        Session::put('cart', $cart);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Product added to cart!',
+            'cart_count' => array_sum(array_column($cart, 'qty'))
+        ]);
+    }
+
+
+    public function undoCart(Request $request)
+    {
+        $cart = Session::get('cart', []);
+        $product_id = $request->product_id;
+
+        // Check if product was removed and restore it
+        if ($cart[$product_id]) {
+            unset($cart[$product_id]);
+
+            Session::put('cart', $cart);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Product restored!',
+                'cart_count' => array_sum(array_column($cart, 'qty'))
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Product was not removed!'
+        ]);
+    }
+
+
     public function updateCart()
     {
 
@@ -198,7 +247,7 @@ class ProductController extends Controller
             foreach ($cart as $key => $value) {
                 foreach ($value as $key_item => $value_item) {
                     if ($key_item == 'qty') {
-                        $cart[$key][$key_item] = (int)($_POST['row'][$count]);
+                        $cart[$key][$key_item] = (int) ($_POST['row'][$count]);
                     }
                 }
                 $count = $count + 1;
@@ -235,19 +284,29 @@ class ProductController extends Controller
 
         //$id = isset($_POST['ArrayofArrays'][0]) ? $_POST['ArrayofArrays'][0] : '';
 
-        if ($id != "") {
+        // if ($id != "") {
 
-            if (Session::has('cart')) {
+        //     if (Session::has('cart')) {
 
-                $cart = Session::get('cart');
-            }
+        //         $cart = Session::get('cart');
+        //     }
 
-            if (array_key_exists($id, $cart)) {
+        //     if (array_key_exists($id, $cart)) {
 
+        //         unset($cart[$id]);
+        //     }
+
+        //     Session::put('cart', $cart);
+        // }
+
+
+        if (!empty($id) && Session::has('cart')) {
+            $cart = Session::get('cart');
+
+            if (isset($cart[$id])) {
                 unset($cart[$id]);
+                Session::put('cart', $cart);
             }
-
-            Session::put('cart', $cart);
         }
 
         // echo 'success';
@@ -293,7 +352,8 @@ class ProductController extends Controller
         $order = orders::where('id', $order_id)->first();
         $order_products = orders_products::where('orders_id', $order_id)->get();
 
-        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);;
+        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);
+        ;
     }
 
     public function checkout()
@@ -389,7 +449,7 @@ class ProductController extends Controller
         // Create a Guzzle client
         $client = new Client([
             'base_uri' => 'https://onlinetools.ups.com/',
-            'timeout'  => 5.0,
+            'timeout' => 5.0,
         ]);
 
         try {
@@ -479,7 +539,7 @@ class ProductController extends Controller
                                 ],
                                 "PackageWeight" => [
                                     "UnitOfMeasurement" => ["Code" => "LBS"],
-                                    "Weight" => number_format((float)$weight, 2, '.', ''),
+                                    "Weight" => number_format((float) $weight, 2, '.', ''),
                                 ],
                             ],
                         ],
@@ -534,7 +594,7 @@ class ProductController extends Controller
         // Create a Guzzle client
         $client = new Client([
             'base_uri' => 'https://onlinetools.ups.com/',
-            'timeout'  => 5.0,
+            'timeout' => 5.0,
         ]);
         // https://onlinetools.ups.com/api/rating/v2403/Rate
         // Get an access token
@@ -633,16 +693,16 @@ class ProductController extends Controller
 
         if (ENV == 'demo') {
             $client = new SoapClient("https://staging.postaplus.net/APIService/PostaWebClient.svc?wsdl");
-            $Password =  '123456';
-            $ShipperAccount =  'DXB51487';
-            $UserName =  'DXB51487';
-            $CodeStation =  'DXB';
+            $Password = '123456';
+            $ShipperAccount = 'DXB51487';
+            $UserName = 'DXB51487';
+            $CodeStation = 'DXB';
         } else {
             $client = new SoapClient("https://etrack.postaplus.net/APIService/PostaWebClient.svc?singleWsdl");
-            $Password =  '';
-            $ShipperAccount =  '';
-            $UserName =  '';
-            $CodeStation =  '';
+            $Password = '';
+            $ShipperAccount = '';
+            $UserName = '';
+            $CodeStation = '';
         }
 
         $params = array(
@@ -745,7 +805,7 @@ class ProductController extends Controller
             'success' => true,
             'message' => 'Discount applied successfully!',
             'discount' => number_format($baseprice, 2),
-            'percentage' => (int)$discount->percentage
+            'percentage' => (int) $discount->percentage
         ]);
     }
 
@@ -789,7 +849,7 @@ class ProductController extends Controller
             'success' => true,
             'message' => 'Gift applied successfully!',
             'gift' => number_format($baseprice, 2),
-            'balance' => (int)$giftCard->balance
+            'balance' => (int) $giftCard->balance
         ]);
     }
 }

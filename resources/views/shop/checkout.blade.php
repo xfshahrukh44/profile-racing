@@ -195,6 +195,65 @@
         .billing-info.col-md-12.input-style.update-btn {
             padding: 0;
         }
+
+        .checkout_product {
+            border: 1px solid #ffffff66;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkout_product h3 {
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .checkout_product h6 {
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .checkout_product select {
+            width: 100%;
+            height: 30px !important;
+            padding: 0;
+            border-radius: 0 !important;
+
+            font-size: 12px;
+        }
+
+        .checkout_form_product .quantity {
+            width: 50%;
+        }
+
+        .checkout_form_product .cart-btn {
+            margin: 0;
+        }
+
+        .checkout_form_product .cart-btn button {
+            padding: 2px 10px;
+            font-size: 15px !important;
+
+            margin-top: 0;
+            border-radius: 5px;
+        }
+
+        .random_product {
+            overflow: auto;
+            display: flex;
+            scroll-behavior: smooth;
+        }
+
+        .section-heading.dark-color {
+            margin-top: 30px;
+        }
+
+        .undo_btn_form {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 @endsection
 @section('content')
@@ -216,7 +275,88 @@
 
     <section class="form-body checkoutPage" style="background-color:#000;">
         <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
 
+                    <div class="random_product">
+                        @foreach ($product_detail as $get_product_detail)
+                            <div class="col-lg-4">
+                                <div class="checkout_product">
+                                    <div class="productimg">
+                                        <img src="{{ asset($get_product_detail->image) }}" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="checkout_form_product">
+                                        <form method="POST" action="{{ route('datacart') }}" class="add_cart_form"
+                                            id="add-cart">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $get_product_detail->id }}">
+
+                                            <div class="inner-product-details">
+                                                <h3 style="font-family: PEPSI_pl;" id="prod_title">
+                                                    {{ $get_product_detail->product_title }}
+                                                </h3>
+
+                                                <h3 id="h3_original">
+                                                    ${{ $get_product_detail->price }}
+                                                    @if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0')
+                                                        - ${{ $get_product_detail->maximum_price }}
+                                                    @endif
+                                                </h3>
+
+                                                @foreach ($productAttributes as $productId => $attributes)
+                                                    @foreach ($attributes as $val_product_attribute)
+                                                        <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }}
+                                                        </h6>
+
+                                                        <?php
+                                                        $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get();
+                                                        ?>
+
+                                                        <input type="hidden" name="select_price"
+                                                            class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}"
+                                                            value=0>
+                                                        <select
+                                                            class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option"
+                                                            name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]">
+                                                            <option value="">Choose an option</option>
+                                                            @foreach ($get_attribute_values as $key => $val_attr_value)
+                                                                <option data-price="{{ $val_attr_value->price }}"
+                                                                    value="{{ $val_attr_value->value }}">
+                                                                    {{ App\AttributeValue::find($val_attr_value->value)->value }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @endforeach
+                                                @endforeach
+
+
+
+                                                <h6>Quantity</h6>
+                                                <div class="quantity">
+                                                    <a href="#" class="minus-1"><span>-</span></a>
+                                                    <input id="qty" name="qty" type="text"
+                                                        class="quantity__input input-1" readonly="" value="1">
+                                                    <a href="#" class="plus-1"><span>+</span></a>
+                                                </div>
+
+                                                <br>
+                                                <div class="cart-btn">
+                                                    <button type="button" class="btn btn-custom" id="addCart"
+                                                        style="background: red; color: white; font-weight: bold; font-size: 23px;">
+                                                        Add to cart
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+
+                    </div>
+                </div>
+            </div>
             <form action="{{ route('order.place') }}" method="POST" id="order-place">
 
                 @csrf
@@ -239,6 +379,7 @@
                     </div>
 
                     <div class="col-md-7 col-lg-7 col-sm-7 col-xs-12">
+
                         <div class="section-heading dark-color">
                             <h3>User Info</h3>
                         </div>
@@ -442,12 +583,12 @@
                                 ?>
                             @endforeach
                             {{--                    <div class="amount-wrapper"> --}}
-                                @php
-                                    $discount = session()->get('percentage', 0);
-                                    if($discount != 0){
-                                        $subtotal = ($subtotal * ($discount->percentage / 100));
-                                    }
-                                @endphp
+                            @php
+                                $discount = session()->get('percentage', 0);
+                                if ($discount != 0) {
+                                    $subtotal = $subtotal * ($discount->percentage / 100);
+                                }
+                            @endphp
                             <div id="shippingdiv" class="grand-total-wrap mb-40 shippingdiv"style="display:none">
                                 <ul id="upsli">
                                     <li>
@@ -461,18 +602,20 @@
                                     </li>
 
                                     <li id="li_discount" style="display: none">
-                                            <input type="checkbox" id="toggle_discount" @if(session()->get('discount')) checked @endif />
-                                            <input type="hidden" name="discount" id="discount">
-                                            Apply Discount
-                                        <div id="discount_content" style="display: {{ session()->get('discount') ? 'block' : 'none' }};">
+                                        <input type="checkbox" id="toggle_discount"
+                                            @if (session()->get('discount')) checked @endif />
+                                        <input type="hidden" name="discount" id="discount">
+                                        Apply Discount
+                                        <div id="discount_content"
+                                            style="display: {{ session()->get('discount') ? 'block' : 'none' }};">
                                             <h4 id="h4_discount">{{ $discount ?? 0 }}</h4>
                                         </div>
                                     </li>
 
                                     <li id="li_gift" style="display: none">
-                                            <input type="checkbox" id="toggle_gift" />
-                                            <input type="hidden" name="gift" id="gift">
-                                            Apply GiftCard
+                                        <input type="checkbox" id="toggle_gift" />
+                                        <input type="hidden" name="gift" id="gift">
+                                        Apply GiftCard
                                         <div id="gift_content" style="display: none">
                                             <h4 id="h4_gift"></h4>
                                         </div>
@@ -487,7 +630,8 @@
                                     Total
                                     <hr style="color: white; height: 4px;">
                                     <span>
-                                        <p class="customp" id="grandtotal"> ${{ number_format($subtotal + $variation, 2) }} </p>
+                                        <p class="customp" id="grandtotal">
+                                            ${{ number_format($subtotal + $variation, 2) }} </p>
                                     </span>
                                 </h3>
 
@@ -497,7 +641,7 @@
 
                             </div>
                         </div>
-{{--                        <div id="accordion" class="payment-accordion" {!! auth()->check() ? '' : 'hidden' !!}>--}}
+                        {{--                        <div id="accordion" class="payment-accordion" {!! auth()->check() ? '' : 'hidden' !!}> --}}
                         <div id="accordion" class="payment-accordion" hidden>
 
 
@@ -577,7 +721,7 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
-        document.getElementById("toggle_discount").addEventListener("change", function () {
+        document.getElementById("toggle_discount").addEventListener("change", function() {
             const discountContent = document.getElementById("discount_content");
             if (this.checked) {
                 discountContent.style.display = "block";
@@ -598,7 +742,7 @@
                     discountContent.appendChild(applyButton);
 
                     // Add click event listener to Apply button
-                    applyButton.addEventListener("click", function (event) {
+                    applyButton.addEventListener("click", function(event) {
                         event.preventDefault();
                         const discountCode = input.value;
                         const baseprice = $('#total_price').val();
@@ -629,23 +773,23 @@
         // Function to send AJAX request to apply discount
         function applyDiscount(discountCode, baseprice = 0) {
             $.ajax({
-                url: "{{ route('applyDiscount') }}",  // Route to apply discount in Laravel
+                url: "{{ route('applyDiscount') }}", // Route to apply discount in Laravel
                 method: 'POST',
                 data: {
                     discount_code: discountCode,
                     baseprice: baseprice,
-                    _token: '{{ csrf_token() }}'  // Add CSRF token for security
+                    _token: '{{ csrf_token() }}' // Add CSRF token for security
                 },
                 success: function(response) {
                     if (response.success) {
                         $('#total_price').val(response.discount);
-                        $('#total_price').text('$'+response.discount);
-                        $('#grandtotal').text('$'+response.discount);
+                        $('#total_price').text('$' + response.discount);
+                        $('#grandtotal').text('$' + response.discount);
                         $('.grandtotalstripe').text('Pay Now $' + response.discount);
                         $('#discount_input').hide();
                         $('#apply_discount').hide();
                         $('#toggle_discount').hide();
-                        $('#h4_discount').text(response.percentage+'%');
+                        $('#h4_discount').text(response.percentage + '%');
                         $('#discount').val(response.percentage);
                         alert("Discount applied successfully!");
                         // You can update the cart details on the page here using the response
@@ -659,7 +803,7 @@
             });
         }
 
-        document.getElementById("toggle_gift").addEventListener("change", function () {
+        document.getElementById("toggle_gift").addEventListener("change", function() {
             const giftContent = document.getElementById("gift_content");
             if (this.checked) {
                 giftContent.style.display = "block";
@@ -680,7 +824,7 @@
                     giftContent.appendChild(applyButton);
 
                     // Add click event listener to Apply button
-                    applyButton.addEventListener("click", function (event) {
+                    applyButton.addEventListener("click", function(event) {
                         event.preventDefault();
                         const giftCode = input.value;
                         const baseprice = $('#total_price').val();
@@ -711,23 +855,23 @@
         // Function to send AJAX request to apply gift
         function applygift(giftCode, baseprice = 0) {
             $.ajax({
-                url: "{{ route('applyGift') }}",  // Route to apply gift in Laravel
+                url: "{{ route('applyGift') }}", // Route to apply gift in Laravel
                 method: 'POST',
                 data: {
                     gift_code: giftCode,
                     baseprice: baseprice,
-                    _token: '{{ csrf_token() }}'  // Add CSRF token for security
+                    _token: '{{ csrf_token() }}' // Add CSRF token for security
                 },
                 success: function(response) {
                     if (response.success) {
                         $('#total_price').val(response.gift);
-                        $('#total_price').text('$'+response.gift);
-                        $('#grandtotal').text('$'+response.gift);
+                        $('#total_price').text('$' + response.gift);
+                        $('#grandtotal').text('$' + response.gift);
                         $('.grandtotalstripe').text('Pay Now $' + response.gift);
                         $('#gift_input').hide();
                         $('#apply_gift').hide();
                         $('#toggle_gift').hide();
-                        $('#h4_gift').text('$'+baseprice+' - $'+response.balance);
+                        $('#h4_gift').text('$' + baseprice + ' - $' + response.balance);
                         $('#gift').val(response.balance);
                         alert("Gift applied successfully!");
                         // You can update the cart details on the page here using the response
@@ -814,26 +958,54 @@
             shippingMethodSelect.empty(); // Clear existing options
 
             // Define an array of shipping methods for different countries
-            const shippingMethodsUSA = [
-                { text: "Standard", code: "11" },
-                { text: "UPS 2nd Day Air®", code: "02" },
-                { text: "UPS 3 Day Select®", code: "12" },
-                { text: "UPS Next Day Air®", code: "14" },
-                { text: "UPS SurePost", code: "93" }
+            const shippingMethodsUSA = [{
+                    text: "Standard",
+                    code: "11"
+                },
+                {
+                    text: "UPS 2nd Day Air®",
+                    code: "02"
+                },
+                {
+                    text: "UPS 3 Day Select®",
+                    code: "12"
+                },
+                {
+                    text: "UPS Next Day Air®",
+                    code: "14"
+                },
+                {
+                    text: "UPS SurePost",
+                    code: "93"
+                }
             ];
 
-            const shippingMethodsOthers = [
-                { text: "UPS Standard", code: "11" },
-                { text: "UPS Worldwide Expedited®", code: "17" },
-                { text: "UPS Worldwide Saver®", code: "86" },
-                { text: "UPS Worldwide Express®", code: "72" },
-                { text: "UPS SurePost", code: "93" }
+            const shippingMethodsOthers = [{
+                    text: "UPS Standard",
+                    code: "11"
+                },
+                {
+                    text: "UPS Worldwide Expedited®",
+                    code: "17"
+                },
+                {
+                    text: "UPS Worldwide Saver®",
+                    code: "86"
+                },
+                {
+                    text: "UPS Worldwide Express®",
+                    code: "72"
+                },
+                {
+                    text: "UPS SurePost",
+                    code: "93"
+                }
             ];
 
             // Determine shipping methods based on the country
-            const selectedShippingMethods = (country.toLowerCase() === 'usa' || country.toLowerCase() === 'united states')
-                ? shippingMethodsUSA
-                : shippingMethodsOthers;
+            const selectedShippingMethods = (country.toLowerCase() === 'usa' || country.toLowerCase() === 'united states') ?
+                shippingMethodsUSA :
+                shippingMethodsOthers;
 
 
             var country = $('#country').val();
@@ -846,7 +1018,9 @@
             // Append options and make AJAX requests for each method
             selectedShippingMethods.forEach(method => {
                 $.ajax({
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
                     url: "{{ route('upsservices') }}",
                     type: "POST",
                     dataType: "json",
@@ -989,7 +1163,8 @@
                                     // Parse the JSON string
                                     const response = JSON.parse(jsonStringMatch[0]);
                                     // Extract the message from the errors array
-                                    if (response.response && response.response.errors && response.response.errors[0].message) {
+                                    if (response.response && response.response.errors && response
+                                        .response.errors[0].message) {
                                         errorMessage = response.response.errors[0].message;
                                     }
                                 } catch (e) {
@@ -1091,7 +1266,8 @@
                                     // Parse the JSON string
                                     const response = JSON.parse(jsonStringMatch[0]);
                                     // Extract the message from the errors array
-                                    if (response.response && response.response.errors && response.response.errors[0].message) {
+                                    if (response.response && response.response.errors && response
+                                        .response.errors[0].message) {
                                         errorMessage = response.response.errors[0].message;
                                     }
                                 } catch (e) {
@@ -1269,7 +1445,7 @@
             },
             client: {
                 // sandbox: 'AR0NWTUnnZIoWXQR_CVmMcExhY7gigkcBfMzRAarXxJAhMk1M0Cb5vXwRbx24IUU5HY_r94D_dBSro2F',
-                production:'AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38',
+                production: 'AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38',
             },
             validate: function(actions) {
                 actions.disable();
@@ -1439,5 +1615,331 @@
             });
             return errorCount;
         }
+    </script>
+
+    <script>
+        let temp_id;
+        let temp_price_id;
+        var temp_price = 0;
+        var select_price = 0;
+        var f_select_price;
+        var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
+    </script>
+    <script>
+        let productId = {!! $get_product_detail->id !!}; // Laravel se product ID le rahe hain
+
+        if (productId === 332) {
+            document.addEventListener("DOMContentLoaded", function() {
+                let checkbox = document.getElementById('add_price_checkbox');
+                let priceElement = document.getElementById('h3_original');
+                let basePrice = parseFloat("{{ $get_product_detail->price }}"); // Laravel price
+
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
+                        console.log(selectvalue);
+
+                        let additionalPrice = parseFloat(selectvalue) || 0;
+
+                        if (this.checked) {
+                            console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
+
+                            priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
+                        } else {
+                            priceElement.innerText = `$${basePrice.toFixed(2)}`;
+                        }
+                    });
+                }
+            });
+        } else {
+
+            function updateOptionPrice(selector) {
+                var text = selector.attr('class');
+                var regex = /\d+/;
+                var number = text.match(regex)[0];
+
+                var selectedOption = selector.find('option:selected');
+                var optionPrice = selectedOption.data('price');
+
+                // Check if the selected option is the first option (Choose an option)
+                if (selectedOption.index() === 0) {
+                    selector.next('.span_selected_option_price').html('').hide();
+                    return; // Stop execution if "Choose an option" is selected
+                }
+
+                // Check if a valid option is selected
+                if (optionPrice !== undefined) {
+                    var amount = parseFloat(optionPrice).toFixed(2);
+
+                    if (amount == '0.00') {
+                        selector.next('.span_selected_option_price').html('$0.00').show();
+                    } else {
+                        $('.select_price' + number).val(amount);
+                        selector.next('.span_selected_option_price').html('$' + amount).show();
+                    }
+
+                    var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
+                    $('.select_price' + number).each(function() {
+                        totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
+                    });
+
+                    $('#h3_original').prop('hidden', true);
+                    $('#h3_additional').prop('hidden', false);
+                } else {
+                    selector.next('.span_selected_option_price').html('$0.00').show();
+                }
+            }
+        }
+
+
+        @foreach ($productAttributes_id as $key => $val_product_attribute)
+            var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
+
+            // Initialize on page load
+            updateOptionPrice(dropdown);
+
+            // Add event listener for changes
+            dropdown.on('change', function() {
+                updateOptionPrice($(this));
+            });
+        @endforeach
+    </script>
+
+
+    <script type="text/javascript">
+        var t_price = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
+        // var temp_p = 0;
+        // $('.get_option').on('change', function () {
+        //     temp_p = 0;
+        //     $('.span_selected_option_price').each(function() {
+        //         if($(this).text() != ''){
+        //             var stringWithoutDollarSign = $(this).text().replace("$", "");
+        //             temp_p += parseFloat(stringWithoutDollarSign);
+        //         }else if($(this).text() == ''){
+        //             var stringWithoutDollarSign = 0;
+        //             temp_p += parseFloat(stringWithoutDollarSign);
+        //         }
+        //     });
+        //     t_price = parseFloat('{{ $get_product_detail->price }}') + temp_p; // Update t_price
+        //     $('#exist_price').val(t_price);
+        //     $('#h3_additional').html('$' + t_price.toFixed(2));
+        // });
+        function updateTotalPrice() {
+            var temp_p = 0;
+
+            // Iterate through each span and calculate the total additional price
+            $('.span_selected_option_price').each(function() {
+                if ($(this).text() != '') {
+                    var stringWithoutDollarSign = $(this).text().replace("$", "");
+                    temp_p += parseFloat(stringWithoutDollarSign);
+                } else if ($(this).text() == '') {
+                    temp_p += 0; // Default to 0 if the text is empty
+                }
+            });
+
+            // Update total price
+            var t_price = parseFloat('{{ $get_product_detail->price }}') + temp_p;
+            $('#exist_price').val(t_price);
+            $('#h3_additional').html('$' + t_price.toFixed(2));
+        }
+
+        updateTotalPrice();
+
+        $('.get_option').on('change', function() {
+            updateTotalPrice();
+        });
+
+        $(document).ready(function() {
+            $(".inner-shop").click(function() {
+                $(".inner-drop").show()
+            })
+        });
+
+        $(document).ready(function() {
+            $(".inner-shop-2").click(function() {
+                $(".inner-drop-2").show()
+            })
+        });
+
+        // $('.select_option').on('change', function () {
+        //     let option_label = $(this).find('option:selected').text();
+        //     if (option_label.includes('+$')) {
+        //         let amount = parseFloat(option_label.split('+$')[1]);
+        //         let price = parseFloat({{ $get_product_detail->price }});
+        //         let additional_price = (amount + price).toFixed(2);
+        //         $(this).next('.span_selected_option_price').html('$' + amount.toFixed(2));
+        //         $('#h3_original').prop('hidden', true);
+        //         $('#h3_additional').prop('hidden', false);
+        //         $('#h3_additional').html('$' + additional_price);
+        //     } else {
+        //         $(this).next('.span_selected_option_price').html('');
+        //         $('#h3_original').prop('hidden', false);
+        //         $('#h3_additional').prop('hidden', true);
+        //     }
+        // });
+
+
+
+        function opencity(evt, cityName) {
+
+            var a, cycleinfo, clicktabs;
+
+            cycleinfo = document.getElementsByClassName("cycleinfo");
+
+            for (i = 0; i < cycleinfo.length; i++) {
+                cycleinfo[i].style.display = "none";
+            }
+            clicktabs = document.getElementsByClassName("clicktabs");
+            for (i = 0; i < clicktabs.length; i++) {
+                clicktabs[i].className = clicktabs[i].className.replace("activee", " ")
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " activee"
+        }
+    </script>
+
+    <script>
+        $(document).on('click', '#addCart', function(e) {
+            e.preventDefault();
+
+            let button = $(this);
+            let form = button.closest('form');
+
+            let product_id = form.find('[name="product_id"]').val();
+            let prod_title = form.find('#prod_title').text().trim();
+            let prod_price = form.find('#h3_original').text().replace('$', '').trim();
+            let qty = form.find('[name="qty"]').val() || 1;
+            let productshow = form.closest('.checkout_product');
+
+            $.ajax({
+                url: "{{ route('datacart') }}",
+                type: "post",
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    product_id: product_id,
+                    name: prod_title,
+                    price: prod_price,
+                    qty: qty,
+                },
+                success: function(response) {
+                    if (response.status) {
+                        toastr.success(response.message);
+                        if (response.cart_count !== undefined) {
+                            $('#cart_count').text(response.cart_count);
+                        }
+
+                        let productData = {
+                            product_id: product_id,
+                            name: prod_title,
+                            price: prod_price,
+                            qty: qty
+                        };
+
+                        productshow.hide(); // Hide product
+
+                        let undoBtn = $(`
+                    <div class="col-lg-12">
+                        <div class="undo_btn_form">
+                            <button class="undoCart btn btn-warning" data-product='${JSON.stringify(productData)}'>Undo</button>
+                        </div>
+                    </div>
+                `);
+
+                        productshow.after(undoBtn); // Append undo button
+
+                        // ✅ Save to localStorage
+                        let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
+                        if (!hiddenProducts.includes(product_id)) {
+                            hiddenProducts.push(product_id);
+                            localStorage.setItem('hiddenProducts', JSON.stringify(hiddenProducts));
+                        }
+
+                        $("#update-cart").load(location.href + " #update-cart");
+                        $(".YouOrder").load(location.href + " .YouOrder");
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    toastr.error('Error: ' + xhr.responseJSON.message);
+                }
+            });
+        });
+
+        // ✅ Undo Button Click
+        $(document).on('click', '.undoCart', function() {
+            let button = $(this);
+
+            // ✅ Fetch and parse product data safely
+            let productData = JSON.parse(button.attr('data-product'));
+
+            if (!productData || !productData.product_id) {
+                toastr.error("Error: Product data missing!");
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('undoCart') }}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    product_id: productData.product_id,
+                    name: productData.name,
+                    price: productData.price,
+                    qty: productData.qty
+                },
+                success: function(response) {
+                    if (response.status) {
+                        toastr.success("Product restored!");
+
+                        $('.checkout_product').each(function() {
+                            if ($(this).find('[name="product_id"]').val() == productData
+                                .product_id) {
+                                $(this).show();
+                            }
+                        });
+
+                        button.closest('.col-lg-12').remove(); // ✅ Remove Undo button container
+
+                        // ✅ Remove from localStorage
+                        let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
+                        hiddenProducts = hiddenProducts.filter(id => id !== productData.product_id);
+                        localStorage.setItem('hiddenProducts', JSON.stringify(hiddenProducts));
+
+                        $('#cart_count').text(response.cart_count);
+                        $("#update-cart").load(location.href + " #update-cart");
+                        $(".YouOrder").load(location.href + " .YouOrder");
+                    } else {
+                        toastr.error("Undo failed!");
+                    }
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
+
+            $('.checkout_product').each(function() {
+                let product_id = $(this).find('[name="product_id"]').val();
+                if (hiddenProducts.includes(product_id)) {
+                    $(this).hide();
+
+                    $(this).after(`
+                <div class="col-lg-12">
+                    <div class="undo_btn_form">
+                        <button class="undoCart btn btn-warning" data-product='${JSON.stringify({ product_id })}'>Undo</button>
+                    </div>
+                </div>
+            `);
+                }
+            });
+        });
     </script>
 @endsection

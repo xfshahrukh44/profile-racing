@@ -65,9 +65,9 @@ Route::group(['middleware' => ['auth', 'roles'], 'roles' => 'admin', 'prefix' =>
     Route::post('config/setting', 'Admin\AdminController@configSettingUpdate')->name('config_settings_update');
 
 
-//==============================================================//
+    //==============================================================//
 
-//==================== Error pages Routes ====================//
+    //==================== Error pages Routes ====================//
     Route::get('403', function () {
         return view('pages.403');
     });
@@ -83,7 +83,7 @@ Route::group(['middleware' => ['auth', 'roles'], 'roles' => 'admin', 'prefix' =>
     Route::get('500', function () {
         return view('pages.500');
     });
-//============================================================//
+    //============================================================//
 
     #Permission management
     Route::get('permission-management', 'PermissionController@getIndex');
@@ -238,7 +238,7 @@ Route::post('update-content', 'HomeController@updateContent')->name('update-cont
 Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
 
 Route::get('/temp', function () {
-//    GlobalMember::truncate();
+    //    GlobalMember::truncate();
 ////    $data = json_decode(file_get_contents(public_path('global_members.json')), true);
 //    $data = [
 //        'global_members' => [
@@ -365,6 +365,8 @@ Route::get('store-detail/{id}', 'ProductController@shopDetail')->name('shopDetai
 Route::get('category-detail/{id}', 'ProductController@categoryDetail')->name('categoryDetail');
 
 Route::post('/cartAdd', 'ProductController@saveCart')->name('save_cart');
+Route::post('/cartdata', 'ProductController@datacart')->name('datacart');
+Route::post('/undo-cart', 'ProductController@undoCart')->name('undoCart');
 Route::any('/remove-cart/{id}', 'ProductController@removeCart')->name('remove_cart');
 Route::post('/updateCart', 'ProductController@updateCart')->name('update_cart');
 Route::get('/cart', 'ProductController@cart')->name('cart');
