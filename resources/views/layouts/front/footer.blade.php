@@ -12,26 +12,39 @@
                 0; ?>
                 <div class="main-modal">
                     @foreach (session()->get('cart') as $key => $value)
-                    <?php
-                    $prod_image = App\Product::where('id', $value['id'])->first();
-                    ?>
-                    <div class="product-img">
-                        <figure>
-                            <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
-                        </figure>
-                        <div class="product-discription">
-                            <h4>
-                                {{ $value['name'] }}
-                                @if($value && isset($value['id']))
-                                    <a onclick="window.location.href='{{ route('remove_cart', $value['id']) }}'"><i class="fa-solid fa-xmark"></i></a>
-                                @endif
-                            </h4>
-                            {{-- <h6>Black</h6>--}}
-                            <div class="counter">
-                                <div class="quantity">
-                                    <a href="#" class=" minus-1"><span>-</span></a>
-                                    <input name="row[]" type="number" class="quantity__input input-1" value="{{ $value['qty'] }}">
-                                    <a href="#" class=" plus-1"><span>+</span></a>
+                        <?php
+                        $prod_image = App\Product::where('id', $value['id'])->first();
+                        ?>
+                        <div class="product-img">
+                            <figure>
+                                <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
+                            </figure>
+                            <div class="product-discription">
+                                <h4>
+                                    {{ $value['name'] }}
+                                    {{-- <a onclick="window.location.href='{{ route('remove_cart', [$value['id']]) }}'"><i
+                                            class="fa-solid fa-xmark"></i></a> --}}
+
+                                    @if (isset($value['id']))
+                                        <a onclick="window.location.href='{{ route('remove_cart', $value['id']) }}'">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </a>
+                                    @endif
+
+                                </h4>
+                                {{-- <h6>Black</h6> --}}
+                                <div class="counter">
+                                    <div class="quantity">
+                                        <a href="#" class=" minus-1"><span>-</span></a>
+                                        <input name="row[]" type="number" class="quantity__input input-1"
+                                            value="{{ $value['qty'] }}">
+                                        <a href="#" class=" plus-1"><span>+</span></a>
+                                    </div>
+                                    <?php $t_var = 0; ?>
+                                    @foreach ($value['variation'] as $key => $values)
+                                        <?php $t_var += $values['attribute_price']; ?>
+                                    @endforeach
+                                    <span>${{ number_format(($value['baseprice'] + $t_var) * $value['qty'], 2) }}</span>
                                 </div>
                             </div>
                         </div>

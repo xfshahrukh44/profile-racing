@@ -75,24 +75,12 @@ class OrderController extends Controller
 
         $countries = DB::table('countries')->get();
 
-        if ($product_detail->isNotEmpty()) {
-            // Fetch all product attributes at once
-            $productAttributes = DB::table('product_attributes')
-                ->whereIn('product_id', $product_detail->pluck('id'))
-                ->get()
-                ->groupBy('product_id');
-
-            // dd($productAttributes);
-        } else {
-            $productAttributes = collect();
-        }
 
         return view('shop.checkout', [
             'cart' => $cart,
             'countries' => $countries,
             'language' => $language,
             'product_detail' => $product_detail,
-            'productAttributes' => $productAttributes,
         ]);
     }
 

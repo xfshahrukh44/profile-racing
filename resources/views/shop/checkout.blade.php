@@ -304,12 +304,17 @@
                                                 </h3>
 
                                                 @php
-                                                    $att_models = \App\ProductAttribute::groupBy('attribute_id')->where('product_id', $get_product_detail->id)->get();
+                                                    $att_models = \App\ProductAttribute::groupBy('attribute_id')
+                                                        ->where('product_id', $get_product_detail->id)
+                                                        ->get();
                                                 @endphp
                                                 @foreach ($att_models as $att_model)
                                                     <h6> {{ $att_model->attribute->name }}</h6>
                                                     @php
-                                                        $pro_att = \App\ProductAttribute::where(['attribute_id' => $att_model->attribute_id, 'product_id' => $get_product_detail->id])->get();
+                                                        $pro_att = \App\ProductAttribute::where([
+                                                            'attribute_id' => $att_model->attribute_id,
+                                                            'product_id' => $get_product_detail->id,
+                                                        ])->get();
                                                     @endphp
                                                     <select name="variation[{{ $att_model->attribute->name }}]">
                                                         @foreach ($pro_att as $pro_atts)
@@ -1828,18 +1833,18 @@
                             price: prod_price,
                             qty: qty
                         };
+                        console.log(productData);
 
                         productshow.hide(); // Hide product
 
-                        let undoBtn = $(`
-                    <div class="col-lg-12">
-                        <div class="undo_btn_form">
-                            <button class="undoCart btn btn-warning" data-product='${JSON.stringify(productData)}'>Undo</button>
-                        </div>
-                    </div>
-                `);
-
-                        productshow.after(undoBtn); // Append undo button
+                        // let undoBtn = $(`
+                    //         <div class="col-lg-12">
+                    //             <div class="undo_btn_form">
+                    //                 <button class="undoCart btn btn-warning" data-product='${JSON.stringify(productData)}'>Undo</button>
+                    //             </div>
+                    //         </div>
+                    //    `);
+                        // productshow.after(undoBtn);
 
                         // ✅ Save to localStorage
                         let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
@@ -1848,7 +1853,11 @@
                             localStorage.setItem('hiddenProducts', JSON.stringify(hiddenProducts));
                         }
 
-                        $("#update-cart").load(location.href + " #update-cart");
+                        $("#update-cart").load(location.href + " #update-cart", function() {
+                            var offcanvasElement = new bootstrap.Offcanvas(document
+                                .getElementById('offcanvasRight'));
+                            offcanvasElement.show(); // ✅ Open Bootstrap Offcanvas
+                        });
                         $(".YouOrder").load(location.href + " .YouOrder");
                     } else {
                         toastr.error(response.message);
@@ -1861,75 +1870,75 @@
         });
 
         // ✅ Undo Button Click
-        $(document).on('click', '.undoCart', function() {
-            let button = $(this);
+        // $(document).on('click', '.undoCart', function() {
+        //     let button = $(this);
 
-            // ✅ Fetch and parse product data safely
-            let productData = JSON.parse(button.attr('data-product'));
+        //     // ✅ Fetch and parse product data safely
+        //     let productData = JSON.parse(button.attr('data-product'));
 
-            if (!productData || !productData.product_id) {
-                toastr.error("Error: Product data missing!");
-                return;
-            }
+        //     if (!productData || !productData.product_id) {
+        //         toastr.error("Error: Product data missing!");
+        //         return;
+        //     }
 
-            $.ajax({
-                url: "{{ route('undoCart') }}",
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    product_id: productData.product_id,
-                    name: productData.name,
-                    price: productData.price,
-                    qty: productData.qty
-                },
-                success: function(response) {
-                    if (response.status) {
-                        toastr.success("Product restored!");
+        //     $.ajax({
+        //         url: "{{ route('undoCart') }}",
+        //         type: "POST",
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         data: {
+        //             "_token": "{{ csrf_token() }}",
+        //             product_id: productData.product_id,
+        //             name: productData.name,
+        //             price: productData.price,
+        //             qty: productData.qty
+        //         },
+        //         success: function(response) {
+        //             if (response.status) {
+        //                 toastr.success("Product restored!");
 
-                        $('.checkout_product').each(function() {
-                            if ($(this).find('[name="product_id"]').val() == productData
-                                .product_id) {
-                                $(this).show();
-                            }
-                        });
+        //                 $('.checkout_product').each(function() {
+        //                     if ($(this).find('[name="product_id"]').val() == productData
+        //                         .product_id) {
+        //                         $(this).show();
+        //                     }
+        //                 });
 
-                        button.closest('.col-lg-12').remove(); // ✅ Remove Undo button container
+        //                 button.closest('.col-lg-12').remove(); // ✅ Remove Undo button container
 
-                        // ✅ Remove from localStorage
-                        let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
-                        hiddenProducts = hiddenProducts.filter(id => id !== productData.product_id);
-                        localStorage.setItem('hiddenProducts', JSON.stringify(hiddenProducts));
+        //                 // ✅ Remove from localStorage
+        //                 let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
+        //                 hiddenProducts = hiddenProducts.filter(id => id !== productData.product_id);
+        //                 localStorage.setItem('hiddenProducts', JSON.stringify(hiddenProducts));
 
-                        $('#cart_count').text(response.cart_count);
-                        $("#update-cart").load(location.href + " #update-cart");
-                        $(".YouOrder").load(location.href + " .YouOrder");
-                    } else {
-                        toastr.error("Undo failed!");
-                    }
-                }
-            });
-        });
+        //                 $('#cart_count').text(response.cart_count);
+        //                 $("#update-cart").load(location.href + " #update-cart");
+        //                 $(".YouOrder").load(location.href + " .YouOrder");
+        //             } else {
+        //                 toastr.error("Undo failed!");
+        //             }
+        //         }
+        //     });
+        // });
 
-        $(document).ready(function() {
-            let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
+        // $(document).ready(function() {
+        //     let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
 
-            $('.checkout_product').each(function() {
-                let product_id = $(this).find('[name="product_id"]').val();
-                if (hiddenProducts.includes(product_id)) {
-                    $(this).hide();
+        //     $('.checkout_product').each(function() {
+        //         let product_id = $(this).find('[name="product_id"]').val();
+        //         if (hiddenProducts.includes(product_id)) {
+        //             $(this).hide();
 
-                    $(this).after(`
-                <div class="col-lg-12">
-                    <div class="undo_btn_form">
-                        <button class="undoCart btn btn-warning" data-product='${JSON.stringify({ product_id })}'>Undo</button>
-                    </div>
-                </div>
-            `);
-                }
-            });
-        });
+        //             $(this).after(`
+    //     <div class="col-lg-12">
+    //         <div class="undo_btn_form">
+    //             <button class="undoCart btn btn-warning" data-product='${JSON.stringify({ product_id })}'>Undo</button>
+    //         </div>
+    //     </div>
+    // `);
+        //         }
+        //     });
+        // });
     </script>
 @endsection

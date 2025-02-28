@@ -102,16 +102,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="inner-headings">
-                            <h2>PRODUCTS</h2>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="inner-headings">
+                                <h2>PRODUCTS</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section> -->
+            </section> -->
 
 
 
@@ -523,7 +523,7 @@
         let productId = {!! $get_product_detail->id !!}; // Laravel se product ID le rahe hain
 
         if (productId === 332) {
-        document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function() {
                 let checkbox = document.getElementById('add_price_checkbox');
                 let priceElement = document.getElementById('h3_original');
                 let basePrice = parseFloat("{{ $get_product_detail->price }}"); // Laravel price
@@ -544,7 +544,7 @@
                     });
                 }
             });
-        }else{
+        } else {
 
             function updateOptionPrice(selector) {
                 var text = selector.attr('class');
