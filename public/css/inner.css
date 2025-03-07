@@ -14,10 +14,12 @@
     font-size: 40px;
     padding: 0px 60px;
 }
+
 .inner-about-sec {
     padding-top: 70px;
     padding-bottom: 70px;
 }
+
 .inner-about-img img {
     width: 100%;
     height: 600px;
@@ -37,9 +39,11 @@
     font-size: 18px;
     line-height: 30px;
 }
+
 .inner-about-txt {
     padding: 0px 20px;
 }
+
 /* about css end */
 
 /* product css start */
@@ -195,13 +199,13 @@ a.plus-1 span {
     /*font-family: "Lato";*/
     /*font-size: 24px;*/
     /*margin-top: 30px;*/
-    
+
     color: #c0c0c0;
     font-family: arial !important;
     font-size: 30px;
     margin-top: 30px;
     font-weight: bold;
-    
+
 }
 
 .inner-product-details h6 {
@@ -235,6 +239,7 @@ a.btn.btn-custom.white {
     background-color: white;
     color: black;
 }
+
 .category h4 {
     color: #c0c0c0;
     font-size: 35px;
@@ -256,6 +261,7 @@ a.btn.btn-custom.white {
 .category ul li {
     padding-bottom: 5px;
 }
+
 /* product css end */
 
 /* blog css start */
@@ -263,9 +269,11 @@ a.btn.btn-custom.white {
 .for-inner {
     background-color: black;
 }
+
 .opt-sec3-main a {
     text-decoration: none;
 }
+
 /* blog css end */
 
 /* blog-inner css start */
@@ -287,11 +295,13 @@ a.btn.btn-custom.white {
     text-align: center;
     transition: all ease 0.5s;
 }
+
 .blog-working p {
     color: white;
     text-align: justify;
     padding-bottom: 35px;
 }
+
 .blog-working a {
     background-color: #be1d1f;
     border-radius: 3px;
@@ -302,6 +312,7 @@ a.btn.btn-custom.white {
     z-index: 0;
     text-decoration: none;
 }
+
 .blog-working a i {
     padding-right: 5px;
     opacity: 0;
@@ -310,10 +321,12 @@ a.btn.btn-custom.white {
     left: 7px;
     top: 12px;
 }
+
 .blog-working a:hover i {
     opacity: 1;
     transition: all ease 0.5s;
 }
+
 /* blog-inner css end */
 
 /* contact-us css start */
@@ -322,12 +335,15 @@ a.btn.btn-custom.white {
     background-color: #060606;
     padding: 80px 0 100px 0;
 }
+
 .lable-txt input::placeholder {
     color: #ffffff;
 }
+
 .lable-txt {
     width: 100%;
 }
+
 section.contact-text input {
     background: inherit;
     border: 1px solid white;
@@ -337,12 +353,15 @@ section.contact-text input {
     transition: 0.2s ease-in-out;
     color: white;
 }
+
 section.contact-text input:hover {
     border: 2px solid white;
 }
+
 section.contact-text input:active {
     border: 2px solid white;
 }
+
 .lable-txt textarea {
     width: 100%;
     border: 1px solid white;
@@ -352,12 +371,15 @@ section.contact-text input:active {
     color: white;
     height: 150px !important;
 }
+
 .lable-txt textarea::placeholder {
     color: white;
 }
+
 .lable-txt.gap {
     padding-top: 25px;
 }
+
 .lable-anker a {
     background-color: #141414;
     padding: 15px 40px;
@@ -366,17 +388,19 @@ section.contact-text input:active {
     font-weight: 550;
     transition: 0.2s ease-in-out;
 }
+
 .lable-anker a:hover {
     background-color: white;
     color: #141414;
 }
+
 .lable-anker {
     padding-top: 30px;
 }
 
 /* contact-us css end */
 
-/* 3/6/2024 owais css start */
+/* 3/6/2024  css start */
 
 .inner-producttt {
     margin-top: 50px;
@@ -411,14 +435,16 @@ section.contact-text input:active {
     font-weight: 400;
     font-size: 18px;
 }
+
 .productmain .clicktabs.active {
     background: #c0c0c0;
     color: black;
     border: none;
 }
-/* 3/6/2024  owais css end */
 
-/* 3/13/2024  owais css start */
+/* 3/6/2024   css end */
+
+/* 3/13/2024   css start */
 
 .hover-links {
     position: relative;
@@ -440,6 +466,7 @@ section.contact-text input:active {
     font-family: "Lato";
     font-size: 13px;
 }
+
 .dropdown-links ul {
     padding-left: 0;
     list-style: none;
@@ -452,6 +479,7 @@ section.contact-text input:active {
 .change_tabs .opt-sec2-img img {
     width: 100%;
 }
+
 .news-tabs {
     padding: 50px 0;
 }
@@ -476,18 +504,22 @@ section.contact-text input:active {
     justify-content: center;
     cursor: pointer;
 }
+
 .change-tabs .clickabel.active {
     background: white;
     color: black;
 }
+
 .change-tabs .clickabel:focus {
     outline: none;
 }
-/* 3/13/2024  owais css end */
+
+/* 3/13/2024   css end */
 
 .bikes-inner {
     padding: 50px 0;
 }
+
 .cylce-one {
     margin-bottom: 100px;
 }
@@ -552,6 +584,7 @@ section.contact-text input:active {
 .cylce-one ul li p {
     margin: 0;
 }
+
 .Freestyle-sec .opt-sec2-text h6 {
     padding-bottom: 0;
 }
@@ -559,6 +592,7 @@ section.contact-text input:active {
 .Freestyle-sec .opt-sec2-text p {
     font-size: 14px;
 }
+
 .history-pg .inner-about-txt h3 {
     font-size: 30px;
 }
@@ -566,9 +600,11 @@ section.contact-text input:active {
 .history-pg .inner-about-img img {
     height: auto;
 }
+
 .recycling-pg .inner-about-img img {
     margin-bottom: 50px;
 }
+
 .history-pg .inner-about-txt h4 {
     color: #cb1e20;
     font-size: 15px;
@@ -580,6 +616,7 @@ section.contact-text input:active {
     font-size: 15px;
     letter-spacing: 2px;
 }
+
 .jobs-pg {
     padding: 50px 0;
 }
@@ -602,6 +639,7 @@ section.contact-text input:active {
     font-weight: 500;
     font-size: 17px;
 }
+
 .job-discription {
     margin-bottom: 60px;
 }
@@ -658,9 +696,11 @@ section.contact-text input:active {
     height: 50px;
     border-radius: 0;
 }
+
 .job-form .form-group #textarea {
     height: unset;
 }
+
 .job-form .form-group #file_up {
     height: 120px;
 }
@@ -693,6 +733,7 @@ section.contact-text input:active {
     color: #cb1e20;
     margin-top: 10px;
 }
+
 .get-login .btn-bustom {
     display: block;
     margin-bottom: 10px;
@@ -703,9 +744,9 @@ section.contact-text input:active {
     color: black;
 }
 
-/* 3/13/2024  owais css end */
+/* 3/13/2024   css end */
 
-/* 3/14/2024  owais css start */
+/* 3/14/2024   css start */
 
 .sup-pg h4 {
     color: white;
@@ -748,6 +789,7 @@ section.contact-text input:active {
 .main-product ul {
     padding: 30px 10px;
 }
+
 .main-product ul h5 {
     color: white;
     font-size: 24px;
@@ -778,9 +820,11 @@ section.contact-text input:active {
     font-size: 18px;
     font-weight: bold;
 }
+
 .main-product {
     padding-bottom: 20px;
 }
+
 .faq-s-pg {
     padding: 50px 0;
 }
@@ -812,11 +856,13 @@ section.contact-text input:active {
 .faq-one ul li h4 {
     font-weight: bold;
 }
+
 .faq-one img {
     width: 80%;
     height: 500px;
     margin: 20px 0;
 }
+
 .terms-policy {
     padding: 50px 0;
 }
@@ -851,7 +897,65 @@ section.contact-text input:active {
 .policy-main h3 {
     color: #cb1e20;
 }
+
 .policy-main img {
     margin: 20px 0;
 }
-/* 3/14/2024  owais css end */
+
+/* 3/14/2024   css end */
+
+/* 3/7/2025   css start */
+
+
+.from-boundry {
+    padding: 25px 15px;
+    border: 1px solid white;
+    border-radius: 15px;
+}
+
+.fixed-slides {
+    position: sticky;
+    top: 20px;
+}
+
+.product-cart {
+    display: flex;
+    align-items: end;
+    gap: 15px;
+}
+
+.product-img-view {
+    width: 25%;
+}
+
+.product-cart .custompp {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-cart {
+    margin-bottom: 15px;
+}
+
+.product-info {
+    width: 100%;
+}
+
+.custompp a.cut_info {
+    margin-left: 10px;
+}
+
+.shippment-price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.shippment-price h4 {
+    font-size: 15px;
+    margin: 0;
+}
+
+/* 3/7/2025  css end */

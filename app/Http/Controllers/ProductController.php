@@ -242,6 +242,7 @@ class ProductController extends Controller
     }
 
 
+
     public function updateCart()
     {
 
@@ -259,8 +260,6 @@ class ProductController extends Controller
                 $count = $count + 1;
             }
         }
-
-
 
         // $productFirstrow = Product::where('id', $pro_id)->first();
         // $cart[$pro_id]['id'] = $pro_id;
@@ -321,6 +320,7 @@ class ProductController extends Controller
         session()->put('added-to-cart', true);
         return back();
     }
+
 
     public function shop()
     {

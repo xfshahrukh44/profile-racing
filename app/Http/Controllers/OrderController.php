@@ -284,8 +284,7 @@ class OrderController extends Controller
 
         $orders->save();
 
-        $orders = orders::orderBy('id', 'desc')
-            ->first();
+        $orders = orders::orderBy('id', 'desc')->first();
 
         foreach ($cart as $key => $value) {
 

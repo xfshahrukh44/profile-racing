@@ -277,435 +277,433 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-7">
+                    <div class="from-boundry">
+                        <div class="checkout_forms">
+                            <div class="random_product">
+                                @foreach ($product_detail as $get_product_detail)
+                                    <div class="col-lg-4">
+                                        <div class="checkout_product">
+                                            <div class="productimg">
+                                                <img src="{{ asset($get_product_detail->image) }}" class="img-fluid"
+                                                    alt="">
+                                            </div>
+                                            <div class="checkout_form_product">
+                                                <form method="POST" action="{{ route('datacart') }}" class="add_cart_form"
+                                                    id="add-cart">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id"
+                                                        value="{{ $get_product_detail->id }}">
 
-                    <div class="random_product">
-                        @foreach ($product_detail as $get_product_detail)
-                            <div class="col-lg-4">
-                                <div class="checkout_product">
-                                    <div class="productimg">
-                                        <img src="{{ asset($get_product_detail->image) }}" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="checkout_form_product">
-                                        <form method="POST" action="{{ route('datacart') }}" class="add_cart_form"
-                                            id="add-cart">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{ $get_product_detail->id }}">
+                                                    <div class="inner-product-details">
+                                                        <h3 style="font-family: PEPSI_pl;" id="prod_title">
+                                                            {{ $get_product_detail->product_title }}
+                                                        </h3>
 
-                                            <div class="inner-product-details">
-                                                <h3 style="font-family: PEPSI_pl;" id="prod_title">
-                                                    {{ $get_product_detail->product_title }}
-                                                </h3>
+                                                        <h3 id="h3_original">
+                                                            ${{ $get_product_detail->price }}
+                                                            @if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0')
+                                                                - ${{ $get_product_detail->maximum_price }}
+                                                            @endif
+                                                        </h3>
 
-                                                <h3 id="h3_original">
-                                                    ${{ $get_product_detail->price }}
-                                                    @if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0')
-                                                        - ${{ $get_product_detail->maximum_price }}
-                                                    @endif
-                                                </h3>
-
-                                                @php
-                                                    $att_models = \App\ProductAttribute::groupBy('attribute_id')
-                                                        ->where('product_id', $get_product_detail->id)
-                                                        ->get();
-                                                @endphp
-                                                @foreach ($att_models as $att_model)
-                                                    <h6> {{ $att_model->attribute->name }}</h6>
-                                                    @php
-                                                        $pro_att = \App\ProductAttribute::where([
-                                                            'attribute_id' => $att_model->attribute_id,
-                                                            'product_id' => $get_product_detail->id,
-                                                        ])->get();
-                                                    @endphp
-                                                    <select name="variation[{{ $att_model->attribute->name }}]">
-                                                        @foreach ($pro_att as $pro_atts)
-                                                            <option value="{{ $pro_atts->attributesValues->id }}">
-                                                                {{ $pro_atts->attributesValues->value }}</option>
+                                                        @php
+                                                            $att_models = \App\ProductAttribute::groupBy('attribute_id')
+                                                                ->where('product_id', $get_product_detail->id)
+                                                                ->get();
+                                                        @endphp
+                                                        @foreach ($att_models as $att_model)
+                                                            <h6> {{ $att_model->attribute->name }}</h6>
+                                                            @php
+                                                                $pro_att = \App\ProductAttribute::where([
+                                                                    'attribute_id' => $att_model->attribute_id,
+                                                                    'product_id' => $get_product_detail->id,
+                                                                ])->get();
+                                                            @endphp
+                                                            <select name="variation[{{ $att_model->attribute->name }}]">
+                                                                @foreach ($pro_att as $pro_atts)
+                                                                    <option value="{{ $pro_atts->attributesValues->id }}">
+                                                                        {{ $pro_atts->attributesValues->value }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         @endforeach
-                                                    </select>
-                                                @endforeach
 
 
 
-                                                <h6>Quantity</h6>
-                                                <div class="quantity">
-                                                    <a href="#" class="minus-1"><span>-</span></a>
-                                                    <input id="qty" name="qty" type="text"
-                                                        class="quantity__input input-1" readonly="" value="1">
-                                                    <a href="#" class="plus-1"><span>+</span></a>
+                                                        <h6>Quantity</h6>
+                                                        <div class="quantity">
+                                                            <a href="#" class="minus-1"><span>-</span></a>
+                                                            <input id="qty" name="qty" type="text"
+                                                                class="quantity__input input-1" readonly=""
+                                                                value="1">
+                                                            <a href="#" class="plus-1"><span>+</span></a>
+                                                        </div>
+
+                                                        <br>
+                                                        <div class="cart-btn">
+                                                            <button type="button" class="btn btn-custom" id="addCart"
+                                                                style="background: red; color: white; font-weight: bold; font-size: 23px;">
+                                                                Add to cart
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="order_checkout">
+                            <form action="{{ route('order.place') }}" method="POST" id="order-place">
+                                @csrf
+                                <?php $subtotal = 0;
+                                $addon_total = 0;
+                                $variation = 0; ?>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="section-heading dark-color">
+                                        <h3>User Info</h3>
+                                    </div>
+                                    @if (\Session::has('stripe_error'))
+                                        <div class="alert alert-danger">
+                                            {!! \Session::get('stripe_error') !!}
+                                        </div>
+                                    @endif
+
+                                    <input type="hidden" name="payment_id" value="" />
+                                    <input type="hidden" name="payer_id" value="" />
+                                    <input type="hidden" name="payment_status" value="" />
+                                    <input type="hidden" name="payment_method" id="payment_method" value="stripe" />
+
+
+                                    @if (Auth::check())
+                                        <?php $_getUser = DB::table('users')
+                                            ->where('id', '=', Auth::user()->id)
+                                            ->first(); ?>
+                                        <div class="form-group">
+                                            <input class="form-control" id="f-name" name="first_name"
+                                                value="{{ old('first_name') ? old('first_name') : $_getUser->name }}"
+                                                placeholder="First Name *" type="text" required>
+                                            <span
+                                                class="invalid-feedback fname {{ $errors->first('first_name') ? 'd-block' : '' }}">
+                                                <strong>{{ $errors->first('first_name') }}</strong>
+                                            </span>
+                                        </div>
+                                        {{-- <div class="form-group">
+                                            <input class="form-control" id="address" name="address_line_1" placeholder="Address *"
+                                                type="text" value="{{ old('address_line_1') }}" required>
+                                            <span class="invalid-feedback {{ $errors->first('address_line_1') ? 'd-block' : '' }}">
+                                                <strong>{{ $errors->first('address_line_1') }}</strong>
+                                            </span>
+                                        </div> --}}
+                                        {{-- <div class="form-group">
+                                            <input class="form-control right" placeholder="Town / City *" name="city" id="city"
+                                                type="text" required>
+                                            <span class="invalid-feedback {{ $errors->first('city') ? 'd-block' : '' }}">
+                                                <strong>{{ $errors->first('city') }}</strong>
+                                            </span>
+                                        </div> --}}
+                                        {{-- <div class="form-group">
+                                            <input type="text" name="country" id="country" class="form-control left"
+                                                placeholder="Country">
+                                            <span class="invalid-feedback {{ $errors->first('country') ? 'd-block' : '' }}">
+                                                <strong>{{ $errors->first('country') }}</strong>
+                                            </span>
+                                        </div> --}}
+                                        <div class="form-group">
+                                            <input class="form-control right" placeholder="Phone *" name="phone_no"
+                                                type="text" value="{{ old('phone_no') }}" required>
+                                            <span
+                                                class="invalid-feedback {{ $errors->first('phone_no') ? 'd-block' : '' }}">
+                                                <strong>{{ $errors->first('phone_no') }}</strong>
+                                            </span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control left" name="email" placeholder="Email *"
+                                                type="email" value="{{ old('email') ? old('email') : $_getUser->email }}"
+                                                required>
+                                            <span class="invalid-feedback {{ $errors->first('email') ? 'd-block' : '' }}">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
+                                        </div>
+                                        {{-- <div class="form-group">
+                                            <input class="form-control" id="zip_code" name="zip_code" placeholder="Postcode"
+                                                type="text" value="{{ old('zip_code') }}">
+                                        </div> --}}
+                                        <div class="form-group">
+                                            <textarea class="form-control" id="comment" name="order_notes" placeholder="Order Note" rows="5">{{ old('order_notes') }}</textarea>
+                                        </div>
+
+                                        <fieldset id="fedexfieldset">
+                                            <legend>Shipping Address</legend>
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" id="searchTextField"
+                                                    name="googleaddress" placeholder="Type Your Address"
+                                                    onchange="initialize()">
+                                            </div>
+                                            <div id="addressdiv">
+                                                <input type="hidden" name="fedex-checker" value="0"
+                                                    id="fedex-checker">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" id="country"
+                                                        name="country" value="" placeholder="Country" required>
                                                 </div>
-
-                                                <br>
-                                                <div class="cart-btn">
-                                                    <button type="button" class="btn btn-custom" id="addCart"
-                                                        style="background: red; color: white; font-weight: bold; font-size: 23px;">
-                                                        Add to cart
-                                                    </button>
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" type="text"
+                                                        id="address" name="address_line_1" value=""
+                                                        placeholder="Street Address" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" id="city"
+                                                        name="city" value="" placeholder="City" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" id="postal"
+                                                        name="postal_code" value="" placeholder="Postal Code"
+                                                        required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" id="state"
+                                                        name="state" value="" placeholder="State Code" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select name="shipping_method" id="shipping_method"
+                                                        class="form-control">
+                                                    </select>
                                                 </div>
                                             </div>
-                                        </form>
+
+                                            <div class="billing-info col-md-12 input-style update-btn">
+                                                <ul class="nav nav-tabs shippingbutton" id="myTab" role="tablist">
+                                                    <li class="nav-item shipli" role="presentation"
+                                                        style="display: none">
+                                                        <button id="fedexbutton" class="btn btn-primary shippingbtn"
+                                                            type="button">
+                                                            Fedex Button
+                                                        </button>
+                                                    </li>
+                                                    <li class="nav-item shipli" role="presentation" style="width: 100%">
+                                                        <button id="upsbutton" class="btn btn-primary shippingbtn"
+                                                            type="button">
+                                                            Calculate Shipping
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <span id="error" class="text-danger" style="display: none"></span>
+                                                <div id="loader" style="display:none">
+                                                    <img src="{{ asset('images/loader.gif') }}">
+                                                </div>
+                                                <div id="servicesdiv" class="mb-35" style="display: none"> </div>
+                                            </div>
+                                        </fieldset>
+                                    @else
+                                        <a style="text-decoration: none;" href="{{ url('signin') }}" target="_blank"
+                                            class="btn proceed_button2"> You can not purchase without authentication
+                                            (Please Signin
+                                            Now) </a>
+                                    @endif
+                                </div>
+                            </form>
+                            <div class="check-paymentt">
+                                <div id="accordion" class="payment-accordion mt-5" hidden>
+                                    <div class="card">
+                                        <div class="card-header" id="headingOne">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link" data-toggle="collapse"
+                                                    data-target="#collapseOne" aria-expanded="true"
+                                                    aria-controls="collapseOne" data-payment="paypal">
+                                                    Pay with Paypal <img src="{{ asset('images/paypal.png') }}"
+                                                        width="60" alt="">
+                                                </button>
+                                            </h5>
+                                        </div>
+
+                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                            data-parent="#accordion">
+                                            <div class="card-body">
+                                                <input type="hidden" name="price" value="{{ $subtotal }}" />
+                                                <input type="hidden" name="product_id" value="" />
+                                                <input type="hidden" name="qty" value="value['qty']" />
+                                                <div id="paypal-button-container-popup"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="card">
+
+                                        <div class="card-header" id="headingTwo">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link" data-toggle="collapse"
+                                                    data-target="#collapseTwo" aria-expanded="true"
+                                                    aria-controls="collapseTwo" data-payment="stripe">
+                                                    Pay with Credit Card <img src="{{ asset('images/payment1.png') }}"
+                                                        alt="" width="150">
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+                                            data-parent="#accordion">
+                                            <div class="card-body">
+                                                <div class="stripe-form-wrapper require-validation"
+                                                    data-stripe-publishable-key="{{ config('services.stripe.key') }}"
+                                                    data-cc-on-file="false">
+                                                    <div id="card-element"></div>
+                                                    <div id="card-errors" role="alert"></div>
+                                                    <div class="form-group">
+                                                        <button class="btn btn-danger btn-block grandtotalstripe"
+                                                            type="button" id="stripe-submit">Pay Now
+                                                            ${{ $subtotal + $variation }} </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-12">
+                    <div class="fixed-slides">
+                        <div class="YouOrder">
+                            @foreach ($cart as $key => $value)
+                                <?php
+                                $prod_image = App\Product::where('id', $value['id'])->first();
+                                ?>
+                                <div class="product-cart">
+                                    <div class="product-img-view">
+                                        <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="product-info">
+                                        <p class="custompp">
+                                            <span>
+                                                {{ $value['name'] }}
+                                                @if (isset($value['id']))
+                                                    <a href='{{ route('remove_cart', $value['id']) }}'">
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </a>
+                                                @endif
+                                            </span>
+                                            <span class="customp">
+                                                ${{ $value['baseprice'] * $value['qty'] }} </span>
+                                        </p>
+                                        <p class="custompp"> variation price
+                                            <span class="customp">
+                                                <?php $t_var = 0; ?>
+                                                @foreach ($value['variation'] as $key => $values)
+                                                    <?php
+                                                    $t_var += $values['attribute_price'];
+                                                    ?>
+                                                @endforeach
+                                                ${{ $t_var * $value['qty'] }}
+                                                <?php $variation += $t_var * $value['qty']; ?>
+                                            </span>
+                                        </p>
+                                        <?php $subtotal += $value['baseprice'] * $value['qty'];
+                                        $variation += $value['variation_price'];
+                                        ?>
+                                    </div>
+
+                                </div>
+                            @endforeach
+                            <div class="amount-wrapper">
+                                @php
+                                    $discount = session()->get('percentage', 0);
+                                    if ($discount != 0) {
+                                        $subtotal = $subtotal * ($discount->percentage / 100);
+                                    }
+                                @endphp
+                                <div id="shippingdiv" class="grand-total-wrap mb-40 shippingdiv"style="display:none">
+                                    <ul id="upsli">
+                                        <li>
+                                            Service Name
+                                            <h4 id="servname">UPS Standard</h4>
+                                        </li>
+
+                                        <li>
+                                            <div class="shippment-price">
+                                                Shipping Total
+                                                <h4 id="totalshippingh4">$0.00</h4>
+                                            </div>
+                                        </li>
+
+                                        <li id="li_discount" style="display: none">
+
+                                            <input type="checkbox" id="toggle_discount"
+                                                @if (session()->get('discount')) checked @endif />
+                                            <input type="hidden" name="discount" id="discount">
+                                            Apply Discount
+                                            <div id="discount_content"
+                                                style="display: {{ session()->get('discount') ? 'block' : 'none' }};">
+                                                <h4 id="h4_discount">{{ $discount ?? 0 }}</h4>
+                                            </div>
+                                        </li>
+
+                                        <li id="li_gift" style="display: none">
+
+                                            <input type="checkbox" id="toggle_gift" />
+                                            <input type="hidden" name="gift" id="gift">
+                                            Apply GiftCard
+                                            <div id="gift_content" style="display: none">
+                                                <h4 id="h4_gift"></h4>
+                                            </div>
+
+                                        </li>
 
 
+                                    </ul>
+
+                                </div>
+                                <div class="">
+                                    <h3>
+                                        Total
+                                        <hr style="color: white; height: 4px;">
+                                        <span>
+                                            <p class="customp" id="grandtotal">
+                                                ${{ number_format($subtotal + $variation, 2) }} </p>
+                                        </span>
+                                    </h3>
+
+                                    <input type="hidden" name="total_price" id="total_price"
+                                        value="{{ $subtotal + $variation }}" />
+                                    <input type="hidden" name="total_variation_price" value="{{ $variation }}" />
+
+                                </div>
+                            </div>
+
+
+                            <hr>
+
+                            <button type="submit" class="hvr-wobble-skew" style="display:none">place order</button>
+                            <!--   <a class="PaymentMethod-a" id="paypal-button-container-popup" href="#" style="display:none"></a> -->
+
+                        </div>
                     </div>
                 </div>
             </div>
-            <form action="{{ route('order.place') }}" method="POST" id="order-place">
-
-                @csrf
-
-                <?php $subtotal = 0;
-                $addon_total = 0;
-                $variation = 0; ?>
-
-                <div class="row">
-                    <div class="col-12">
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="col-md-7 col-lg-7 col-sm-7 col-xs-12">
-
-                        <div class="section-heading dark-color">
-                            <h3>User Info</h3>
-                        </div>
-                        @if (\Session::has('stripe_error'))
-                            <div class="alert alert-danger">
-                                {!! \Session::get('stripe_error') !!}
-                            </div>
-                        @endif
-
-                        <input type="hidden" name="payment_id" value="" />
-                        <input type="hidden" name="payer_id" value="" />
-                        <input type="hidden" name="payment_status" value="" />
-                        <input type="hidden" name="payment_method" id="payment_method" value="stripe" />
-
-
-                        @if (Auth::check())
-                            <?php $_getUser = DB::table('users')
-                                ->where('id', '=', Auth::user()->id)
-                                ->first(); ?>
-                            <div class="form-group">
-                                <input class="form-control" id="f-name" name="first_name"
-                                    value="{{ old('first_name') ? old('first_name') : $_getUser->name }}"
-                                    placeholder="First Name *" type="text" required>
-                                <span class="invalid-feedback fname {{ $errors->first('first_name') ? 'd-block' : '' }}">
-                                    <strong>{{ $errors->first('first_name') }}</strong>
-                                </span>
-                            </div>
-                            {{-- <div class="form-group">
-                                <input class="form-control" id="address" name="address_line_1" placeholder="Address *"
-                                    type="text" value="{{ old('address_line_1') }}" required>
-                                <span class="invalid-feedback {{ $errors->first('address_line_1') ? 'd-block' : '' }}">
-                                    <strong>{{ $errors->first('address_line_1') }}</strong>
-                                </span>
-                            </div> --}}
-                            {{-- <div class="form-group">
-                                <input class="form-control right" placeholder="Town / City *" name="city" id="city"
-                                    type="text" required>
-                                <span class="invalid-feedback {{ $errors->first('city') ? 'd-block' : '' }}">
-                                    <strong>{{ $errors->first('city') }}</strong>
-                                </span>
-                            </div> --}}
-                            {{-- <div class="form-group">
-                                <input type="text" name="country" id="country" class="form-control left"
-                                    placeholder="Country">
-                                <span class="invalid-feedback {{ $errors->first('country') ? 'd-block' : '' }}">
-                                    <strong>{{ $errors->first('country') }}</strong>
-                                </span>
-                            </div> --}}
-                            <div class="form-group">
-                                <input class="form-control right" placeholder="Phone *" name="phone_no" type="text"
-                                    value="{{ old('phone_no') }}" required>
-                                <span class="invalid-feedback {{ $errors->first('phone_no') ? 'd-block' : '' }}">
-                                    <strong>{{ $errors->first('phone_no') }}</strong>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control left" name="email" placeholder="Email *" type="email"
-                                    value="{{ old('email') ? old('email') : $_getUser->email }}" required>
-                                <span class="invalid-feedback {{ $errors->first('email') ? 'd-block' : '' }}">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
-                            </div>
-                            {{-- <div class="form-group">
-                                <input class="form-control" id="zip_code" name="zip_code" placeholder="Postcode"
-                                    type="text" value="{{ old('zip_code') }}">
-                            </div> --}}
-                            <div class="form-group">
-                                <textarea class="form-control" id="comment" name="order_notes" placeholder="Order Note" rows="5">{{ old('order_notes') }}</textarea>
-                            </div>
-
-                            <fieldset id="fedexfieldset">
-                                <legend>Shipping Address</legend>
-                                <div class="form-group">
-                                    <input class="form-control" type="text" id="searchTextField" name="googleaddress"
-                                        placeholder="Type Your Address" onchange="initialize()">
-                                </div>
-                                <div id="addressdiv">
-                                    <input type="hidden" name="fedex-checker" value="0" id="fedex-checker">
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" id="country" name="country"
-                                            value="" placeholder="Country" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" type="text" id="address"
-                                            name="address_line_1" value="" placeholder="Street Address" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" id="city" name="city"
-                                            value="" placeholder="City" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" id="postal" name="postal_code"
-                                            value="" placeholder="Postal Code" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" id="state" name="state"
-                                            value="" placeholder="State Code" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <select name="shipping_method" id="shipping_method" class="form-control">
-                                            {{-- <option value="01">Next Day Air</option>
-                                            <option value="02">2nd Day Air</option>
-                                            <option value="03" selected>Ground</option>
-                                            <option value="07">Express</option>
-                                            <option value="08">Expedited</option>
-                                            <option value="11">UPS Standard</option>
-                                            <option value="12">3 Day Select</option>
-                                            <option value="13">Next Day Air Saver</option>
-                                            <option value="14">UPS Next Day Air® Early</option>
-                                            <option value="17">UPS Worldwide Economy DDU</option>
-                                            <option value="54">Express Plus</option>
-                                            <option value="59">2nd Day Air A.M.</option>
-                                            <option value="65">UPS Saver</option>
-                                            <option value="M2">First Class Mail</option>
-                                            <option value="M3">Priority Mail</option>
-                                            <option value="M4">Expedited MaiI Innovations</option>
-                                            <option value="M5">Priority Mail Innovations</option>
-                                            <option value="M6">Economy Mail Innovations</option>
-                                            <option value="M7">MaiI Innovations (MI) Returns</option>
-                                            <option value="70">UPS Access Point™ Economy</option>
-                                            <option value="71">UPS Worldwide Express Freight Midday</option>
-                                            <option value="72">UPS Worldwide Economy DDP</option>
-                                            <option value="74">UPS Express®12:00</option>
-                                            <option value="75">UPS Heavy Goods</option>
-                                            <option value="82">UPS Today Standard</option>
-                                            <option value="83">UPS Today Dedicated Courier</option>
-                                            <option value="84">UPS Today Intercity</option>
-                                            <option value="85">UPS Today Express</option>
-                                            <option value="86">UPS Today Express Saver</option>
-                                            <option value="96">UPS Worldwide Express Freight.</option> --}}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="billing-info col-md-12 input-style update-btn">
-                                    <ul class="nav nav-tabs shippingbutton" id="myTab" role="tablist">
-                                        <li class="nav-item shipli" role="presentation" style="display: none">
-                                            <button id="fedexbutton" class="btn btn-primary shippingbtn" type="button">
-                                                Fedex Button
-                                            </button>
-                                        </li>
-                                        <li class="nav-item shipli" role="presentation" style="width: 100%">
-                                            <button id="upsbutton" class="btn btn-primary shippingbtn" type="button">
-                                                Calculate Shipping
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <span id="error" class="text-danger" style="display: none"></span>
-                                    <div id="loader" style="display:none">
-                                        <img src="{{ asset('images/loader.gif') }}">
-                                    </div>
-                                    <div id="servicesdiv" class="mb-35" style="display: none">
-
-
-                                    </div>
-                                </div>
-
-
-                            </fieldset>
-                        @else
-                            <a style="text-decoration: none;" href="{{ url('signin') }}" target="_blank"
-                                class="btn proceed_button2"> You can not purchase without authentication (Please Signin
-                                Now) </a>
-                        @endif
-
-                    </div>
-                    <div class="col-md-5 col-lg-5 col-sm-5 col-xs-12">
-                        <div class="section-heading dark-color">
-                            <h3>YOUR ORDER</h3>
-                        </div>
-                        <div class="YouOrder">
-
-                            @foreach ($cart as $key => $value)
-                                {{--                    <p class="custompp"> {{ $value['name'] }} <span class="customp"> x {{ $value['qty'] }} = ${{ $value['baseprice'] * $value['qty'] }} </span> </p> --}}
-                                {{--                    <p class="custompp" style="margin-top: -15px;margin-left: 15px;"> > variation price --}}
-                                {{--                      --}}
-                                {{--                      <span class="customp"> --}}
-
-                                <?php $t_var = 0; ?>
-                                @foreach ($value['variation'] as $key => $values)
-                                    <?php
-                                    $t_var += $values['attribute_price'];
-                                    ?>
-                                @endforeach
-
-                                {{--                        x {{ $value['qty'] }} = ${{ $t_var * $value['qty'] }} --}}
-
-                                <?php $variation += $t_var * $value['qty']; ?>
-
-                                {{--                      </span> --}}
-                                {{--                    --}}
-                                {{--                    </p> --}}
-                                {{--                    --}}
-                                {{--                    <hr> --}}
-
-                                <?php $subtotal += $value['baseprice'] * $value['qty'];
-                                // $variation += $value['variation_price'];
-                                ?>
-                            @endforeach
-                            {{--                    <div class="amount-wrapper"> --}}
-                            @php
-                                $discount = session()->get('percentage', 0);
-                                if ($discount != 0) {
-                                    $subtotal = $subtotal * ($discount->percentage / 100);
-                                }
-                            @endphp
-                            <div id="shippingdiv" class="grand-total-wrap mb-40 shippingdiv"style="display:none">
-                                <ul id="upsli">
-                                    <li>
-                                        Service Name
-                                        <h4 id="servname">UPS Standard</h4>
-                                    </li>
-
-                                    <li>
-                                        Shipping Total
-                                        <h4 id="totalshippingh4">$0.00</h4>
-                                    </li>
-
-                                    <li id="li_discount" style="display: none">
-                                        <input type="checkbox" id="toggle_discount"
-                                            @if (session()->get('discount')) checked @endif />
-                                        <input type="hidden" name="discount" id="discount">
-                                        Apply Discount
-                                        <div id="discount_content"
-                                            style="display: {{ session()->get('discount') ? 'block' : 'none' }};">
-                                            <h4 id="h4_discount">{{ $discount ?? 0 }}</h4>
-                                        </div>
-                                    </li>
-
-                                    <li id="li_gift" style="display: none">
-                                        <input type="checkbox" id="toggle_gift" />
-                                        <input type="hidden" name="gift" id="gift">
-                                        Apply GiftCard
-                                        <div id="gift_content" style="display: none">
-                                            <h4 id="h4_gift"></h4>
-                                        </div>
-                                    </li>
-
-
-                                </ul>
-
-                            </div>
-                            <div class="">
-                                <h3>
-                                    Total
-                                    <hr style="color: white; height: 4px;">
-                                    <span>
-                                        <p class="customp" id="grandtotal">
-                                            ${{ number_format($subtotal + $variation, 2) }} </p>
-                                    </span>
-                                </h3>
-
-                                <input type="hidden" name="total_price" id="total_price"
-                                    value="{{ $subtotal + $variation }}" />
-                                <input type="hidden" name="total_variation_price" value="{{ $variation }}" />
-
-                            </div>
-                        </div>
-                        {{--                        <div id="accordion" class="payment-accordion" {!! auth()->check() ? '' : 'hidden' !!}> --}}
-                        <div id="accordion" class="payment-accordion" hidden>
-
-
-                            <div class="card">
-                                <div class="card-header" id="headingOne">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                            aria-expanded="true" aria-controls="collapseOne" data-payment="paypal">
-                                            Pay with Paypal <img src="{{ asset('images/paypal.png') }}" width="60"
-                                                alt="">
-                                        </button>
-                                    </h5>
-                                </div>
-
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                    data-parent="#accordion">
-                                    <div class="card-body">
-                                        <input type="hidden" name="price" value="{{ $subtotal }}" />
-                                        <input type="hidden" name="product_id" value="" />
-                                        <input type="hidden" name="qty" value="value['qty']" />
-                                        <div id="paypal-button-container-popup"></div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-                            <div class="card">
-
-                                <div class="card-header" id="headingTwo">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo"
-                                            aria-expanded="true" aria-controls="collapseTwo" data-payment="stripe">
-                                            Pay with Credit Card <img src="{{ asset('images/payment1.png') }}"
-                                                alt="" width="150">
-                                        </button>
-                                    </h5>
-                                </div>
-
-
-                                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
-                                    data-parent="#accordion">
-                                    <div class="card-body">
-                                        <div class="stripe-form-wrapper require-validation"
-                                            data-stripe-publishable-key="{{ config('services.stripe.key') }}"
-                                            data-cc-on-file="false">
-                                            <div id="card-element"></div>
-                                            <div id="card-errors" role="alert"></div>
-                                            <div class="form-group">
-                                                <button class="btn btn-danger btn-block grandtotalstripe" type="button"
-                                                    id="stripe-submit">Pay Now ${{ $subtotal + $variation }} </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <button type="submit" class="hvr-wobble-skew" style="display:none">place order</button>
-                        <!--   <a class="PaymentMethod-a" id="paypal-button-container-popup" href="#" style="display:none"></a> -->
-                    </div>
-                </div>
-
-            </form>
-
         </div>
     </section>
 @endsection
+
+
 @section('js')
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDvh8npnQNdrlU-Ct_gwwHAaMBBDsJQtag">
     </script>
@@ -716,54 +714,96 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
-        document.getElementById("toggle_discount").addEventListener("change", function() {
-            const discountContent = document.getElementById("discount_content");
-            if (this.checked) {
-                discountContent.style.display = "block";
+        // document.getElementById("toggle_discount").addEventListener("change", function() {
+        //     alert();
+        //     const discountContent = document.getElementById("discount_content");
+        //     if (this.checked) {
+        //         discountContent.style.display = "block";
 
-                // Check if the input already exists
-                if (!document.getElementById("discount_input")) {
-                    // Create and append the input field
-                    const input = document.createElement("input");
-                    input.type = "text";
-                    input.id = "discount_input";
-                    input.placeholder = "Enter discount code";
-                    discountContent.appendChild(input);
+        //         // Check if the input already exists
+        //         if (!document.getElementById("discount_input")) {
+        //             // Create and append the input field
+        //             const input = document.createElement("input");
+        //             input.type = "text";
+        //             input.id = "discount_input";
+        //             input.placeholder = "Enter discount code";
+        //             discountContent.appendChild(input);
 
-                    // Create and append the Apply button with an icon
-                    const applyButton = document.createElement("button");
-                    applyButton.id = "apply_discount";
-                    applyButton.innerHTML = '<i class="fas fa-check"></i> Apply';
-                    discountContent.appendChild(applyButton);
+        //             // Create and append the Apply button with an icon
+        //             const applyButton = document.createElement("button");
+        //             applyButton.id = "apply_discount";
+        //             applyButton.innerHTML = '<i class="fas fa-check"></i> Apply';
+        //             discountContent.appendChild(applyButton);
 
-                    // Add click event listener to Apply button
-                    applyButton.addEventListener("click", function(event) {
-                        event.preventDefault();
-                        const discountCode = input.value;
-                        const baseprice = $('#total_price').val();
-                        if (discountCode) {
-                            // Send AJAX request to apply discount code
-                            applyDiscount(discountCode, baseprice);
-                        } else {
-                            alert("Please enter a discount code.");
-                        }
+        //             // Add click event listener to Apply button
+        //             applyButton.addEventListener("click", function(event) {
+        //                 event.preventDefault();
+        //                 const discountCode = input.value;
+        //                 const baseprice = $('#total_price').val();
+        //                 if (discountCode) {
+        //                     // Send AJAX request to apply discount code
+        //                     applyDiscount(discountCode, baseprice);
+        //                 } else {
+        //                     alert("Please enter a discount code.");
+        //                 }
+        //             });
+        //         }
+        //     } else {
+        //         discountContent.style.display = "none";
+
+        //         // Remove the input field and Apply button if they exist
+        //         const input = document.getElementById("discount_input");
+        //         if (input) {
+        //             input.remove();
+        //         }
+
+        //         const applyButton = document.getElementById("apply_discount");
+        //         if (applyButton) {
+        //             applyButton.remove();
+        //         }
+        //     }
+        // });
+
+        $(document).ready(function() {
+            $("body").on('change', '#toggle_discount', function() {
+                let discountContent = $("#discount_content");
+
+                if ($(this).is(":checked")) {
+                    discountContent.show();
+
+                    $("#discount_input, #apply_discount").remove();
+
+                    let input = $("<input>", {
+                        type: "text",
+                        id: "discount_input",
+                        placeholder: "Enter discount code",
                     });
-                }
-            } else {
-                discountContent.style.display = "none";
 
-                // Remove the input field and Apply button if they exist
-                const input = document.getElementById("discount_input");
-                if (input) {
-                    input.remove();
-                }
+                    let applyButton = $("<button>", {
+                        id: "apply_discount",
+                        html: '<i class="fas fa-check"></i> Apply',
+                    });
 
-                const applyButton = document.getElementById("apply_discount");
-                if (applyButton) {
-                    applyButton.remove();
+                    discountContent.append(input, applyButton);
+                } else {
+                    discountContent.hide();
+                    $("#discount_input, #apply_discount").remove();
                 }
-            }
+            });
+
+            $(document).on("click", "#apply_discount", function(event) {
+                event.preventDefault();
+                let discountCode = $("#discount_input").val();
+                let baseprice = $("#total_price").val(); // Getting price from input field
+
+                if (discountCode) {
+                    applyDiscount(discountCode, baseprice);
+                } else {
+                    alert("Please enter a discount code.");
+                }
+            });
         });
+
 
         // Function to send AJAX request to apply discount
         function applyDiscount(discountCode, baseprice = 0) {
@@ -798,54 +838,100 @@
             });
         }
 
-        document.getElementById("toggle_gift").addEventListener("change", function() {
-            const giftContent = document.getElementById("gift_content");
-            if (this.checked) {
-                giftContent.style.display = "block";
+        // document.getElementById("toggle_gift").addEventListener("change", function() {
+        //     const giftContent = document.getElementById("gift_content");
+        //     if (this.checked) {
+        //         giftContent.style.display = "block";
 
-                // Check if the input already exists
-                if (!document.getElementById("gift_input")) {
-                    // Create and append the input field
-                    const input = document.createElement("input");
-                    input.type = "text";
-                    input.id = "gift_input";
-                    input.placeholder = "Enter gift code";
-                    giftContent.appendChild(input);
+        //         // Check if the input already exists
+        //         if (!document.getElementById("gift_input")) {
+        //             // Create and append the input field
+        //             const input = document.createElement("input");
+        //             input.type = "text";
+        //             input.id = "gift_input";
+        //             input.placeholder = "Enter gift code";
+        //             giftContent.appendChild(input);
 
-                    // Create and append the Apply button with an icon
-                    const applyButton = document.createElement("button");
-                    applyButton.id = "apply_gift";
-                    applyButton.innerHTML = '<i class="fas fa-check"></i> Apply';
-                    giftContent.appendChild(applyButton);
+        //             // Create and append the Apply button with an icon
+        //             const applyButton = document.createElement("button");
+        //             applyButton.id = "apply_gift";
+        //             applyButton.innerHTML = '<i class="fas fa-check"></i> Apply';
+        //             giftContent.appendChild(applyButton);
 
-                    // Add click event listener to Apply button
-                    applyButton.addEventListener("click", function(event) {
-                        event.preventDefault();
-                        const giftCode = input.value;
-                        const baseprice = $('#total_price').val();
-                        if (giftCode) {
-                            // Send AJAX request to apply gift code
-                            applygift(giftCode, baseprice);
-                        } else {
-                            alert("Please enter a gift code.");
-                        }
-                    });
+        //             // Add click event listener to Apply button
+        //             applyButton.addEventListener("click", function(event) {
+        //                 event.preventDefault();
+        //                 const giftCode = input.value;
+        //                 const baseprice = $('#total_price').val();
+        //                 if (giftCode) {
+        //                     // Send AJAX request to apply gift code
+        //                     applygift(giftCode, baseprice);
+        //                 } else {
+        //                     alert("Please enter a gift code.");
+        //                 }
+        //             });
+        //         }
+        //     } else {
+        //         giftContent.style.display = "none";
+
+        //         // Remove the input field and Apply button if they exist
+        //         const input = document.getElementById("gift_input");
+        //         if (input) {
+        //             input.remove();
+        //         }
+
+        //         const applyButton = document.getElementById("apply_gift");
+        //         if (applyButton) {
+        //             applyButton.remove();
+        //         }
+        //     }
+        // });
+
+        $(document).ready(function() {
+            $("body").on('change', '#toggle_gift', function() {
+            // $("#toggle_gift").change(function() {
+                const giftContent = $("#gift_content");
+
+                if ($(this).is(":checked")) {
+                    giftContent.show();
+
+                    // Check if the input already exists
+                    if (!$("#gift_input").length) {
+                        // Create and append the input field
+                        const input = $("<input>", {
+                            type: "text",
+                            id: "gift_input",
+                            placeholder: "Enter gift code"
+                        });
+
+                        // Create and append the Apply button with an icon
+                        const applyButton = $("<button>", {
+                            id: "apply_gift",
+                            html: '<i class="fas fa-check"></i> Apply'
+                        });
+
+                        giftContent.append(input, applyButton);
+                    }
+                } else {
+                    giftContent.hide();
+                    $("#gift_input, #apply_gift").remove();
                 }
-            } else {
-                giftContent.style.display = "none";
+            });
 
-                // Remove the input field and Apply button if they exist
-                const input = document.getElementById("gift_input");
-                if (input) {
-                    input.remove();
-                }
+            // ✅ Event delegation for Apply button
+            $(document).on("click", "#apply_gift", function(event) {
+                event.preventDefault();
+                const giftCode = $("#gift_input").val();
+                const baseprice = $("#total_price").val();
 
-                const applyButton = document.getElementById("apply_gift");
-                if (applyButton) {
-                    applyButton.remove();
+                if (giftCode) {
+                    applygift(giftCode, baseprice);
+                } else {
+                    alert("Please enter a gift code.");
                 }
-            }
+            });
         });
+
 
         // Function to send AJAX request to apply gift
         function applygift(giftCode, baseprice = 0) {
@@ -1853,11 +1939,7 @@
                             localStorage.setItem('hiddenProducts', JSON.stringify(hiddenProducts));
                         }
 
-                        $("#update-cart").load(location.href + " #update-cart", function() {
-                            var offcanvasElement = new bootstrap.Offcanvas(document
-                                .getElementById('offcanvasRight'));
-                            offcanvasElement.show(); // ✅ Open Bootstrap Offcanvas
-                        });
+                        $("#update-cart").load(location.href + " #update-cart");
                         $(".YouOrder").load(location.href + " .YouOrder");
                     } else {
                         toastr.error(response.message);
@@ -1941,4 +2023,6 @@
         //     });
         // });
     </script>
+
+
 @endsection

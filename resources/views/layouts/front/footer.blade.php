@@ -26,7 +26,7 @@
                                             class="fa-solid fa-xmark"></i></a> --}}
 
                                     @if (isset($value['id']))
-                                        <a onclick="window.location.href='{{ route('remove_cart', $value['id']) }}'">
+                                        <a href='{{ route('remove_cart', $value['id']) }}'">
                                             <i class="fa-solid fa-xmark"></i>
                                         </a>
                                     @endif
