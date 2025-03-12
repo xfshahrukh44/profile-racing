@@ -889,7 +889,7 @@
 
         $(document).ready(function() {
             $("body").on('change', '#toggle_gift', function() {
-            // $("#toggle_gift").change(function() {
+                // $("#toggle_gift").change(function() {
                 const giftContent = $("#gift_content");
 
                 if ($(this).is(":checked")) {
@@ -1941,6 +1941,9 @@
 
                         $("#update-cart").load(location.href + " #update-cart");
                         $(".YouOrder").load(location.href + " .YouOrder");
+
+                        window.location.reload();
+
                     } else {
                         toastr.error(response.message);
                     }
@@ -1950,6 +1953,8 @@
                 }
             });
         });
+
+
 
         // ✅ Undo Button Click
         // $(document).on('click', '.undoCart', function() {

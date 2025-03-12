@@ -68,10 +68,18 @@ class OrderController extends Controller
 
         $productIds = array_keys($cart);
 
+        $previouslyFetched = session()->get('fetched_products', []);
+
         $product_detail = DB::table('products')
             ->whereNotIn('id', $productIds)
+            ->whereNotIn('id', $previouslyFetched)
             ->limit(5)
             ->get();
+        // dd($product_detail);
+
+        $newFetchedIds = $product_detail->pluck('id')->toArray();
+        session()->put('fetched_products', array_merge($previouslyFetched, $newFetchedIds));
+
 
         $countries = DB::table('countries')->get();
 
