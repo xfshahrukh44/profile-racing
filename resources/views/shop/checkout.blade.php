@@ -278,7 +278,7 @@
             <div class="row">
                 <div class="col-lg-7">
                     <div class="from-boundry">
-                        <div class="checkout_forms">
+                        {{-- <div class="checkout_forms">
                             <div class="random_product">
                                 @foreach ($product_detail as $get_product_detail)
                                     <div class="col-lg-4">
@@ -352,7 +352,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="order_checkout">
                             <form action="{{ route('order.place') }}" method="POST" id="order-place">
                                 @csrf
