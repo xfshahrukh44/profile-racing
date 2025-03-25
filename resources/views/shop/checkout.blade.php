@@ -454,21 +454,25 @@
                                                     name="googleaddress" placeholder="Type Your Address"
                                                     onchange="initialize()">
                                             </div>
-                                            <div id="addressdiv">
+                                            <div id="addressdiv" style="display: none">
                                                 <input type="hidden" name="fedex-checker" value="0"
                                                     id="fedex-checker">
                                                 <div class="form-group">
-                                                    <input class="form-control" type="text" id="country"
-                                                        name="country" value="" placeholder="Country" required>
+                                                    <input class="form-control" type="text" id="country" name="country"
+                                                        value="" placeholder="Country" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <input class="form-control" type="text" type="text"
-                                                        id="address" name="address_line_1" value=""
-                                                        placeholder="Street Address" required>
+                                                    <input class="form-control" type="text" type="text" id="address"
+                                                        name="address_line_1" value="" placeholder="Street Address"
+                                                        required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <input class="form-control" type="text" id="city"
-                                                        name="city" value="" placeholder="City" required>
+                                                    <input class="form-control" type="text" id="city" name="city"
+                                                        value="" placeholder="City" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" id="street"
+                                                        name="street_number" value="" placeholder="street Number">
                                                 </div>
                                                 <div class="form-group">
                                                     <input class="form-control" type="text" id="postal"
