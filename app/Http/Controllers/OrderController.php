@@ -398,6 +398,7 @@ class OrderController extends Controller
         $order->building = $request->building;
         $order->order_shipping = $cart['shipping'];
         $order->country_code = $request->country_code;
+        $order->street_number = $request->street_number;
 
         $order->order_email = $request->email;
         $order->delivery_phone_no = $request->phone_no;
@@ -417,6 +418,8 @@ class OrderController extends Controller
         $t_variation_price = $request->total_variation_price;
 
         $order->order_total = $total;
+        
+
 
         $order->user_id = $id;
 
