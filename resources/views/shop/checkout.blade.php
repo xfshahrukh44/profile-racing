@@ -459,36 +459,43 @@
                                                     id="fedex-checker">
                                                 <div class="form-group">
                                                     <input class="form-control" type="text" id="country" name="country"
-                                                        value="" placeholder="Country" required>
+                                                        value="" placeholder="Country" required hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <input class="form-control" type="text" type="text" id="address"
                                                         name="address_line_1" value="" placeholder="Street Address"
-                                                        required>
+                                                        required hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <input class="form-control" type="text" id="city" name="city"
-                                                        value="" placeholder="City" required>
+                                                        value="" placeholder="City" required hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <input class="form-control" type="text" id="street"
-                                                        name="street_number" value="" placeholder="street Number">
+                                                        name="street_number" value=""
+                                                        placeholder="Apt/ Unit# (optional)">
                                                 </div>
                                                 <div class="form-group">
                                                     <input class="form-control" type="text" id="postal"
                                                         name="postal_code" value="" placeholder="Postal Code"
-                                                        required>
+                                                        required hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <input class="form-control" type="text" id="state"
-                                                        name="state" value="" placeholder="State Code" required>
+                                                        name="state" value="" placeholder="State Code" required
+                                                        hidden>
                                                 </div>
                                                 <div class="form-group">
-                                                    <select name="shipping_method" id="shipping_method"
-                                                        class="form-control">
-                                                    </select>
+                                                    <label>Shipping Option</label>
+                                                    <div class="shipping-icon">
+                                                        <i class="fa-solid fa-chevron-down icon-down"></i>
+                                                        <select name="shipping_method" id="shipping_method"
+                                                            class="form-control">
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
+
 
                                             <div class="billing-info col-md-12 input-style update-btn">
                                                 <ul class="nav nav-tabs shippingbutton" id="myTab" role="tablist">
@@ -502,7 +509,7 @@
                                                     <li class="nav-item shipli" role="presentation" style="width: 100%">
                                                         <button id="upsbutton" class="btn btn-primary shippingbtn"
                                                             type="button">
-                                                            Calculate Shipping
+                                                            Continue
                                                         </button>
                                                     </li>
                                                 </ul>
@@ -547,10 +554,7 @@
                                                 <div id="paypal-button-container-popup"></div>
                                             </div>
                                         </div>
-
                                     </div>
-
-
                                     <div class="card">
 
                                         <div class="card-header" id="headingTwo">
@@ -2031,6 +2035,12 @@
         //         }
         //     });
         // });
+    </script>
+
+    <script>
+        $('#shipping_method').click(function() {
+            $('.icon-down').toggleClass('rotated');
+        });
     </script>
 
 

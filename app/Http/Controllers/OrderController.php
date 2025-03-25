@@ -373,12 +373,15 @@ class OrderController extends Controller
 
         $cart = Session::get('cart');
 
-        // $subtotal = 0;
-        // foreach ($cart as $key => $value) {
-        // 	$subtotal +=	$value['baseprice'] * $value['qty'];
-        // }
+        $subtotal = 0;
+        foreach ($cart as $key => $value) {
+        	$subtotal +=	$value['baseprice'] * $value['qty'];
+        }
+        // dd($subtotal);
 
-        $subtotal = $request->total_price;
+        // $subtotal = $request->total_price;
+
+        
 
         $order = new orders();
 
@@ -415,7 +418,9 @@ class OrderController extends Controller
 
         $total += $subtotal + $cart['shipping'];
 
-        $t_variation_price = $request->total_variation_price;
+        $t_variation_price = $request->total_variation_price ?? 0;
+
+        // $t_variation_price = $request->total_variation_price;
 
         $order->order_total = $total;
         
@@ -432,8 +437,6 @@ class OrderController extends Controller
         } else {
 
             try {
-
-
 
                 try {
                     Stripe\Stripe::setApiKey(config('services.stripe.secret'));
@@ -457,7 +460,7 @@ class OrderController extends Controller
                         'description' => "Payment From Website",
                         'metadata' => array("name" => $request->first_name, "email" => $request->email),
                     ));
-                    dd($charge);
+                    // dd($charge);
                 } catch (Exception $e) {
                     return redirect()->back()->with('stripe_error', $e->getMessage());
                 }
