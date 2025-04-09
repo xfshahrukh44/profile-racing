@@ -433,7 +433,7 @@
                                     </div>
 
                                     <div id="shipping-loading" style="display:none;">
-                                        <img src="{{ asset('images/loader.gif') }}" alt="Loading...">
+                                        <img src="{{ asset('assets/imgs/loader.gif') }}" alt="Loading...">
                                     </div>
 
                                     <div class="form-group">
