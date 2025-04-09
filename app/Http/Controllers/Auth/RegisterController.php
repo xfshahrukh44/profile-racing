@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/'; 
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -68,18 +68,18 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $validator = $this->validator($request->all());
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator, 'registerForm');
         }
 
         event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
-        
-        Session::flash('message', 'New Account Created Successfully'); 
-        Session::flash('alert-class', 'alert-success'); 
+
+        Session::flash('message', 'New Account Created Successfully');
+        Session::flash('alert-class', 'alert-success');
         return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
+            ?: redirect($this->redirectPath());
     }
 
     /**
@@ -99,7 +99,7 @@ class RegisterController extends Controller
 
     protected function registered(Request $request, $user)
     {
-        if($user->profile == null){
+        if ($user->profile == null) {
             $profile = new Profile();
             $profile->user_id = $user->id;
             $profile->localisation = $request->localisation;

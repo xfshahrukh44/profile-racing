@@ -254,6 +254,61 @@
             align-items: center;
             justify-content: center;
         }
+
+        li.nav-item.shipli {
+            text-align: end;
+        }
+
+        .shipping-method-option {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .shipping-method-option:hover {
+            background-color: #f5f5f5;
+        }
+
+        .shipping-method-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .shipping-method-option label {
+            display: flex;
+            flex-grow: 1;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+
+        .method-name {
+            font-weight: bold;
+        }
+
+        .method-price {
+            color: #2a6496;
+            font-weight: bold;
+        }
+
+        .method-time {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .grand-total {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
     </style>
 @endsection
 @section('content')
@@ -278,314 +333,180 @@
             <div class="row">
                 <div class="col-lg-7">
                     <div class="from-boundry">
-                        {{-- <div class="checkout_forms">
-                            <div class="random_product">
-                                @foreach ($product_detail as $get_product_detail)
-                                    <div class="col-lg-4">
-                                        <div class="checkout_product">
-                                            <div class="productimg">
-                                                <img src="{{ asset($get_product_detail->image) }}" class="img-fluid"
-                                                    alt="">
-                                            </div>
-                                            <div class="checkout_form_product">
-                                                <form method="POST" action="{{ route('datacart') }}" class="add_cart_form"
-                                                    id="add-cart">
-                                                    @csrf
-                                                    <input type="hidden" name="product_id"
-                                                        value="{{ $get_product_detail->id }}">
-
-                                                    <div class="inner-product-details">
-                                                        <h3 style="font-family: PEPSI_pl;" id="prod_title">
-                                                            {{ $get_product_detail->product_title }}
-                                                        </h3>
-
-                                                        <h3 id="h3_original">
-                                                            ${{ $get_product_detail->price }}
-                                                            @if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0')
-                                                                - ${{ $get_product_detail->maximum_price }}
-                                                            @endif
-                                                        </h3>
-
-                                                        @php
-                                                            $att_models = \App\ProductAttribute::groupBy('attribute_id')
-                                                                ->where('product_id', $get_product_detail->id)
-                                                                ->get();
-                                                        @endphp
-                                                        @foreach ($att_models as $att_model)
-                                                            <h6> {{ $att_model->attribute->name }}</h6>
-                                                            @php
-                                                                $pro_att = \App\ProductAttribute::where([
-                                                                    'attribute_id' => $att_model->attribute_id,
-                                                                    'product_id' => $get_product_detail->id,
-                                                                ])->get();
-                                                            @endphp
-                                                            <select name="variation[{{ $att_model->attribute->name }}]">
-                                                                @foreach ($pro_att as $pro_atts)
-                                                                    <option value="{{ $pro_atts->attributesValues->id }}">
-                                                                        {{ $pro_atts->attributesValues->value }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        @endforeach
-
-
-
-                                                        <h6>Quantity</h6>
-                                                        <div class="quantity">
-                                                            <a href="#" class="minus-1"><span>-</span></a>
-                                                            <input id="qty" name="qty" type="text"
-                                                                class="quantity__input input-1" readonly=""
-                                                                value="1">
-                                                            <a href="#" class="plus-1"><span>+</span></a>
-                                                        </div>
-
-                                                        <br>
-                                                        <div class="cart-btn">
-                                                            <button type="button" class="btn btn-custom" id="addCart"
-                                                                style="background: red; color: white; font-weight: bold; font-size: 23px;">
-                                                                Add to cart
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div> --}}
                         <div class="order_checkout">
-                            <form action="{{ route('order.place') }}" method="POST" id="order-place">
+                            <form id="order-place" method="POST" action="{{ route('order.place') }}">
                                 @csrf
-                                <?php $subtotal = 0;
-                                $addon_total = 0;
-                                $variation = 0; ?>
+                                <div id="customer-info-form">
 
-                                <div class="row">
-                                    <div class="col-12">
-                                        @if ($errors->any())
-                                            <div class="alert alert-danger">
-                                                <ul>
-                                                    @foreach ($errors->all() as $error)
-                                                        <li>{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            @if ($errors->any())
+                                                <div class="alert alert-danger">
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <div class="section-heading dark-color">
+                                            <h3>Contact</h3>
+                                        </div>
+
+                                        @if (Auth::check())
+                                            <?php $_getUser = DB::table('users')
+                                                ->where('id', '=', Auth::user()->id)
+                                                ->first(); ?>
+
+                                            <div class="form-group">
+                                                <input class="form-control left" name="email" placeholder="Email *"
+                                                    type="email"
+                                                    value="{{ old('email') ? old('email') : $_getUser->email }}" required>
                                             </div>
-                                        @endif
-                                    </div>
 
+                                            <div class="section-heading dark-color">
+                                                <h3>Shipping address</h3>
+                                            </div>
 
-                                    <div class="section-heading dark-color">
-                                        <h3>User Info</h3>
-                                    </div>
-                                    @if (\Session::has('stripe_error'))
-                                        <div class="alert alert-danger">
-                                            {!! \Session::get('stripe_error') !!}
-                                        </div>
-                                    @endif
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input class="form-control" id="first_name" name="first_name"
+                                                            value="{{ old('first_name') ? old('first_name') : $_getUser->name }}"
+                                                            placeholder="First Name *" type="text" required>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input class="form-control" id="last_name" name="last_name"
+                                                            value="{{ old('last_name') ? old('last_name') : $_getUser->name }}"
+                                                            placeholder="Last Name *" type="text" required>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                    <input type="hidden" name="payment_id" value="" />
-                                    <input type="hidden" name="payer_id" value="" />
-                                    <input type="hidden" name="payment_status" value="" />
-                                    <input type="hidden" name="payment_method" id="payment_method" value="stripe" />
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" name="company" value=""
+                                                    placeholder="Company (optional)">
+                                            </div>
 
-
-                                    @if (Auth::check())
-                                        <?php $_getUser = DB::table('users')
-                                            ->where('id', '=', Auth::user()->id)
-                                            ->first(); ?>
-                                        <div class="form-group">
-                                            <input class="form-control" id="f-name" name="first_name"
-                                                value="{{ old('first_name') ? old('first_name') : $_getUser->name }}"
-                                                placeholder="First Name *" type="text" required>
-                                            <span
-                                                class="invalid-feedback fname {{ $errors->first('first_name') ? 'd-block' : '' }}">
-                                                <strong>{{ $errors->first('first_name') }}</strong>
-                                            </span>
-                                        </div>
-                                        {{-- <div class="form-group">
-                                            <input class="form-control" id="address" name="address_line_1" placeholder="Address *"
-                                                type="text" value="{{ old('address_line_1') }}" required>
-                                            <span class="invalid-feedback {{ $errors->first('address_line_1') ? 'd-block' : '' }}">
-                                                <strong>{{ $errors->first('address_line_1') }}</strong>
-                                            </span>
-                                        </div> --}}
-                                        {{-- <div class="form-group">
-                                            <input class="form-control right" placeholder="Town / City *" name="city" id="city"
-                                                type="text" required>
-                                            <span class="invalid-feedback {{ $errors->first('city') ? 'd-block' : '' }}">
-                                                <strong>{{ $errors->first('city') }}</strong>
-                                            </span>
-                                        </div> --}}
-                                        {{-- <div class="form-group">
-                                            <input type="text" name="country" id="country" class="form-control left"
-                                                placeholder="Country">
-                                            <span class="invalid-feedback {{ $errors->first('country') ? 'd-block' : '' }}">
-                                                <strong>{{ $errors->first('country') }}</strong>
-                                            </span>
-                                        </div> --}}
-                                        <div class="form-group">
-                                            <input class="form-control right" placeholder="Phone *" name="phone_no"
-                                                type="text" value="{{ old('phone_no') }}" required>
-                                            <span
-                                                class="invalid-feedback {{ $errors->first('phone_no') ? 'd-block' : '' }}">
-                                                <strong>{{ $errors->first('phone_no') }}</strong>
-                                            </span>
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control left" name="email" placeholder="Email *"
-                                                type="email" value="{{ old('email') ? old('email') : $_getUser->email }}"
-                                                required>
-                                            <span class="invalid-feedback {{ $errors->first('email') ? 'd-block' : '' }}">
-                                                <strong>{{ $errors->first('email') }}</strong>
-                                            </span>
-                                        </div>
-                                        {{-- <div class="form-group">
-                                            <input class="form-control" id="zip_code" name="zip_code" placeholder="Postcode"
-                                                type="text" value="{{ old('zip_code') }}">
-                                        </div> --}}
-                                        <div class="form-group">
-                                            <textarea class="form-control" id="comment" name="order_notes" placeholder="Order Note" rows="5">{{ old('order_notes') }}</textarea>
-                                        </div>
-
-                                        <fieldset id="fedexfieldset">
-                                            <legend>Shipping Address</legend>
                                             <div class="form-group">
                                                 <input class="form-control" type="text" id="searchTextField"
-                                                    name="googleaddress" placeholder="Type Your Address"
-                                                    onchange="initialize()">
+                                                    name="googleaddress" placeholder="Address" required>
                                             </div>
-                                            <div id="addressdiv" style="display: none">
-                                                <input type="hidden" name="fedex-checker" value="0"
-                                                    id="fedex-checker">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" id="country" name="country"
-                                                        value="" placeholder="Country" required hidden>
+
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" name="street_number"
+                                                    value="" placeholder="Apt/ Unit# (optional)">
+                                            </div>
+
+                                            <!-- Hidden fields for address components -->
+                                            <input type="hidden" name="country" id="country">
+                                            <input type="hidden" name="address_line_1" id="address">
+                                            <input type="hidden" name="city" id="city">
+                                            <input type="hidden" name="postal_code" id="postal">
+                                            <input type="hidden" name="state" id="state">
+
+                                            <div class="form-group">
+                                                <button type="button" id="continue-to-shipping"
+                                                    class="btn btn-primary">Continue to Shipping</button>
+                                            </div>
+                                        @else
+                                            <a href="{{ url('signin') }}" target="_blank" class="btn proceed_button2">
+                                                You can not purchase without authentication (Please Signin Now)
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <!-- Step 2: Shipping Options Form -->
+                                <div id="shipping-options-form" style="display:none;">
+                                    <div class="section-heading dark-color">
+                                        <h3>Shipping Options</h3>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Select Shipping Method</label>
+                                        <div id="shipping-methods-container">
+                                            <!-- Shipping options will be populated here as radio buttons -->
+                                        </div>
+                                    </div>
+
+                                    <div id="shipping-loading" style="display:none;">
+                                        <img src="{{ asset('images/loader.gif') }}" alt="Loading...">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button type="button" id="back-to-info" class="btn btn-secondary">Back</button>
+                                        <button type="button" id="continue-to-payment" class="btn btn-primary">Continue
+                                            to
+                                            Payment</button>
+                                    </div>
+                                </div>
+
+
+                                <!-- Step 3: Payment Form -->
+                                <div id="payment-form" style="display:none;">
+                                    <div class="section-heading dark-color">
+                                        <h3>Payment Method</h3>
+                                    </div>
+
+                                    <div id="payment-accordion" class="payment-accordion">
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link" data-toggle="collapse"
+                                                        data-target="#collapseOne" aria-expanded="true"
+                                                        aria-controls="collapseOne" data-payment="paypal">
+                                                        Pay with Paypal <img src="{{ asset('images/paypal.png') }}"
+                                                            width="60" alt="">
+                                                    </button>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                                data-parent="#payment-accordion">
+                                                <div class="card-body">
+                                                    <input type="hidden" name="price" value="{{ $subtotal }}" />
+                                                    <input type="hidden" name="product_id" value="" />
+                                                    <input type="hidden" name="qty" value="value['qty']" />
+                                                    <div id="paypal-button-container-popup"></div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" type="text" id="address"
-                                                        name="address_line_1" value="" placeholder="Street Address"
-                                                        required hidden>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" id="city" name="city"
-                                                        value="" placeholder="City" required hidden>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" id="street"
-                                                        name="street_number" value=""
-                                                        placeholder="Apt/ Unit# (optional)">
-                                                </div>
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" id="postal"
-                                                        name="postal_code" value="" placeholder="Postal Code"
-                                                        required hidden>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" id="state"
-                                                        name="state" value="" placeholder="State Code" required
-                                                        hidden>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Shipping Option</label>
-                                                    <div class="shipping-icon">
-                                                        <i class="fa-solid fa-chevron-down icon-down"></i>
-                                                        <select name="shipping_method" id="shipping_method"
-                                                            class="form-control">
-                                                        </select>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="headingTwo">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link" data-toggle="collapse"
+                                                        data-target="#collapseTwo" aria-expanded="true"
+                                                        aria-controls="collapseTwo" data-payment="stripe">
+                                                        Pay with Credit Card <img src="{{ asset('images/payment1.png') }}"
+                                                            alt="" width="150">
+                                                    </button>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+                                                data-parent="#payment-accordion">
+                                                <div class="card-body">
+                                                    <div class="stripe-form-wrapper">
+                                                        <div id="card-element"></div>
+                                                        <div id="card-errors" role="alert"></div>
+                                                        <div class="form-group">
+                                                            <button class="btn btn-danger btn-block" type="button"
+                                                                id="stripe-submit">Pay Now $<span
+                                                                    id="stripe-amount">0.00</span></button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
 
-
-                                            <div class="billing-info col-md-12 input-style update-btn">
-                                                <ul class="nav nav-tabs shippingbutton" id="myTab" role="tablist">
-                                                    <li class="nav-item shipli" role="presentation"
-                                                        style="display: none">
-                                                        <button id="fedexbutton" class="btn btn-primary shippingbtn"
-                                                            type="button">
-                                                            Fedex Button
-                                                        </button>
-                                                    </li>
-                                                    <li class="nav-item shipli" role="presentation" style="width: 100%">
-                                                        <button id="upsbutton" class="btn btn-primary shippingbtn"
-                                                            type="button">
-                                                            Continue
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                <span id="error" class="text-danger" style="display: none"></span>
-                                                <div id="loader" style="display:none">
-                                                    <img src="{{ asset('images/loader.gif') }}">
-                                                </div>
-                                                <div id="servicesdiv" class="mb-35" style="display: none"> </div>
-                                            </div>
-                                        </fieldset>
-                                    @else
-                                        <a style="text-decoration: none;" href="{{ url('signin') }}" target="_blank"
-                                            class="btn proceed_button2"> You can not purchase without authentication
-                                            (Please Signin
-                                            Now) </a>
-                                    @endif
+                                    <div class="form-group">
+                                        <button type="button" id="back-to-shipping" class="btn btn-secondary">Back to
+                                            Shipping</button>
+                                    </div>
                                 </div>
                             </form>
-                            <div class="check-paymentt">
-                                <div id="accordion" class="payment-accordion mt-5" hidden>
-                                    <div class="card">
-                                        <div class="card-header" id="headingOne">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link" data-toggle="collapse"
-                                                    data-target="#collapseOne" aria-expanded="true"
-                                                    aria-controls="collapseOne" data-payment="paypal">
-                                                    Pay with Paypal <img src="{{ asset('images/paypal.png') }}"
-                                                        width="60" alt="">
-                                                </button>
-                                            </h5>
-                                        </div>
-
-                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                            data-parent="#accordion">
-                                            <div class="card-body">
-                                                <input type="hidden" name="price" value="{{ $subtotal }}" />
-                                                <input type="hidden" name="product_id" value="" />
-                                                <input type="hidden" name="qty" value="value['qty']" />
-                                                <div id="paypal-button-container-popup"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-
-                                        <div class="card-header" id="headingTwo">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link" data-toggle="collapse"
-                                                    data-target="#collapseTwo" aria-expanded="true"
-                                                    aria-controls="collapseTwo" data-payment="stripe">
-                                                    Pay with Credit Card <img src="{{ asset('images/payment1.png') }}"
-                                                        alt="" width="150">
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
-                                            data-parent="#accordion">
-                                            <div class="card-body">
-                                                <div class="stripe-form-wrapper require-validation"
-                                                    data-stripe-publishable-key="{{ config('services.stripe.key') }}"
-                                                    data-cc-on-file="false">
-                                                    <div id="card-element"></div>
-                                                    <div id="card-errors" role="alert"></div>
-                                                    <div class="form-group">
-                                                        <button class="btn btn-danger btn-block grandtotalstripe"
-                                                            type="button" id="stripe-submit">Pay Now
-                                                            ${{ $subtotal + $variation }} </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -629,9 +550,9 @@
                                         $variation += $value['variation_price'];
                                         ?>
                                     </div>
-
                                 </div>
                             @endforeach
+
                             <div class="amount-wrapper">
                                 @php
                                     $discount = session()->get('percentage', 0);
@@ -639,73 +560,157 @@
                                         $subtotal = $subtotal * ($discount->percentage / 100);
                                     }
                                 @endphp
-                                <div id="shippingdiv" class="grand-total-wrap mb-40 shippingdiv"style="display:none">
-                                    <ul id="upsli">
-                                        <li>
-                                            Service Name
-                                            <h4 id="servname">UPS Standard</h4>
-                                        </li>
-
-                                        <li>
-                                            <div class="shippment-price">
-                                                Shipping Total
-                                                <h4 id="totalshippingh4">$0.00</h4>
-                                            </div>
-                                        </li>
-
-                                        <li id="li_discount" style="display: none">
-
-                                            <input type="checkbox" id="toggle_discount"
-                                                @if (session()->get('discount')) checked @endif />
-                                            <input type="hidden" name="discount" id="discount">
-                                            Apply Discount
-                                            <div id="discount_content"
-                                                style="display: {{ session()->get('discount') ? 'block' : 'none' }};">
-                                                <h4 id="h4_discount">{{ $discount ?? 0 }}</h4>
-                                            </div>
-                                        </li>
-
-                                        <li id="li_gift" style="display: none">
-
-                                            <input type="checkbox" id="toggle_gift" />
-                                            <input type="hidden" name="gift" id="gift">
-                                            Apply GiftCard
-                                            <div id="gift_content" style="display: none">
-                                                <h4 id="h4_gift"></h4>
-                                            </div>
-
-                                        </li>
 
 
-                                    </ul>
+                                <div id="shipping-results">
+                                    {{-- <div class="order-summary"> --}}
+                                    {{-- <div id="taxli" style="display:none;">
+                                            <h4>Tax: <span id="tax-amount">$0.00</span></h4>
+                                        </div> --}}
+                                    {{-- <div id="shipping-cost" style="display:none;">
+                                            <h4>Shipping: <span id="shipping-amount">$0.00</span></h4>
+                                        </div> --}}
+                                    {{-- <div id="order-total">
+                                            <h4>Total: <span id="grand-total">$0.00</span></h4>
+                                        </div> --}}
+                                    {{-- </div>
+                                     </div> --}}
 
+                                    <!-- Order Summary Section -->
+                                    <div class="order-summary">
+                                        <!-- Subtotal -->
+                                        <div class="summary-item">
+                                            <span>Subtotal:</span>
+                                            <span>${{ number_format($subtotal, 2) }}</span>
+                                        </div>
+
+                                        <!-- Variations -->
+                                        <div class="summary-item">
+                                            <span>Variations:</span>
+                                            <span>${{ number_format($variation, 2) }}</span>
+                                        </div>
+
+                                        <!-- Shipping (will be updated dynamically) -->
+                                        <div class="summary-item" id="shipping-cost" style="display:none;">
+                                            <span>Shipping:</span>
+                                            <span id="shipping-amount">$0.00</span>
+                                        </div>
+
+                                        <!-- Tax (will be updated dynamically) -->
+                                        {{-- <div class="summary-item" id="taxli" style="display:none;">
+                                            <span>Tax:</span>
+                                            <span id="tax-amount">$0.00</span>
+                                        </div> --}}
+
+                                        <!-- Discount (dynamic) -->
+                                        <div class="summary-item" id="discount-row" style="display:none;">
+                                            <span>Discount:</span>
+                                            <span id="discount-amount">-$0.00</span>
+                                        </div>
+
+                                        <!-- Gift Card (dynamic) -->
+                                        <div class="summary-item" id="gift-row" style="display:none;">
+                                            <span>Gift Card:</span>
+                                            <span id="gift-amount">-$0.00</span>
+                                        </div>
+
+                                        <hr>
+
+                                        <!-- Grand Total -->
+
+                                    </div>
                                 </div>
-                                <div class="">
-                                    <h3>
-                                        Total
-                                        <hr style="color: white; height: 4px;">
-                                        <span>
-                                            <p class="customp" id="grandtotal">
-                                                ${{ number_format($subtotal + $variation, 2) }} </p>
-                                        </span>
-                                    </h3>
 
-                                    <input type="hidden" name="total_price" id="total_price"
-                                        value="{{ $subtotal + $variation }}" />
-                                    <input type="hidden" name="total_variation_price" value="{{ $variation }}" />
 
+                                <!-- Discount Section -->
+                                <div class="discount-section">
+                                    <div class="apply-discount">
+                                        <input type="checkbox" id="toggle_discount"
+                                            @if (session()->has('discount')) checked @endif />
+                                        <label for="toggle_discount">Apply Discount</label>
+                                        <div id="discount-content"
+                                            style="@if (session()->has('discount')) display:block; @else display:none; @endif">
+                                            @if (session()->has('discount'))
+                                                <span id="discount-code-display">{{ session('discount.code') }}</span>
+                                                <span id="discount-value">-{{ session('discount.percentage') }}%</span>
+                                                <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
+                                            @else
+                                                <input type="text" id="discount-input"
+                                                    placeholder="Enter discount code">
+                                                <button id="apply-discount" class="btn btn-primary">Apply</button>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- Gift Card Section -->
+                                <div class="gift-card-section mt-3">
+                                    <div class="apply-gift-card">
+                                        <input type="checkbox" id="toggle_gift_card"
+                                            @if (session()->has('gift_card')) checked @endif />
+                                        <label for="toggle_gift_card">Apply Gift Card</label>
+                                        <div id="gift-card-content"
+                                            style="@if (session()->has('gift_card')) display:block; @else display:none; @endif">
+                                            @if (session()->has('gift_card'))
+                                                <span id="gift-card-code-display">{{ session('gift_card.code') }}</span>
+                                                <span
+                                                    id="gift-card-value">-${{ number_format(session('gift_card.amount'), 2) }}</span>
+                                                <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
+                                            @else
+                                                <input type="text" id="gift-card-input"
+                                                    placeholder="Enter gift card code">
+                                                <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Order Summary Rows -->
+                                <div class="summary-item" id="discount-row"
+                                    style="@if (session()->has('discount')) display:flex; @else display:none; @endif">
+                                    <span>Discount:</span>
+                                    <span id="discount-amount">
+                                        @if (session()->has('discount'))
+                                            -${{ number_format(session('discount.amount'), 2) }}
+                                        @else
+                                            -$0.00
+                                        @endif
+                                    </span>
+                                </div>
+
+                                <div class="summary-item" id="gift-card-row"
+                                    style="@if (session()->has('gift_card')) display:flex; @else display:none; @endif">
+                                    <span>Gift Card:</span>
+                                    <span id="gift-card-amount">
+                                        @if (session()->has('gift_card'))
+                                            -${{ number_format(session('gift_card.amount'), 2) }}
+                                        @else
+                                            -$0.00
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="summary-item grand-total" id="order-total"
+                                    style="display:flex; justify-content: space-between; align-items: center;">
+                                    <h4 class="m-0">Total:</h4>
+                                    <span id="grand-total">${{ number_format($subtotal + $variation, 2) }}</span>
+                                </div>
+
+                                <input type="hidden" name="total_price" id="total_price"
+                                    value="{{ $subtotal + $variation }}" />
+                                <input type="hidden" name="total_variation_price" value="{{ $variation }}" />
+                                <input type="hidden" name="shipping_method_name" id="shipping_method_name"
+                                    value="" />
+                                <input type="hidden" name="shipping_amount" id="shipping_amount_input"
+                                    value="0" />
                             </div>
-
 
                             <hr>
 
-                            <button type="submit" class="hvr-wobble-skew" style="display:none">place order</button>
-                            <!--   <a class="PaymentMethod-a" id="paypal-button-container-popup" href="#" style="display:none"></a> -->
-
+                            <button type="submit" class="hvr-wobble-skew" style="display:none">Place Order</button>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -722,988 +727,889 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
-        // document.getElementById("toggle_discount").addEventListener("change", function() {
-        //     alert();
-        //     const discountContent = document.getElementById("discount_content");
-        //     if (this.checked) {
-        //         discountContent.style.display = "block";
+        $(document).ready(function() {
+            // Initialize variables
+            let subtotal = parseFloat("{{ $subtotal }}");
+            let variation = parseFloat("{{ $variation }}");
+            let shipping = 0;
+            let tax = 0;
+            let discount = parseFloat("{{ session()->get('discount') ? session()->get('discount')->amount : 0 }}");
+            let gift = 0;
 
-        //         // Check if the input already exists
-        //         if (!document.getElementById("discount_input")) {
-        //             // Create and append the input field
-        //             const input = document.createElement("input");
-        //             input.type = "text";
-        //             input.id = "discount_input";
-        //             input.placeholder = "Enter discount code";
-        //             discountContent.appendChild(input);
+            // Calculate and update totals
+            function updateTotals() {
+                let total = subtotal + variation + shipping + tax - discount - gift;
 
-        //             // Create and append the Apply button with an icon
-        //             const applyButton = document.createElement("button");
-        //             applyButton.id = "apply_discount";
-        //             applyButton.innerHTML = '<i class="fas fa-check"></i> Apply';
-        //             discountContent.appendChild(applyButton);
+                // Update display
+                $('#grand-total').text('$' + total.toFixed(2));
+                $('#total-price').val(total.toFixed(2));
 
-        //             // Add click event listener to Apply button
-        //             applyButton.addEventListener("click", function(event) {
-        //                 event.preventDefault();
-        //                 const discountCode = input.value;
-        //                 const baseprice = $('#total_price').val();
-        //                 if (discountCode) {
-        //                     // Send AJAX request to apply discount code
-        //                     applyDiscount(discountCode, baseprice);
+                // Update Stripe/PayPal buttons
+                $('.grandtotalstripe').text('Pay Now $' + total.toFixed(2));
+            }
+
+            // Discount toggle
+            $('#toggle_discount').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#discount-content').show();
+
+                    // If discount already applied, don't show input
+                    if (!"{{ session()->get('discount') }}") {
+                        $('#discount-content').html(`
+                    <input type="text" id="discount-input" placeholder="Enter discount code">
+                    <button id="apply-discount">Apply</button>
+                `);
+                    }
+                } else {
+                    // Remove discount
+                    discount = 0;
+                    $('#discount-row').hide();
+                    $('#discount-amount').text('-$0.00');
+                    $('#discount-amount-input').val(0);
+                    $('#discount-content').hide();
+                    updateTotals();
+                }
+            });
+
+            // Apply discount
+            $(document).on('click', '#apply-discount', function() {
+                let code = $('#discount-input').val();
+
+                if (code) {
+                    $.ajax({
+                        url: "{{ route('apply_discount') }}",
+                        method: 'POST',
+                        data: {
+                            discount_code: code,
+                            baseprice: subtotal + variation,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                discount = parseFloat(response.amount);
+
+                                // Update display
+                                $('#discount-row').show();
+                                $('#discount-amount').text('-$' + discount.toFixed(2));
+                                $('#discount-amount-input').val(discount);
+
+                                // Update discount content
+                                $('#discount-content').html(`
+                            <span id="discount-code-display">${code}</span>
+                            <span id="discount-value">-${response.percentage}%</span>
+                        `);
+
+                                updateTotals();
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    });
+                } else {
+                    alert('Please enter a discount code');
+                }
+            });
+
+            // Gift card toggle
+            $('#toggle_gift').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#gift-content').show();
+                } else {
+                    // Remove gift card
+                    gift = 0;
+                    $('#gift-row').hide();
+                    $('#gift-amount').text('-$0.00');
+                    $('#gift-amount-input').val(0);
+                    $('#gift-content').hide();
+                    updateTotals();
+                }
+            });
+
+            // Apply gift card
+            $(document).on('click', '#apply-gift', function() {
+                let code = $('#gift-input').val();
+
+                if (code) {
+                    $.ajax({
+                        url: "{{ route('apply_gift_card') }}",
+                        method: 'POST',
+                        data: {
+                            gift_code: code,
+                            baseprice: subtotal + variation,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                gift = parseFloat(response.amount);
+
+                                // Update display
+                                $('#gift-row').show();
+                                $('#gift-amount').text('-$' + gift.toFixed(2));
+                                $('#gift-amount-input').val(gift);
+
+                                updateTotals();
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    });
+                } else {
+                    alert('Please enter a gift card code');
+                }
+            });
+
+            // When shipping method is selected (from your shipping code)
+            function updateShippingAndTax(shippingRate, taxRate) {
+                shipping = parseFloat(shippingRate);
+                tax = (subtotal + variation) * (parseFloat(taxRate) / 100);
+
+                // Update display
+                $('#shipping-row').show();
+                $('#shipping-amount').text('$' + shipping.toFixed(2));
+                $('#shipping-amount-input').val(shipping);
+
+                $('#tax-row').show();
+                $('#tax-amount').text('$' + tax.toFixed(2));
+                $('#tax-amount-input').val(tax);
+
+                updateTotals();
+            }
+
+            // Initialize with any existing discount
+            @if (session()->get('discount'))
+                $('#discount-row').show();
+                $('#discount-amount').text('-${{ session()->get('discount')->amount }}');
+            @endif
+        });
+
+        // $("#searchTextField").keydown(function() {
+        //     $('#fedex-checker').val(0);
+        //     $('#accordion').slideUp();
+        //     // $('#addressdiv').slideUp();
+        //     $('#desctax').slideUp();
+        //     $('#othertaxli').slideUp();
+        //     $('#cataxli').slideUp();
+        //     $("#shippingdiv").slideUp();
+        // })
+
+        // function initialize() {
+        //     var input = document.getElementById('searchTextField');
+        //     var autocomplete = new google.maps.places.Autocomplete(input);
+        //     google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        //         var place = autocomplete.getPlace();
+        //         var searchAddressComponents = place.address_components,
+        //             searchPostalCode = "",
+        //             searchAddress = "",
+        //             searchCity = "",
+        //             searchState = "",
+        //             searchCountryName = "",
+        //             searchCountryCode = "";
+
+        //         $.each(searchAddressComponents, function() {
+        //             if (this.types[0] == "postal_code") {
+        //                 searchPostalCode = this.short_name;
+        //             }
+        //             if (this.types[0] == "route") {
+        //                 searchAddress = this.short_name;
+        //             }
+        //             if (this.types[0] == "locality") {
+        //                 searchCity = this.short_name;
+        //             }
+        //             if (this.types[0] == "administrative_area_level_1") {
+        //                 searchState = this.short_name;
+        //             }
+        //             if (this.types[0] == "country") {
+        //                 searchCountryName = this.long_name;
+        //                 searchCountryCode = this.short_name;
+        //             }
+        //         });
+
+        //         var addressArray = place.adr_address.split(',')
+
+        //         var country = searchCountryCode;
+        //         var city = searchCity;
+        //         var address = searchAddress;
+        //         var state = searchState;
+
+        //         var postalcode = searchPostalCode;
+        //         $('#country').val(searchCountryCode);
+        //         $('#country-code').val(searchCountryName);
+
+        //         // $('#country option[value="' + country.toString() + '"]').prop('selected', true);
+        //         $('#city').val(city);
+        //         $('#address').val(address);
+        //         $('#state').val(state);
+        //         $('#postal').val(postalcode);
+        //         // $('#addressdiv').slideDown();
+        //         $('#fedex-checker').val(1);
+
+        //         updateShippingMethods(searchCountryName);
+
+
+        //     });
+        // }
+
+        // function updateShippingMethods(country) {
+        //     const shippingMethodSelect = $('#shipping_method');
+        //     shippingMethodSelect.empty(); // Clear existing options
+
+        //     // Define an array of shipping methods for different countries
+        //     const shippingMethodsUSA = [{
+        //             text: "Standard",
+        //             code: "11"
+        //         },
+        //         {
+        //             text: "UPS 2nd Day Air®",
+        //             code: "02"
+        //         },
+        //         {
+        //             text: "UPS 3 Day Select®",
+        //             code: "12"
+        //         },
+        //         {
+        //             text: "UPS Next Day Air®",
+        //             code: "14"
+        //         },
+        //         {
+        //             text: "UPS SurePost",
+        //             code: "93"
+        //         }
+        //     ];
+
+        //     const shippingMethodsOthers = [{
+        //             text: "UPS Standard",
+        //             code: "11"
+        //         },
+        //         {
+        //             text: "UPS Worldwide Expedited®",
+        //             code: "17"
+        //         },
+        //         {
+        //             text: "UPS Worldwide Saver®",
+        //             code: "86"
+        //         },
+        //         {
+        //             text: "UPS Worldwide Express®",
+        //             code: "72"
+        //         },
+        //         {
+        //             text: "UPS SurePost",
+        //             code: "93"
+        //         }
+        //     ];
+
+        //     // Determine shipping methods based on the country
+        //     const selectedShippingMethods = (country.toLowerCase() === 'usa' || country.toLowerCase() === 'united states') ?
+        //         shippingMethodsUSA :
+        //         shippingMethodsOthers;
+
+
+        //     var country = $('#country').val();
+        //     var address = $('#address').val();
+        //     var postal = $('#postal').val();
+
+        //     var city = $('#city').val();
+        //     var state = $('#state').val();
+
+        //     // Append options and make AJAX requests for each method
+        //     selectedShippingMethods.forEach(method => {
+        //         $.ajax({
+        //             headers: {
+        //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        //             },
+        //             url: "{{ route('upsservices') }}",
+        //             type: "POST",
+        //             dataType: "json",
+        //             data: {
+        //                 country: country,
+        //                 address: address,
+        //                 state: state,
+        //                 postal: postal,
+        //                 city: city,
+        //                 shipping_method: method.code
+        //             },
+        //             success: function(response) {
+        //                 if (response.status) {
+        //                     // Append the option with upsamount in the text
+        //                     shippingMethodSelect.append(
+        //                         new Option(`${method.text} (${response.upsamount})`, method.code)
+        //                     );
         //                 } else {
-        //                     alert("Please enter a discount code.");
+        //                     console.error('Error in response:', response);
+        //                 }
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error('AJAX error:', error);
+        //             }
+        //         });
+        //     });
+
+
+        //     $('#shippingdiv').slideDown(); // Show the shipping dropdown
+        // }
+
+        // // $(document).on('click', ".btn", function(e){
+        // //   $('#order-place').submit();
+        // // });
+
+        // $('#order-place').append('<input type="hidden" name="subtotal" value="{{ $subtotal }}" id="fedex_token">');
+
+        // $('#upsbutton').click(function() {
+        //     $('#servname').parent().prop('hidden', ($('#country').val() == 'US'));
+        //     $('.shippingbtn').removeClass('active');
+        //     $('#loader').show();
+        //     $(this).addClass("active");
+        //     var country = $('#country').val();
+        //     var address = $('#address').val();
+        //     var postal = $('#postal').val();
+
+        //     var city = $('#city').val();
+        //     var state = $('#state').val();
+        //     var shipping_method = $('#shipping_method').val();
+
+        //     if (country == '' || address == '' || postal == '' || city == '') {
+        //         // toastr.error('Please fill all address fields')
+        //         toastr.error('Please enter a valid address.')
+        //     } else {
+        //         // $('#li_hidden').prop('hidden', false);
+        //         if ($('#country').val() == 'US') {
+        //             $.ajaxSetup({
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //                 }
+        //             });
+
+        //             $.ajax({
+        //                 _token: "{{ csrf_token() }}",
+        //                 url: "{{ route('upsservices') }}",
+        //                 type: "post",
+        //                 dataType: "json",
+        //                 data: {
+        //                     country: country,
+        //                     address: address,
+        //                     state: state,
+        //                     postal: postal,
+        //                     city: city,
+        //                     shipping_method: shipping_method,
+
+        //                 },
+        //                 success: function(response) {
+        //                     if (response.status) {
+        //                         $('#li_discount').show();
+        //                         $('#li_gift').show();
+        //                         $('#accordion').prop('hidden', false);
+        //                         $('#li_hidden').prop('hidden', false);
+
+        //                         var tax = Number('{{ $subtotal }}') + ((Number(response.tax) /
+        //                             100) * Number('{{ $subtotal }}'));
+        //                         $("#ordertotalli h4").text('$' + tax.toString());
+        //                         var ordertotal = Number(response.upsamount) + Number(tax);
+        //                         // $('#taxli  h4').text(response.tax.toString() + "%")
+        //                         $('#taxli  h4').text('$' + ((response.tax / 100) * parseFloat(
+        //                             '{{ $subtotal }}')).toFixed(2).toString())
+        //                         if (response.description != null) {
+        //                             $('#desctax h4').text(response.description);
+        //                             $('#desctax').slideDown();
+        //                         }
+
+        //                         $('#taxli').slideDown();
+        //                         $('#shippingamount').val(response.upsamount);
+        //                         $('#servname').text('UPS Standard');
+        //                         $('#totalshippingh4').text('$' + response.upsamount.toString());
+        //                         $('#shippingdiv').slideDown();
+        //                         $('#fedexli').hide();
+        //                         $('#upsli').slideDown();
+        //                         $('#grandtotal').text('$ ' + ordertotal.toFixed(2));
+        //                         $('.grandtotalstripe').text('Pay Now $' + ordertotal.toFixed(2));
+        //                         $('#total_price').text('$ ' + ordertotal.toFixed(2));
+        //                         $('#amount').val(Number(ordertotal.toFixed(2)));
+        //                         // $('#authbtn').text('Pay Now $' + ordertotal.toFixed(2));
+        //                         $('#authbtn').text('Pay Now');
+        //                         $('#shippinginput').val("UPS");
+        //                         $('#accordion').slideDown();
+
+        //                         $('#error').text('');
+        //                         $('#error').hide();
+
+        //                     } else {
+        //                         $.toast({
+        //                             heading: 'Alert!',
+        //                             position: 'bottom-right',
+        //                             text: response.message,
+        //                             loaderBg: '#ff6849',
+        //                             icon: 'error',
+        //                             hideAfter: 5000,
+        //                             stack: 6
+        //                         });
+        //                     }
+        //                 },
+        //                 error: function(xhr) {
+        //                     // console.error(xhr);
+        //                     let errorMessage = "An error occurred while processing your request.";
+
+        //                     const errorString = xhr.responseJSON.error;
+
+        //                     // Extract the JSON part from the error string using regex
+        //                     const jsonStringMatch = errorString.match(/{.*}/);
+
+        //                     if (jsonStringMatch) {
+        //                         try {
+        //                             // Parse the JSON string
+        //                             const response = JSON.parse(jsonStringMatch[0]);
+        //                             // Extract the message from the errors array
+        //                             if (response.response && response.response.errors && response
+        //                                 .response.errors[0].message) {
+        //                                 errorMessage = response.response.errors[0].message;
+        //                             }
+        //                         } catch (e) {
+        //                             console.error("Error parsing the JSON string:", e);
+        //                         }
+        //                     }
+
+        //                     $.toast({
+        //                         heading: 'Alert!',
+        //                         position: 'bottom-right',
+        //                         text: errorMessage,
+        //                         loaderBg: '#ff6849',
+        //                         icon: 'error',
+        //                         hideAfter: 5000,
+        //                         stack: 6
+        //                     });
+        //                 }
+        //             });
+        //         } else {
+        //             $.ajaxSetup({
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //                 }
+        //             });
+        //             $.ajax({
+        //                 _token: "{{ csrf_token() }}",
+        //                 url: "{{ route('upsservices') }}",
+        //                 type: "post",
+        //                 dataType: "json",
+        //                 data: {
+        //                     country: country,
+        //                     address: address,
+        //                     state: state,
+        //                     postal: postal,
+        //                     city: city,
+        //                     shipping_method: shipping_method,
+
+        //                 },
+        //                 success: function(response) {
+        //                     if (response.status) {
+        //                         $('#li_discount').show();
+        //                         $('#li_gift').show();
+        //                         $('#li_hidden').prop('hidden', false);
+        //                         console.clear();
+        //                         var tax = Number('{{ $subtotal }}') + ((Number(response.tax) /
+        //                             100) * Number('{{ $subtotal }}'));
+        //                         $("#ordertotalli h4").text('$' + tax.toString());
+        //                         var ordertotal = Number(response.upsamount) + Number(tax);
+        //                         // $('#taxli  h4').text(response.tax.toString() + "%")
+        //                         $('#taxli  h4').text('$' + ((response.tax / 100) * parseFloat(
+        //                             '{{ $subtotal }}')).toFixed(2).toString())
+        //                         if (response.description != null) {
+        //                             $('#desctax h4').text(response.description);
+        //                             $('#desctax').slideDown();
+        //                         }
+
+        //                         $('#taxli').slideDown();
+        //                         $('#shippingamount').val(response.upsamount);
+        //                         $('#servname').text('UPS Standard');
+        //                         $('#totalshippingh4').text('$' + response.upsamount.toString());
+        //                         $('#shippingdiv').slideDown();
+        //                         $('#fedexli').hide();
+        //                         $('#upsli').slideDown();
+        //                         $('#grandtotal').text('$ ' + ordertotal.toFixed(2));
+        //                         $('.grandtotalstripe').text('Pay Now $' + ordertotal.toFixed(2));
+        //                         $('#total_price').text('$ ' + ordertotal.toFixed(2));
+        //                         $('#amount').val(Number(ordertotal.toFixed(2)));
+        //                         // $('#authbtn').text('Pay Now $' + ordertotal.toFixed(2));
+        //                         $('#authbtn').text('Pay Now');
+        //                         $('#shippinginput').val("UPS");
+        //                         $('#accordion').slideDown();
+
+        //                         $('#error').text('');
+        //                         $('#error').hide();
+
+        //                     } else {
+        //                         $.toast({
+        //                             heading: 'Alert!',
+        //                             position: 'bottom-right',
+        //                             text: response.message,
+        //                             loaderBg: '#ff6849',
+        //                             icon: 'error',
+        //                             hideAfter: 5000,
+        //                             stack: 6
+        //                         });
+        //                     }
+        //                 },
+        //                 error: function(xhr) {
+        //                     // console.error(xhr);
+        //                     let errorMessage = "An error occurred while processing your request.";
+
+        //                     const errorString = xhr.responseJSON.error;
+
+        //                     // Extract the JSON part from the error string using regex
+        //                     const jsonStringMatch = errorString.match(/{.*}/);
+
+        //                     if (jsonStringMatch) {
+        //                         try {
+        //                             // Parse the JSON string
+        //                             const response = JSON.parse(jsonStringMatch[0]);
+        //                             // Extract the message from the errors array
+        //                             if (response.response && response.response.errors && response
+        //                                 .response.errors[0].message) {
+        //                                 errorMessage = response.response.errors[0].message;
+        //                             }
+        //                         } catch (e) {
+        //                             console.error("Error parsing the JSON string:", e);
+        //                         }
+        //                     }
+
+        //                     $.toast({
+        //                         heading: 'Alert!',
+        //                         position: 'bottom-right',
+        //                         text: errorMessage,
+        //                         loaderBg: '#ff6849',
+        //                         icon: 'error',
+        //                         hideAfter: 5000,
+        //                         stack: 6
+        //                     });
         //                 }
         //             });
         //         }
-        //     } else {
-        //         discountContent.style.display = "none";
 
-        //         // Remove the input field and Apply button if they exist
-        //         const input = document.getElementById("discount_input");
-        //         if (input) {
-        //             input.remove();
-        //         }
-
-        //         const applyButton = document.getElementById("apply_discount");
-        //         if (applyButton) {
-        //             applyButton.remove();
-        //         }
         //     }
+
+        //     $('#loader').hide();
+        //     $(this).removeClass('active');
+
+
         // });
 
-        $(document).ready(function() {
-            $("body").on('change', '#toggle_discount', function() {
-                let discountContent = $("#discount_content");
+        // $('#fedexbutton').click(function() {
+        //     if ($('#fedex-checker').val() == 0) {
+        //         $('#error').text('Please Fill out the Address');
+        //         $('#error').show();
+        //     } else {
+        //         alert();
+        //         $('#accordion').slideUp();
+        //         $('.shippingbtn').removeClass('active');
+        //         $(this).addClass("active");
+        //         $('#error').hide();
+        //         $('#servicesdiv').slideUp();
+        //         $('#loader').show();
+        //         var country = $('#country').val();
+        //         var address = $('#address').val();
+        //         var postal = $('#postal').val();
+        //         var city = $('#city').val();
+        //         var token = $('#fedex_token').val();
+        //         var state = $('#state').val();
 
-                if ($(this).is(":checked")) {
-                    discountContent.show();
+        //         $.ajaxSetup({
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             }
+        //         });
 
-                    $("#discount_input, #apply_discount").remove();
-
-                    let input = $("<input>", {
-                        type: "text",
-                        id: "discount_input",
-                        placeholder: "Enter discount code",
-                    });
-
-                    let applyButton = $("<button>", {
-                        id: "apply_discount",
-                        html: '<i class="fas fa-check"></i> Apply',
-                    });
-
-                    discountContent.append(input, applyButton);
-                } else {
-                    discountContent.hide();
-                    $("#discount_input, #apply_discount").remove();
-                }
-            });
-
-            $(document).on("click", "#apply_discount", function(event) {
-                event.preventDefault();
-                let discountCode = $("#discount_input").val();
-                let baseprice = $("#total_price").val(); // Getting price from input field
-
-                if (discountCode) {
-                    applyDiscount(discountCode, baseprice);
-                } else {
-                    alert("Please enter a discount code.");
-                }
-            });
-        });
-
-
-        // Function to send AJAX request to apply discount
-        function applyDiscount(discountCode, baseprice = 0) {
-            $.ajax({
-                url: "{{ route('applyDiscount') }}", // Route to apply discount in Laravel
-                method: 'POST',
-                data: {
-                    discount_code: discountCode,
-                    baseprice: baseprice,
-                    _token: '{{ csrf_token() }}' // Add CSRF token for security
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#total_price').val(response.discount);
-                        $('#total_price').text('$' + response.discount);
-                        $('#grandtotal').text('$' + response.discount);
-                        $('.grandtotalstripe').text('Pay Now $' + response.discount);
-                        $('#discount_input').hide();
-                        $('#apply_discount').hide();
-                        $('#toggle_discount').hide();
-                        $('#h4_discount').text(response.percentage + '%');
-                        $('#discount').val(response.percentage);
-                        alert("Discount applied successfully!");
-                        // You can update the cart details on the page here using the response
-                    } else {
-                        alert("Failed to apply discount. " + response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert("An error occurred. Please try again.");
-                }
-            });
-        }
-
-        // document.getElementById("toggle_gift").addEventListener("change", function() {
-        //     const giftContent = document.getElementById("gift_content");
-        //     if (this.checked) {
-        //         giftContent.style.display = "block";
-
-        //         // Check if the input already exists
-        //         if (!document.getElementById("gift_input")) {
-        //             // Create and append the input field
-        //             const input = document.createElement("input");
-        //             input.type = "text";
-        //             input.id = "gift_input";
-        //             input.placeholder = "Enter gift code";
-        //             giftContent.appendChild(input);
-
-        //             // Create and append the Apply button with an icon
-        //             const applyButton = document.createElement("button");
-        //             applyButton.id = "apply_gift";
-        //             applyButton.innerHTML = '<i class="fas fa-check"></i> Apply';
-        //             giftContent.appendChild(applyButton);
-
-        //             // Add click event listener to Apply button
-        //             applyButton.addEventListener("click", function(event) {
-        //                 event.preventDefault();
-        //                 const giftCode = input.value;
-        //                 const baseprice = $('#total_price').val();
-        //                 if (giftCode) {
-        //                     // Send AJAX request to apply gift code
-        //                     applygift(giftCode, baseprice);
+        //         $.ajax({
+        //             _token: "{{ csrf_token() }}",
+        //             url: "{{ route('shipping') }}",
+        //             type: "post",
+        //             dataType: "json",
+        //             data: {
+        //                 country: country,
+        //                 address: address,
+        //                 city: city,
+        //                 postal: postal,
+        //                 state: state,
+        //                 token: token,
+        //             },
+        //             success: function(response) {
+        //                 if (response.success) {
+        //                     console.log(response.tax)
+        //                     if (response.description != null) {
+        //                         $('#desctax h4').text(response.description);
+        //                         $('#desctax').slideDown();
+        //                     }
+        //                     var tax = Number('{{ $subtotal }}') + ((Number(response.tax) / 100) *
+        //                         Number('{{ $subtotal }}'));
+        //                     $("#ordertotalli h4").text('$' + tax.toString());
+        //                     var ordertotal = (Number(tax) + Number(json[0]['ratedShipmentDetails'][0][
+        //                         'totalNetFedExCharge'
+        //                     ])).toFixed(2);
+        //                     $('#shippingamount').val(json[0]['ratedShipmentDetails'][0][
+        //                         'totalNetFedExCharge'
+        //                     ]);
+        //                     $('#loader').hide();
+        //                     console.log(ordertotal);
+        //                     $('#servname').text("Fedex Standard");
+        //                     $('#shippingtotalfed').text('$ ' + json[0]['ratedShipmentDetails'][0][
+        //                         'totalNetFedExCharge'
+        //                     ].toString());
+        //                     $('#grandtotal').text('$' + ordertotal);
+        //                     $('.grandtotalstripe').text('Pay Now $' + ordertotal);
+        //                     $('#total_price').text('$ ' + ordertotal.toFixed(2));
+        //                     $('#shippingdiv').slideDown();
+        //                     $('#upsli').hide();
+        //                     $('#fedexli').slideDown();
+        //                     // $('#authbtn').text('Pay Now $' + ordertotal);
+        //                     $('#authbtn').text('Pay Now');
+        //                     $('#amount').val(ordertotal);
+        //                     $('#shippinginput').val("Fedex");
+        //                     $('#accordion').slideDown();
         //                 } else {
-        //                     alert("Please enter a gift code.");
+        //                     $('#loader').hide();
+        //                     if (response.err)
+        //                         $('#error').text(response.error);
+        //                     $('#error').show();
         //                 }
-        //             });
-        //         }
-        //     } else {
-        //         giftContent.style.display = "none";
 
-        //         // Remove the input field and Apply button if they exist
-        //         const input = document.getElementById("gift_input");
-        //         if (input) {
-        //             input.remove();
-        //         }
-
-        //         const applyButton = document.getElementById("apply_gift");
-        //         if (applyButton) {
-        //             applyButton.remove();
-        //         }
+        //             }
+        //         })
         //     }
         // });
 
-        $(document).ready(function() {
-            $("body").on('change', '#toggle_gift', function() {
-                // $("#toggle_gift").change(function() {
-                const giftContent = $("#gift_content");
-
-                if ($(this).is(":checked")) {
-                    giftContent.show();
-
-                    // Check if the input already exists
-                    if (!$("#gift_input").length) {
-                        // Create and append the input field
-                        const input = $("<input>", {
-                            type: "text",
-                            id: "gift_input",
-                            placeholder: "Enter gift code"
-                        });
-
-                        // Create and append the Apply button with an icon
-                        const applyButton = $("<button>", {
-                            id: "apply_gift",
-                            html: '<i class="fas fa-check"></i> Apply'
-                        });
-
-                        giftContent.append(input, applyButton);
-                    }
-                } else {
-                    giftContent.hide();
-                    $("#gift_input, #apply_gift").remove();
-                }
-            });
-
-            // ✅ Event delegation for Apply button
-            $(document).on("click", "#apply_gift", function(event) {
-                event.preventDefault();
-                const giftCode = $("#gift_input").val();
-                const baseprice = $("#total_price").val();
-
-                if (giftCode) {
-                    applygift(giftCode, baseprice);
-                } else {
-                    alert("Please enter a gift code.");
-                }
-            });
-        });
-
-
-        // Function to send AJAX request to apply gift
-        function applygift(giftCode, baseprice = 0) {
-            $.ajax({
-                url: "{{ route('applyGift') }}", // Route to apply gift in Laravel
-                method: 'POST',
-                data: {
-                    gift_code: giftCode,
-                    baseprice: baseprice,
-                    _token: '{{ csrf_token() }}' // Add CSRF token for security
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#total_price').val(response.gift);
-                        $('#total_price').text('$' + response.gift);
-                        $('#grandtotal').text('$' + response.gift);
-                        $('.grandtotalstripe').text('Pay Now $' + response.gift);
-                        $('#gift_input').hide();
-                        $('#apply_gift').hide();
-                        $('#toggle_gift').hide();
-                        $('#h4_gift').text('$' + baseprice + ' - $' + response.balance);
-                        $('#gift').val(response.balance);
-                        alert("Gift applied successfully!");
-                        // You can update the cart details on the page here using the response
-                    } else {
-                        alert("Failed to apply gift. " + response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert("An error occurred. Please try again.");
-                }
-            });
-        }
-
-
-        $("#searchTextField").keydown(function() {
-            $('#fedex-checker').val(0);
-            $('#accordion').slideUp();
-            $('#addressdiv').slideUp();
-            $('#desctax').slideUp();
-            $('#othertaxli').slideUp();
-            $('#cataxli').slideUp();
-            $("#shippingdiv").slideUp();
-        })
-
-        function initialize() {
-            var input = document.getElementById('searchTextField');
-            var autocomplete = new google.maps.places.Autocomplete(input);
-            google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                var place = autocomplete.getPlace();
-                var searchAddressComponents = place.address_components,
-                    searchPostalCode = "",
-                    searchAddress = "",
-                    searchCity = "",
-                    searchState = "",
-                    searchCountryName = "",
-                    searchCountryCode = "";
-
-                $.each(searchAddressComponents, function() {
-                    if (this.types[0] == "postal_code") {
-                        searchPostalCode = this.short_name;
-                    }
-                    if (this.types[0] == "route") {
-                        searchAddress = this.short_name;
-                    }
-                    if (this.types[0] == "locality") {
-                        searchCity = this.short_name;
-                    }
-                    if (this.types[0] == "administrative_area_level_1") {
-                        searchState = this.short_name;
-                    }
-                    if (this.types[0] == "country") {
-                        searchCountryName = this.long_name;
-                        searchCountryCode = this.short_name;
-                    }
-                });
-
-                var addressArray = place.adr_address.split(',')
-
-                var country = searchCountryCode;
-                var city = searchCity;
-                var address = searchAddress;
-                var state = searchState;
-
-                var postalcode = searchPostalCode;
-                $('#country').val(searchCountryCode);
-                $('#country-code').val(searchCountryName);
-
-                // $('#country option[value="' + country.toString() + '"]').prop('selected', true);
-                $('#city').val(city);
-                $('#address').val(address);
-                $('#state').val(state);
-                $('#postal').val(postalcode);
-                $('#addressdiv').slideDown();
-                $('#fedex-checker').val(1);
-
-                updateShippingMethods(searchCountryName);
-
-
-            });
-        }
-
-        function updateShippingMethods(country) {
-            const shippingMethodSelect = $('#shipping_method');
-            shippingMethodSelect.empty(); // Clear existing options
-
-            // Define an array of shipping methods for different countries
-            const shippingMethodsUSA = [{
-                    text: "Standard",
-                    code: "11"
-                },
-                {
-                    text: "UPS 2nd Day Air®",
-                    code: "02"
-                },
-                {
-                    text: "UPS 3 Day Select®",
-                    code: "12"
-                },
-                {
-                    text: "UPS Next Day Air®",
-                    code: "14"
-                },
-                {
-                    text: "UPS SurePost",
-                    code: "93"
-                }
-            ];
-
-            const shippingMethodsOthers = [{
-                    text: "UPS Standard",
-                    code: "11"
-                },
-                {
-                    text: "UPS Worldwide Expedited®",
-                    code: "17"
-                },
-                {
-                    text: "UPS Worldwide Saver®",
-                    code: "86"
-                },
-                {
-                    text: "UPS Worldwide Express®",
-                    code: "72"
-                },
-                {
-                    text: "UPS SurePost",
-                    code: "93"
-                }
-            ];
-
-            // Determine shipping methods based on the country
-            const selectedShippingMethods = (country.toLowerCase() === 'usa' || country.toLowerCase() === 'united states') ?
-                shippingMethodsUSA :
-                shippingMethodsOthers;
-
-
-            var country = $('#country').val();
-            var address = $('#address').val();
-            var postal = $('#postal').val();
-
-            var city = $('#city').val();
-            var state = $('#state').val();
-
-            // Append options and make AJAX requests for each method
-            selectedShippingMethods.forEach(method => {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    url: "{{ route('upsservices') }}",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        country: country,
-                        address: address,
-                        state: state,
-                        postal: postal,
-                        city: city,
-                        shipping_method: method.code
-                    },
-                    success: function(response) {
-                        if (response.status) {
-                            // Append the option with upsamount in the text
-                            shippingMethodSelect.append(
-                                new Option(`${method.text} (${response.upsamount})`, method.code)
-                            );
-                        } else {
-                            console.error('Error in response:', response);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX error:', error);
-                    }
-                });
-            });
-
-
-            $('#shippingdiv').slideDown(); // Show the shipping dropdown
-        }
-    </script>
-
-    <script>
-        // $(document).on('click', ".btn", function(e){
-        //   $('#order-place').submit();
+        // $('#accordion .btn-link').on('click', function(e) {
+        //     if (!$(this).hasClass('collapsed')) {
+        //         e.stopPropagation();
+        //     }
+        //     $('#payment_method').val($(this).attr('data-payment'));
         // });
 
-        $('#order-place').append('<input type="hidden" name="subtotal" value="{{ $subtotal }}" id="fedex_token">');
 
-        $('#upsbutton').click(function() {
-            $('#servname').parent().prop('hidden', ($('#country').val() == 'US'));
-            $('.shippingbtn').removeClass('active');
-            $('#loader').show();
-            $(this).addClass("active");
-            var country = $('#country').val();
-            var address = $('#address').val();
-            var postal = $('#postal').val();
+        // $('.bttn').on('change', function() {
+        //     var count = 0;
+        //     if ($(this).prop("checked") == true) {
+        //         if ($('#f-name').val() == "") {
+        //             $('.fname').text('first name is required field');
+        //         } else {
+        //             $('.fname').text("");
+        //             count++;
+        //         }
+        //         if ($('#l-name').val() == "") {
+        //             $('.lname').text('last name is required field');
+        //         } else {
+        //             $('.lname').text("");
+        //             count++;
+        //         }
 
-            var city = $('#city').val();
-            var state = $('#state').val();
-            var shipping_method = $('#shipping_method').val();
+        //         if (count == 2) {
+        //             $('#paypal-button-container-popup').show();
+        //         } else {
+        //             $(this).prop("checked", false);
 
-            if (country == '' || address == '' || postal == '' || city == '') {
-                // toastr.error('Please fill all address fields')
-                toastr.error('Please enter a valid address.')
-            } else {
-                // $('#li_hidden').prop('hidden', false);
-                if ($('#country').val() == 'US') {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+        //             $.toast({
+        //                 heading: 'Alert!',
+        //                 position: 'bottom-right',
+        //                 text: 'Please fill the required fields before proceeding to pay',
+        //                 loaderBg: '#ff6849',
+        //                 icon: 'error',
+        //                 hideAfter: 5000,
+        //                 stack: 6
+        //             });
 
-                    $.ajax({
-                        _token: "{{ csrf_token() }}",
-                        url: "{{ route('upsservices') }}",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            country: country,
-                            address: address,
-                            state: state,
-                            postal: postal,
-                            city: city,
-                            shipping_method: shipping_method,
+        //             return false;
 
-                        },
-                        success: function(response) {
-                            if (response.status) {
-                                $('#li_discount').show();
-                                $('#li_gift').show();
-                                $('#accordion').prop('hidden', false);
-                                $('#li_hidden').prop('hidden', false);
+        //         }
 
-                                var tax = Number('{{ $subtotal }}') + ((Number(response.tax) /
-                                    100) * Number('{{ $subtotal }}'));
-                                $("#ordertotalli h4").text('$' + tax.toString());
-                                var ordertotal = Number(response.upsamount) + Number(tax);
-                                // $('#taxli  h4').text(response.tax.toString() + "%")
-                                $('#taxli  h4').text('$' + ((response.tax / 100) * parseFloat(
-                                    '{{ $subtotal }}')).toFixed(2).toString())
-                                if (response.description != null) {
-                                    $('#desctax h4').text(response.description);
-                                    $('#desctax').slideDown();
-                                }
+        //     } else {
+        //         $('#paypal-button-container-popup').hide();
+        //         // $('.btn').show();
+        //     }
 
-                                $('#taxli').slideDown();
-                                $('#shippingamount').val(response.upsamount);
-                                $('#servname').text('UPS Standard');
-                                $('#totalshippingh4').text('$' + response.upsamount.toString());
-                                $('#shippingdiv').slideDown();
-                                $('#fedexli').hide();
-                                $('#upsli').slideDown();
-                                $('#grandtotal').text('$ ' + ordertotal.toFixed(2));
-                                $('.grandtotalstripe').text('Pay Now $' + ordertotal.toFixed(2));
-                                $('#total_price').text('$ ' + ordertotal.toFixed(2));
-                                $('#amount').val(Number(ordertotal.toFixed(2)));
-                                // $('#authbtn').text('Pay Now $' + ordertotal.toFixed(2));
-                                $('#authbtn').text('Pay Now');
-                                $('#shippinginput').val("UPS");
-                                $('#accordion').slideDown();
+        //     $('input[name="' + this.name + '"]').not(this).prop('checked', false);
+        //     //$(this).siblings('input[type="checkbox"]').prop('checked', false);
+        // });
 
-                                $('#error').text('');
-                                $('#error').hide();
+        // let paypalAmountText = $('#grandtotal').text();
+        // let paypalAmount = parseFloat(paypalAmountText.replace(/[$,]/g, ''));
+        // console.log(paypalAmount);
 
-                            } else {
-                                $.toast({
-                                    heading: 'Alert!',
-                                    position: 'bottom-right',
-                                    text: response.message,
-                                    loaderBg: '#ff6849',
-                                    icon: 'error',
-                                    hideAfter: 5000,
-                                    stack: 6
-                                });
-                            }
-                        },
-                        error: function(xhr) {
-                            // console.error(xhr);
-                            let errorMessage = "An error occurred while processing your request.";
+        // paypal.Button.render({
+        //     env: 'production', //production
 
-                            const errorString = xhr.responseJSON.error;
+        //     style: {
+        //         label: 'checkout',
+        //         size: 'responsive',
+        //         shape: 'rect',
+        //         color: 'gold'
+        //     },
+        //     client: {
+        //         // sandbox: 'AR0NWTUnnZIoWXQR_CVmMcExhY7gigkcBfMzRAarXxJAhMk1M0Cb5vXwRbx24IUU5HY_r94D_dBSro2F',
+        //         production: 'AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38',
+        //     },
+        //     validate: function(actions) {
+        //         actions.disable();
+        //         paypalActions = actions;
+        //     },
 
-                            // Extract the JSON part from the error string using regex
-                            const jsonStringMatch = errorString.match(/{.*}/);
+        //     onClick: function(e) {
+        //         var errorCount = checkEmptyFileds();
 
-                            if (jsonStringMatch) {
-                                try {
-                                    // Parse the JSON string
-                                    const response = JSON.parse(jsonStringMatch[0]);
-                                    // Extract the message from the errors array
-                                    if (response.response && response.response.errors && response
-                                        .response.errors[0].message) {
-                                        errorMessage = response.response.errors[0].message;
-                                    }
-                                } catch (e) {
-                                    console.error("Error parsing the JSON string:", e);
-                                }
-                            }
+        //         if (errorCount == 1) {
+        //             $.toast({
+        //                 heading: 'Alert!',
+        //                 position: 'bottom-right',
+        //                 text: 'Please fill the required fields before proceeding to pay',
+        //                 loaderBg: '#ff6849',
+        //                 icon: 'error',
+        //                 hideAfter: 5000,
+        //                 stack: 6
+        //             });
+        //             paypalActions.disable();
+        //         } else {
+        //             paypalActions.enable();
+        //         }
+        //     },
+        //     payment: function(data, actions) {
+        //         return actions.payment.create({
+        //             payment: {
+        //                 transactions: [{
+        //                     amount: {
+        //                         // total: {{ number_format((float) $subtotal + $variation, 2, '.', '') }},
+        //                         total: paypalAmount,
+        //                         currency: 'USD'
+        //                     }
+        //                 }]
+        //             }
+        //         });
+        //     },
+        //     onAuthorize: function(data, actions) {
+        //         return actions.payment.execute().then(function() {
+        //             // generateNotification('success','Payment Authorized');
 
-                            $.toast({
-                                heading: 'Alert!',
-                                position: 'bottom-right',
-                                text: errorMessage,
-                                loaderBg: '#ff6849',
-                                icon: 'error',
-                                hideAfter: 5000,
-                                stack: 6
-                            });
-                        }
-                    });
-                } else {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        _token: "{{ csrf_token() }}",
-                        url: "{{ route('upsservices') }}",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            country: country,
-                            address: address,
-                            state: state,
-                            postal: postal,
-                            city: city,
-                            shipping_method: shipping_method,
+        //             $.toast({
+        //                 heading: 'Success!',
+        //                 position: 'bottom-right',
+        //                 text: 'Payment Authorized',
+        //                 loaderBg: '#ff6849',
+        //                 icon: 'success',
+        //                 hideAfter: 1000,
+        //                 stack: 6
+        //             });
 
-                        },
-                        success: function(response) {
-                            if (response.status) {
-                                $('#li_discount').show();
-                                $('#li_gift').show();
-                                $('#li_hidden').prop('hidden', false);
-                                console.clear();
-                                var tax = Number('{{ $subtotal }}') + ((Number(response.tax) /
-                                    100) * Number('{{ $subtotal }}'));
-                                $("#ordertotalli h4").text('$' + tax.toString());
-                                var ordertotal = Number(response.upsamount) + Number(tax);
-                                // $('#taxli  h4').text(response.tax.toString() + "%")
-                                $('#taxli  h4').text('$' + ((response.tax / 100) * parseFloat(
-                                    '{{ $subtotal }}')).toFixed(2).toString())
-                                if (response.description != null) {
-                                    $('#desctax h4').text(response.description);
-                                    $('#desctax').slideDown();
-                                }
+        //             var params = {
+        //                 payment_status: 'Completed',
+        //                 paymentID: data.paymentID,
+        //                 payerID: data.payerID
+        //             };
 
-                                $('#taxli').slideDown();
-                                $('#shippingamount').val(response.upsamount);
-                                $('#servname').text('UPS Standard');
-                                $('#totalshippingh4').text('$' + response.upsamount.toString());
-                                $('#shippingdiv').slideDown();
-                                $('#fedexli').hide();
-                                $('#upsli').slideDown();
-                                $('#grandtotal').text('$ ' + ordertotal.toFixed(2));
-                                $('.grandtotalstripe').text('Pay Now $' + ordertotal.toFixed(2));
-                                $('#total_price').text('$ ' + ordertotal.toFixed(2));
-                                $('#amount').val(Number(ordertotal.toFixed(2)));
-                                // $('#authbtn').text('Pay Now $' + ordertotal.toFixed(2));
-                                $('#authbtn').text('Pay Now');
-                                $('#shippinginput').val("UPS");
-                                $('#accordion').slideDown();
-
-                                $('#error').text('');
-                                $('#error').hide();
-
-                            } else {
-                                $.toast({
-                                    heading: 'Alert!',
-                                    position: 'bottom-right',
-                                    text: response.message,
-                                    loaderBg: '#ff6849',
-                                    icon: 'error',
-                                    hideAfter: 5000,
-                                    stack: 6
-                                });
-                            }
-                        },
-                        error: function(xhr) {
-                            // console.error(xhr);
-                            let errorMessage = "An error occurred while processing your request.";
-
-                            const errorString = xhr.responseJSON.error;
-
-                            // Extract the JSON part from the error string using regex
-                            const jsonStringMatch = errorString.match(/{.*}/);
-
-                            if (jsonStringMatch) {
-                                try {
-                                    // Parse the JSON string
-                                    const response = JSON.parse(jsonStringMatch[0]);
-                                    // Extract the message from the errors array
-                                    if (response.response && response.response.errors && response
-                                        .response.errors[0].message) {
-                                        errorMessage = response.response.errors[0].message;
-                                    }
-                                } catch (e) {
-                                    console.error("Error parsing the JSON string:", e);
-                                }
-                            }
-
-                            $.toast({
-                                heading: 'Alert!',
-                                position: 'bottom-right',
-                                text: errorMessage,
-                                loaderBg: '#ff6849',
-                                icon: 'error',
-                                hideAfter: 5000,
-                                stack: 6
-                            });
-                        }
-                    });
-                }
-
-            }
-
-            $('#loader').hide();
-            $(this).removeClass('active');
+        //             // console.log(data.paymentID);
+        //             // return false;
+        //             $('input[name="payment_status"]').val('Completed');
+        //             $('input[name="payment_id"]').val(data.paymentID);
+        //             $('input[name="payer_id"]').val(data.payerID);
+        //             $('input[name="payment_method"]').val('paypal');
+        //             $('#order-place').submit();
+        //         });
+        //     },
+        //     onCancel: function(data, actions) {
+        //         var params = {
+        //             payment_status: 'Failed',
+        //             paymentID: data.paymentID
+        //         };
+        //         $('input[name="payment_status"]').val('Failed');
+        //         $('input[name="payment_id"]').val(data.paymentID);
+        //         $('input[name="payer_id"]').val('');
+        //         $('input[name="payment_method"]').val('paypal');
+        //     }
+        // }, '#paypal-button-container-popup');
 
 
-        });
+        // var stripe = Stripe('{{ env('STRIPE_KEY') }}');
 
-        $('#fedexbutton').click(function() {
-            if ($('#fedex-checker').val() == 0) {
-                $('#error').text('Please Fill out the Address');
-                $('#error').show();
-            } else {
-                alert();
-                $('#accordion').slideUp();
-                $('.shippingbtn').removeClass('active');
-                $(this).addClass("active");
-                $('#error').hide();
-                $('#servicesdiv').slideUp();
-                $('#loader').show();
-                var country = $('#country').val();
-                var address = $('#address').val();
-                var postal = $('#postal').val();
-                var city = $('#city').val();
-                var token = $('#fedex_token').val();
-                var state = $('#state').val();
+        // // Create an instance of Elements.
+        // var elements = stripe.elements();
+        // var style = {
+        //     base: {
+        //         color: '#32325d',
+        //         lineHeight: '18px',
+        //         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        //         fontSmoothing: 'antialiased',
+        //         fontSize: '16px',
+        //         '::placeholder': {
+        //             color: '#aab7c4'
+        //         }
+        //     },
+        //     invalid: {
+        //         color: '#fa755a',
+        //         iconColor: '#fa755a'
+        //     }
+        // };
+        // var card = elements.create('card', {
+        //     style: style
+        // });
+        // card.mount('#card-element');
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+        // card.addEventListener('change', function(event) {
+        //     var displayError = document.getElementById('card-errors');
+        //     if (event.error) {
+        //         $(displayError).show();
+        //         displayError.textContent = event.error.message;
+        //     } else {
+        //         $(displayError).hide();
+        //         displayError.textContent = '';
+        //     }
+        // });
 
-                $.ajax({
-                    _token: "{{ csrf_token() }}",
-                    url: "{{ route('shipping') }}",
-                    type: "post",
-                    dataType: "json",
-                    data: {
-                        country: country,
-                        address: address,
-                        city: city,
-                        postal: postal,
-                        state: state,
-                        token: token,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            console.log(response.tax)
-                            if (response.description != null) {
-                                $('#desctax h4').text(response.description);
-                                $('#desctax').slideDown();
-                            }
-                            var tax = Number('{{ $subtotal }}') + ((Number(response.tax) / 100) *
-                                Number('{{ $subtotal }}'));
-                            $("#ordertotalli h4").text('$' + tax.toString());
-                            var ordertotal = (Number(tax) + Number(json[0]['ratedShipmentDetails'][0][
-                                'totalNetFedExCharge'
-                            ])).toFixed(2);
-                            $('#shippingamount').val(json[0]['ratedShipmentDetails'][0][
-                                'totalNetFedExCharge'
-                            ]);
-                            $('#loader').hide();
-                            console.log(ordertotal);
-                            $('#servname').text("Fedex Standard");
-                            $('#shippingtotalfed').text('$ ' + json[0]['ratedShipmentDetails'][0][
-                                'totalNetFedExCharge'
-                            ].toString());
-                            $('#grandtotal').text('$' + ordertotal);
-                            $('.grandtotalstripe').text('Pay Now $' + ordertotal);
-                            $('#total_price').text('$ ' + ordertotal.toFixed(2));
-                            $('#shippingdiv').slideDown();
-                            $('#upsli').hide();
-                            $('#fedexli').slideDown();
-                            // $('#authbtn').text('Pay Now $' + ordertotal);
-                            $('#authbtn').text('Pay Now');
-                            $('#amount').val(ordertotal);
-                            $('#shippinginput').val("Fedex");
-                            $('#accordion').slideDown();
-                        } else {
-                            $('#loader').hide();
-                            if (response.err)
-                                $('#error').text(response.error);
-                            $('#error').show();
-                        }
+        // var form = document.getElementById('order-place');
 
-                    }
-                })
-            }
-        });
+        // $('#stripe-submit').click(function() {
+        //     stripe.createToken(card).then(function(result) {
+        //         var errorCount = checkEmptyFileds();
+        //         if ((result.error) || (errorCount == 1)) {
+        //             // Inform the user if there was an error.
+        //             if (result.error) {
+        //                 var errorElement = document.getElementById('card-errors');
+        //                 $(errorElement).show();
+        //                 errorElement.textContent = result.error.message;
+        //             } else {
+        //                 $.toast({
+        //                     heading: 'Alert!',
+        //                     position: 'bottom-right',
+        //                     text: 'Please fill the required fields before proceeding to pay',
+        //                     loaderBg: '#ff6849',
+        //                     icon: 'error',
+        //                     hideAfter: 5000,
+        //                     stack: 6
+        //                 });
+        //             }
+        //         } else {
+        //             // Send the token to your server.
+        //             stripeTokenHandler(result.token);
+        //         }
+        //     });
+        // });
 
-        $('#accordion .btn-link').on('click', function(e) {
-            if (!$(this).hasClass('collapsed')) {
-                e.stopPropagation();
-            }
-            $('#payment_method').val($(this).attr('data-payment'));
-        });
-
-        $('.bttn').on('change', function() {
-            var count = 0;
-            if ($(this).prop("checked") == true) {
-                if ($('#f-name').val() == "") {
-                    $('.fname').text('first name is required field');
-                } else {
-                    $('.fname').text("");
-                    count++;
-                }
-                if ($('#l-name').val() == "") {
-                    $('.lname').text('last name is required field');
-                } else {
-                    $('.lname').text("");
-                    count++;
-                }
-
-                if (count == 2) {
-                    $('#paypal-button-container-popup').show();
-                } else {
-                    $(this).prop("checked", false);
-
-                    $.toast({
-                        heading: 'Alert!',
-                        position: 'bottom-right',
-                        text: 'Please fill the required fields before proceeding to pay',
-                        loaderBg: '#ff6849',
-                        icon: 'error',
-                        hideAfter: 5000,
-                        stack: 6
-                    });
-
-                    return false;
-
-                }
-
-            } else {
-                $('#paypal-button-container-popup').hide();
-                // $('.btn').show();
-            }
-
-            $('input[name="' + this.name + '"]').not(this).prop('checked', false);
-            //$(this).siblings('input[type="checkbox"]').prop('checked', false);
-        });
-
-        let paypalAmountText = $('#grandtotal').text();
-        let paypalAmount = parseFloat(paypalAmountText.replace(/[$,]/g, ''));
-        console.log(paypalAmount);
-
-        paypal.Button.render({
-            env: 'production', //production
-
-            style: {
-                label: 'checkout',
-                size: 'responsive',
-                shape: 'rect',
-                color: 'gold'
-            },
-            client: {
-                // sandbox: 'AR0NWTUnnZIoWXQR_CVmMcExhY7gigkcBfMzRAarXxJAhMk1M0Cb5vXwRbx24IUU5HY_r94D_dBSro2F',
-                production: 'AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38',
-            },
-            validate: function(actions) {
-                actions.disable();
-                paypalActions = actions;
-            },
-
-            onClick: function(e) {
-                var errorCount = checkEmptyFileds();
-
-                if (errorCount == 1) {
-                    $.toast({
-                        heading: 'Alert!',
-                        position: 'bottom-right',
-                        text: 'Please fill the required fields before proceeding to pay',
-                        loaderBg: '#ff6849',
-                        icon: 'error',
-                        hideAfter: 5000,
-                        stack: 6
-                    });
-                    paypalActions.disable();
-                } else {
-                    paypalActions.enable();
-                }
-            },
-            payment: function(data, actions) {
-                return actions.payment.create({
-                    payment: {
-                        transactions: [{
-                            amount: {
-                                // total: {{ number_format((float) $subtotal + $variation, 2, '.', '') }},
-                                total: paypalAmount,
-                                currency: 'USD'
-                            }
-                        }]
-                    }
-                });
-            },
-            onAuthorize: function(data, actions) {
-                return actions.payment.execute().then(function() {
-                    // generateNotification('success','Payment Authorized');
-
-                    $.toast({
-                        heading: 'Success!',
-                        position: 'bottom-right',
-                        text: 'Payment Authorized',
-                        loaderBg: '#ff6849',
-                        icon: 'success',
-                        hideAfter: 1000,
-                        stack: 6
-                    });
-
-                    var params = {
-                        payment_status: 'Completed',
-                        paymentID: data.paymentID,
-                        payerID: data.payerID
-                    };
-
-                    // console.log(data.paymentID);
-                    // return false;
-                    $('input[name="payment_status"]').val('Completed');
-                    $('input[name="payment_id"]').val(data.paymentID);
-                    $('input[name="payer_id"]').val(data.payerID);
-                    $('input[name="payment_method"]').val('paypal');
-                    $('#order-place').submit();
-                });
-            },
-            onCancel: function(data, actions) {
-                var params = {
-                    payment_status: 'Failed',
-                    paymentID: data.paymentID
-                };
-                $('input[name="payment_status"]').val('Failed');
-                $('input[name="payment_id"]').val(data.paymentID);
-                $('input[name="payer_id"]').val('');
-                $('input[name="payment_method"]').val('paypal');
-            }
-        }, '#paypal-button-container-popup');
+        // function stripeTokenHandler(token) {
+        //     // Insert the token ID into the form so it gets submitted to the server
+        //     var form = document.getElementById('order-place');
+        //     var hiddenInput = document.createElement('input');
+        //     hiddenInput.setAttribute('type', 'hidden');
+        //     hiddenInput.setAttribute('name', 'stripeToken');
+        //     hiddenInput.setAttribute('value', token.id);
+        //     form.appendChild(hiddenInput);
+        //     form.submit();
+        // }
 
 
-        var stripe = Stripe('{{ env('STRIPE_KEY') }}');
-
-        // Create an instance of Elements.
-        var elements = stripe.elements();
-        var style = {
-            base: {
-                color: '#32325d',
-                lineHeight: '18px',
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                fontSmoothing: 'antialiased',
-                fontSize: '16px',
-                '::placeholder': {
-                    color: '#aab7c4'
-                }
-            },
-            invalid: {
-                color: '#fa755a',
-                iconColor: '#fa755a'
-            }
-        };
-        var card = elements.create('card', {
-            style: style
-        });
-        card.mount('#card-element');
-
-        card.addEventListener('change', function(event) {
-            var displayError = document.getElementById('card-errors');
-            if (event.error) {
-                $(displayError).show();
-                displayError.textContent = event.error.message;
-            } else {
-                $(displayError).hide();
-                displayError.textContent = '';
-            }
-        });
-
-        var form = document.getElementById('order-place');
-
-        $('#stripe-submit').click(function() {
-            stripe.createToken(card).then(function(result) {
-                var errorCount = checkEmptyFileds();
-                if ((result.error) || (errorCount == 1)) {
-                    // Inform the user if there was an error.
-                    if (result.error) {
-                        var errorElement = document.getElementById('card-errors');
-                        $(errorElement).show();
-                        errorElement.textContent = result.error.message;
-                    } else {
-                        $.toast({
-                            heading: 'Alert!',
-                            position: 'bottom-right',
-                            text: 'Please fill the required fields before proceeding to pay',
-                            loaderBg: '#ff6849',
-                            icon: 'error',
-                            hideAfter: 5000,
-                            stack: 6
-                        });
-                    }
-                } else {
-                    // Send the token to your server.
-                    stripeTokenHandler(result.token);
-                }
-            });
-        });
-
-        function stripeTokenHandler(token) {
-            // Insert the token ID into the form so it gets submitted to the server
-            var form = document.getElementById('order-place');
-            var hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'stripeToken');
-            hiddenInput.setAttribute('value', token.id);
-            form.appendChild(hiddenInput);
-            form.submit();
-        }
-
-
-        function checkEmptyFileds() {
-            var errorCount = 0;
-            $('form#order-place').find('.form-control').each(function() {
-                if ($(this).prop('required')) {
-                    if (!$(this).val()) {
-                        $(this).parent().find('.invalid-feedback').addClass('d-block');
-                        $(this).parent().find('.invalid-feedback strong').html('Field is Required');
-                        errorCount = 1;
-                    }
-                }
-            });
-            return errorCount;
-        }
+        // function checkEmptyFileds() {
+        //     var errorCount = 0;
+        //     $('form#order-place').find('.form-control').each(function() {
+        //         if ($(this).prop('required')) {
+        //             if (!$(this).val()) {
+        //                 $(this).parent().find('.invalid-feedback').addClass('d-block');
+        //                 $(this).parent().find('.invalid-feedback strong').html('Field is Required');
+        //                 errorCount = 1;
+        //             }
+        //         }
+        //     });
+        //     return errorCount;
+        // }
     </script>
 
     <script>
@@ -2040,6 +1946,592 @@
     <script>
         $('#shipping_method').click(function() {
             $('.icon-down').toggleClass('rotated');
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Google Places Autocomplete
+            function initAutocomplete() {
+                var input = document.getElementById('searchTextField');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
+                    var addressComponents = {
+                        postal_code: '',
+                        route: '',
+                        locality: '',
+                        administrative_area_level_1: '',
+                        country: ''
+                    };
+
+                    // Extract address components
+                    place.address_components.forEach(function(component) {
+                        if (component.types.includes('postal_code')) {
+                            addressComponents.postal_code = component.short_name;
+                        }
+                        if (component.types.includes('route')) {
+                            addressComponents.route = component.short_name;
+                        }
+                        if (component.types.includes('locality')) {
+                            addressComponents.locality = component.short_name;
+                        }
+                        if (component.types.includes('administrative_area_level_1')) {
+                            addressComponents.administrative_area_level_1 = component.short_name;
+                        }
+                        if (component.types.includes('country')) {
+                            addressComponents.country = component.short_name;
+                        }
+                    });
+
+                    // Update hidden fields
+                    $('#country').val(addressComponents.country);
+                    $('#address').val(addressComponents.route);
+                    $('#city').val(addressComponents.locality);
+                    $('#state').val(addressComponents.administrative_area_level_1);
+                    $('#postal').val(addressComponents.postal_code);
+                });
+            }
+
+            // Initialize on page load
+            initAutocomplete();
+
+            // Step 1: Customer Info to Shipping Options
+            $('#continue-to-shipping').click(function() {
+                // Validate required fields
+                if (!$('#searchTextField').val()) {
+                    toastr.error('Please enter a valid address');
+                    return;
+                }
+
+                $('#customer-info-form').hide();
+                $('#shipping-options-form').show();
+                loadShippingOptions();
+            });
+
+            // Step 2: Back to Customer Info
+            $('#back-to-info').click(function() {
+                $('#shipping-options-form').hide();
+                $('#customer-info-form').show();
+            });
+
+            // Step 2: Shipping Options to Payment
+            $('#continue-to-payment').click(function() {
+                if (!$('input[name="shipping_method"]:checked').val()) {
+                    toastr.error('Please select a shipping method');
+                    return;
+                }
+
+                $('#shipping-options-form').hide();
+                $('#payment-form').show();
+
+                // Update payment button with total amount
+                var total = parseFloat($('#grand-total').text().replace('$', ''));
+                $('#stripe-amount').text(total.toFixed(2));
+
+                // Initialize PayPal button with current total
+                initPayPalButton();
+            });
+
+            // Step 3: Back to Shipping Options
+            $('#back-to-shipping').click(function() {
+                $('#payment-form').hide();
+                $('#shipping-options-form').show();
+            });
+
+            // Shipping methods configuration
+            const shippingMethods = {
+                US: [{
+                        text: "UPS Ground",
+                        code: "03"
+                    },
+                    {
+                        text: "UPS 3 Day Select",
+                        code: "12"
+                    },
+                    {
+                        text: "UPS 2nd Day Air",
+                        code: "02"
+                    },
+                    {
+                        text: "UPS Next Day Air Saver",
+                        code: "13"
+                    },
+                    {
+                        text: "UPS Next Day Air",
+                        code: "01"
+                    },
+                    {
+                        text: "UPS SurePost",
+                        code: "93"
+                    }
+                ],
+                INTERNATIONAL: [{
+                        text: "UPS Standard",
+                        code: "11"
+                    },
+                    {
+                        text: "UPS Worldwide Expedited",
+                        code: "08"
+                    },
+                    {
+                        text: "UPS Worldwide Saver",
+                        code: "65"
+                    },
+                    {
+                        text: "UPS Worldwide Express",
+                        code: "07"
+                    },
+                    {
+                        text: "UPS Worldwide Express Plus",
+                        code: "54"
+                    }
+                ]
+            };
+
+            // Function to determine available shipping methods
+            function getShippingMethods(countryCode) {
+                const usTerritories = ['US', 'PR', 'GU', 'AS', 'VI', 'MP'];
+                return usTerritories.includes(countryCode) ? shippingMethods.US : shippingMethods.INTERNATIONAL;
+            }
+
+            // Load shipping options
+            function loadShippingOptions() {
+                $('#shipping-loading').show();
+                $('#shipping-methods-container').empty();
+
+                const country = $('#country').val();
+                const address = $('#address').val();
+                const postal = $('#postal').val();
+                const city = $('#city').val();
+                const state = $('#state').val();
+
+                const availableMethods = getShippingMethods(country);
+
+                availableMethods.forEach(method => {
+                    $.ajax({
+                        url: "{{ route('upsservices') }}",
+                        type: "POST",
+                        data: {
+                            country: country,
+                            address: address,
+                            state: state,
+                            postal: postal,
+                            city: city,
+                            shipping_method: method.code,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            if (response.status) {
+                                const radioId = `shipping-method-${method.code}`;
+                                const radioHtml = `
+                            <div class="shipping-method-option">
+                                <input type="radio" 
+                                    id="${radioId}" 
+                                    name="shipping_method" 
+                                    value="${method.code}"
+                                    data-rate="${response.upsamount}"
+                                    data-tax="${response.tax || 0}"
+                                    data-method-name="${method.text}"
+                                    class="shipping-method-radio">
+                                <label for="${radioId}">
+                                    <span class="method-name">${method.text}</span>
+                                    <span class="method-price">$${response.upsamount}</span>
+                                    ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''}
+                                </label>
+                            </div>
+                        `;
+                                $('#shipping-methods-container').append(radioHtml);
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('Error loading shipping method:', method.text, xhr
+                                .responseText);
+                        },
+                        complete: function() {
+                            $('#shipping-loading').hide();
+                        }
+                    });
+                });
+            }
+
+            // When shipping method is selected, update totals
+            $(document).on('change', '.shipping-method-radio', function() {
+                var selectedMethod = $(this).data('method-name');
+                var shippingRate = parseFloat($(this).data('rate'));
+                var taxRate = parseFloat($(this).data('tax')) || 0;
+                var subtotal = parseFloat("{{ $subtotal }}");
+                var variation = parseFloat("{{ $variation }}");
+
+                // Calculate tax amount
+                var taxAmount = ((subtotal + variation) * (taxRate / 100)).toFixed(2);
+
+                // Calculate grand total
+                var grandTotal = (subtotal + variation + parseFloat(taxAmount) + shippingRate).toFixed(2);
+
+                // Update display
+                $('#shipping-method-name').text(selectedMethod);
+                $('#shipping-method-row').show();
+                $('#shipping-amount').text('$' + shippingRate.toFixed(2));
+                $('#shipping-cost').show();
+                $('#tax-amount').text('$' + taxAmount);
+                $('#tax-row').show();
+                $('#grand-total').text('$' + grandTotal);
+
+                // Update hidden fields
+                $('#shipping_method_name').val(selectedMethod);
+                $('#shipping_amount_input').val(shippingRate.toFixed(2));
+                $('#total_price').val(grandTotal);
+            });
+
+            // Payment method selection
+            $('#payment-accordion .btn-link').on('click', function(e) {
+                if (!$(this).hasClass('collapsed')) {
+                    e.stopPropagation();
+                }
+                $('#payment_method').val($(this).data('payment'));
+            });
+
+            // Initialize Stripe
+            var stripe = Stripe('{{ env('STRIPE_KEY') }}');
+            var elements = stripe.elements();
+            var card = elements.create('card', {
+                style: {
+                    base: {
+                        color: '#32325d',
+                        lineHeight: '18px',
+                        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                        fontSmoothing: 'antialiased',
+                        fontSize: '16px',
+                        '::placeholder': {
+                            color: '#aab7c4'
+                        }
+                    },
+                    invalid: {
+                        color: '#fa755a',
+                        iconColor: '#fa755a'
+                    }
+                }
+            });
+
+            // Only mount card if element exists
+            var cardElement = document.getElementById('card-element');
+            if (cardElement) {
+                card.mount('#card-element');
+            }
+
+            card.addEventListener('change', function(event) {
+                var displayError = document.getElementById('card-errors');
+                if (displayError) {
+                    if (event.error) {
+                        $(displayError).show();
+                        displayError.textContent = event.error.message;
+                    } else {
+                        $(displayError).hide();
+                        displayError.textContent = '';
+                    }
+                }
+            });
+
+            // Handle Stripe payment submission
+            $('#stripe-submit').click(function() {
+                stripe.createToken(card).then(function(result) {
+                    var errorCount = checkEmptyFileds();
+                    if ((result.error) || (errorCount == 1)) {
+                        if (result.error) {
+                            var errorElement = document.getElementById('card-errors');
+                            if (errorElement) {
+                                $(errorElement).show();
+                                errorElement.textContent = result.error.message;
+                            }
+                        } else {
+                            $.toast({
+                                heading: 'Alert!',
+                                position: 'bottom-right',
+                                text: 'Please fill the required fields before proceeding to pay',
+                                loaderBg: '#ff6849',
+                                icon: 'error',
+                                hideAfter: 5000,
+                                stack: 6
+                            });
+                        }
+                    } else {
+                        stripeTokenHandler(result.token);
+                    }
+                });
+            });
+
+            function stripeTokenHandler(token) {
+                var form = document.getElementById('order-place');
+                if (form) {
+                    // Remove any existing token
+                    var existingToken = form.querySelector('input[name="stripeToken"]');
+                    if (existingToken) {
+                        form.removeChild(existingToken);
+                    }
+
+                    // Create new token input
+                    var hiddenInput = document.createElement('input');
+                    hiddenInput.setAttribute('type', 'hidden');
+                    hiddenInput.setAttribute('name', 'stripeToken');
+                    hiddenInput.setAttribute('value', token.id);
+                    form.appendChild(hiddenInput);
+
+                    // Submit the form
+                    form.submit();
+                } else {
+                    console.error('Form element not found');
+                    $.toast({
+                        heading: 'Error!',
+                        position: 'bottom-right',
+                        text: 'Unable to process payment. Please try again.',
+                        loaderBg: '#ff6849',
+                        icon: 'error',
+                        hideAfter: 5000,
+                        stack: 6
+                    });
+                }
+            }
+
+            // Initialize PayPal Button
+            var paypalButtonInitialized = false;
+
+            function initPayPalButton() {
+                if (paypalButtonInitialized) return;
+
+                let paypalAmountText = $('#grand-total').text();
+                let paypalAmount = parseFloat(paypalAmountText.replace(/[$,]/g, ''));
+
+                paypal.Button.render({
+                    env: 'production',
+                    style: {
+                        label: 'checkout',
+                        size: 'responsive',
+                        shape: 'rect',
+                        color: 'gold'
+                    },
+                    client: {
+                        production: 'AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38',
+                    },
+                    validate: function(actions) {
+                        actions.disable();
+                        paypalActions = actions;
+                    },
+                    onClick: function() {
+                        var errorCount = checkEmptyFileds();
+                        if (errorCount == 1) {
+                            $.toast({
+                                heading: 'Alert!',
+                                position: 'bottom-right',
+                                text: 'Please fill the required fields before proceeding to pay',
+                                loaderBg: '#ff6849',
+                                icon: 'error',
+                                hideAfter: 5000,
+                                stack: 6
+                            });
+                            paypalActions.disable();
+                        } else {
+                            paypalActions.enable();
+                        }
+                    },
+                    payment: function(data, actions) {
+                        return actions.payment.create({
+                            payment: {
+                                transactions: [{
+                                    amount: {
+                                        total: paypalAmount.toFixed(2),
+                                        currency: 'USD'
+                                    }
+                                }]
+                            }
+                        });
+                    },
+                    onAuthorize: function(data, actions) {
+                        return actions.payment.execute().then(function() {
+                            $.toast({
+                                heading: 'Success!',
+                                position: 'bottom-right',
+                                text: 'Payment Authorized',
+                                loaderBg: '#ff6849',
+                                icon: 'success',
+                                hideAfter: 1000,
+                                stack: 6
+                            });
+
+                            $('input[name="payment_status"]').val('Completed');
+                            $('input[name="payment_id"]').val(data.paymentID);
+                            $('input[name="payer_id"]').val(data.payerID);
+                            $('input[name="payment_method"]').val('paypal');
+                            $('#order-place').submit();
+                        });
+                    },
+                    onCancel: function(data) {
+                        $('input[name="payment_status"]').val('Failed');
+                        $('input[name="payment_id"]').val(data.paymentID);
+                        $('input[name="payer_id"]').val('');
+                        $('input[name="payment_method"]').val('paypal');
+                    }
+                }, '#paypal-button-container-popup');
+
+                paypalButtonInitialized = true;
+            }
+
+            // Field validation function
+            function checkEmptyFileds() {
+                var errorCount = 0;
+                $('form#order-place').find('.form-control').each(function() {
+                    if ($(this).prop('required') && !$(this).val()) {
+                        $(this).parent().find('.invalid-feedback').addClass('d-block');
+                        $(this).parent().find('.invalid-feedback strong').html('Field is Required');
+                        errorCount = 1;
+                    }
+                });
+                return errorCount;
+            }
+
+            // ==================== DISCOUNT & GIFT CARD FUNCTIONALITY ====================
+
+            // Initialize from session if exists
+            @if (session()->has('discount'))
+                applyDiscount({
+                    code: "{{ session('discount.code') }}",
+                    percentage: {{ session('discount.percentage') }},
+                    amount: {{ session('discount.amount') }}
+                });
+            @endif
+
+            @if (session()->has('gift_card'))
+                applyGiftCard({
+                    code: "{{ session('gift_card.code') }}",
+                    amount: {{ session('gift_card.amount') }}
+                });
+            @endif
+
+            // Discount Application
+            $(document).on('click', '#apply-discount', function() {
+                var discountCode = $('#discount-input').val().trim();
+                if (!discountCode) {
+                    toastr.error('Please enter a discount code');
+                    return;
+                }
+
+                var subtotal = parseFloat("{{ $subtotal }}") || 0;
+                var variation = parseFloat("{{ $variation }}") || 0;
+                var currentTotal = subtotal + variation;
+
+                $.ajax({
+                    url: "{{ route('apply_discount') }}",
+                    type: "POST",
+                    data: {
+                        code: discountCode,
+                        subtotal: currentTotal,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            applyDiscount(response.discount);
+                            toastr.success('Discount applied successfully');
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            for (var field in errors) {
+                                toastr.error(errors[field][0]);
+                            }
+                        } else {
+                            toastr.error('Error applying discount');
+                        }
+                    }
+                });
+            });
+
+            // Gift Card Application
+            $(document).on('click', '#apply-gift-card', function() {
+                var giftCardCode = $('#gift-card-input').val().trim();
+                if (!giftCardCode) {
+                    toastr.error('Please enter a gift card code');
+                    return;
+                }
+
+                var subtotal = parseFloat("{{ $subtotal }}") || 0;
+                var variation = parseFloat("{{ $variation }}") || 0;
+                var currentTotal = subtotal + variation;
+
+                $.ajax({
+                    url: "{{ route('apply_gift_card') }}",
+                    type: "POST",
+                    data: {
+                        code: giftCardCode,
+                        subtotal: currentTotal,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            applyGiftCard(response.gift_card);
+                            toastr.success('Gift card applied successfully');
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            for (var field in errors) {
+                                toastr.error(errors[field][0]);
+                            }
+                        } else {
+                            toastr.error('Error applying gift card');
+                        }
+                    }
+                });
+            });
+
+            // Helper Functions
+            function applyDiscount(discount) {
+                $('#discount-row').show();
+                $('#discount-amount').text('-$' + discount.amount.toFixed(2));
+                $('#discount-content').html(`
+        <span id="discount-code-display">${discount.code}</span>
+        <span id="discount-value">-${discount.percentage}%</span>
+        <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
+    `);
+                updateGrandTotal();
+            }
+
+            function applyGiftCard(giftCard) {
+                $('#gift-card-row').show();
+                $('#gift-card-amount').text('-$' + giftCard.amount.toFixed(2));
+                $('#gift-card-content').html(`
+        <span id="gift-card-code-display">${giftCard.code}</span>
+        <span id="gift-card-value">-$${giftCard.amount.toFixed(2)}</span>
+        <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
+    `);
+                updateGrandTotal();
+            }
+
+            function updateGrandTotal() {
+                var subtotal = parseFloat("{{ $subtotal }}") || 0;
+                var variation = parseFloat("{{ $variation }}") || 0;
+                var shipping = parseFloat($('#shipping-amount').text().replace('$', '')) || 0;
+                var tax = parseFloat($('#tax-amount').text().replace('$', '')) || 0;
+                var discount = parseFloat($('#discount-amount').text().replace('-$', '')) || 0;
+                var giftCard = parseFloat($('#gift-card-amount').text().replace('-$', '')) || 0;
+
+                var grandTotal = subtotal + variation + shipping + tax - discount - giftCard;
+
+                $('#grand-total').text('$' + grandTotal.toFixed(2));
+                $('#total_price').val(grandTotal.toFixed(2));
+
+                if ($('#payment-form').is(':visible')) {
+                    $('#stripe-amount').text(grandTotal.toFixed(2));
+                    initPayPalButton();
+                }
+            }
         });
     </script>
 

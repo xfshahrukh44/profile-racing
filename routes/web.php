@@ -1,12 +1,13 @@
 <?php
 
+use Carbon\Carbon;
+use App\Models\News;
+use App\Models\HowTo;
+use App\Models\UsMember;
 use App\Models\Bikecheck;
 use App\Models\GlobalMember;
-use App\Models\HowTo;
-use App\Models\News;
-use App\Models\UsMember;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -379,8 +380,15 @@ Route::post('/new-order', 'OrderController@newOrder')->name('new.place');
 Route::post('shipping', 'ProductController@shipping')->name('shipping');
 Route::post('upsservices', 'ProductController@upsservices')->name('upsservices');
 Route::get('ups-api', 'ProductController@upsapi')->name('upsapi');
-Route::post('apply-discount', 'ProductController@applyDiscount')->name('applyDiscount');
-Route::post('apply-gift', 'ProductController@applyGift')->name('applyGift');
+// Route::post('apply-discount', 'ProductController@applyDiscount')->name('applyDiscount');
+// Route::post('apply-gift', 'ProductController@applyGift')->name('applyGift');
+// Discount Routes
+Route::post('/apply-discount', [ProductController::class, 'applyDiscount'])->name('apply_discount');
+Route::post('/remove-discount', [ProductController::class, 'removeDiscount'])->name('remove_discount');
+
+// Gift Card Routes
+Route::post('/apply-gift-card', [ProductController::class, 'applyGiftCard'])->name('apply_gift_card');
+Route::post('/remove-gift-card', [ProductController::class, 'removeGiftCard'])->name('remove_gift_card');
 
 /*wishlist*/
 Route::get('/wishlist', 'WishlistController@index')->name('customer.wishlist.list');
