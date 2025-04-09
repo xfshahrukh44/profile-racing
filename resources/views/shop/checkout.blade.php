@@ -432,9 +432,14 @@
                                         </div>
                                     </div>
 
-                                    <div id="shipping-loading" style="display:none;">
+                                    {{-- <div id="shipping-loading" style="display:none;">
                                         <img src="{{ asset('assets/imgs/loader.gif') }}" alt="Loading...">
-                                    </div>
+                                    </div> --}}
+
+                                    <div id="shipping-loading" class="spinner-border text-warning" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                      </div>
+                                   
 
                                     <div class="form-group">
                                         <button type="button" id="back-to-info" class="btn btn-secondary">Back</button>
