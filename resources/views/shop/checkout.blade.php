@@ -438,8 +438,8 @@
 
                                     <div id="shipping-loading" class="spinner-border text-warning" role="status">
                                         <span class="sr-only">Loading...</span>
-                                      </div>
-                                   
+                                    </div>
+
 
                                     <div class="form-group">
                                         <button type="button" id="back-to-info" class="btn btn-secondary">Back</button>
@@ -728,7 +728,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
         integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    {{-- <script src="https://www.paypalobjects.com/api/checkout.js"></script> --}}
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
+        data-sdk-integration-source="button-factory"></script>
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
@@ -2306,59 +2309,53 @@
             function initPayPalButton() {
                 if (paypalButtonInitialized) return;
 
+                // Check if paypal object is available
+                if (typeof paypal === 'undefined' || !paypal.Buttons) {
+                    console.error('PayPal SDK not loaded');
+                    setTimeout(initPayPalButton, 500); // Retry after delay
+                    return;
+                }
+
                 let paypalAmountText = $('#grand-total').text();
                 let paypalAmount = parseFloat(paypalAmountText.replace(/[$,]/g, ''));
 
-                paypal.Button.render({
-                    env: 'production',
+                // Use paypal.Buttons instead of paypal.Button
+                paypal.Buttons({
                     style: {
-                        label: 'checkout',
-                        size: 'responsive',
+                        layout: 'vertical',
+                        color: 'gold',
                         shape: 'rect',
-                        color: 'gold'
+                        label: 'checkout',
+                        fundingicons: true
                     },
-                    client: {
-                        production: 'AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38',
+
+                    // Enable funding sources
+                    funding: {
+                        allowed: [
+                            paypal.FUNDING.PAYPAL,
+                            paypal.FUNDING.PAYLATER,
+                            paypal.FUNDING.VENMO
+                        ],
+                        disallowed: []
                     },
-                    validate: function(actions) {
-                        actions.disable();
-                        paypalActions = actions;
-                    },
-                    onClick: function() {
-                        var errorCount = checkEmptyFileds();
-                        if (errorCount == 1) {
-                            $.toast({
-                                heading: 'Alert!',
-                                position: 'bottom-right',
-                                text: 'Please fill the required fields before proceeding to pay',
-                                loaderBg: '#ff6849',
-                                icon: 'error',
-                                hideAfter: 5000,
-                                stack: 6
-                            });
-                            paypalActions.disable();
-                        } else {
-                            paypalActions.enable();
-                        }
-                    },
-                    payment: function(data, actions) {
-                        return actions.payment.create({
-                            payment: {
-                                transactions: [{
-                                    amount: {
-                                        total: paypalAmount.toFixed(2),
-                                        currency: 'USD'
-                                    }
-                                }]
-                            }
+
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: paypalAmount.toFixed(2)
+                                }
+                            }]
                         });
                     },
-                    onAuthorize: function(data, actions) {
-                        return actions.payment.execute().then(function() {
+
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
                             $.toast({
                                 heading: 'Success!',
                                 position: 'bottom-right',
-                                text: 'Payment Authorized',
+                                text: 'Payment completed by ' + details.payer.name
+                                    .given_name,
                                 loaderBg: '#ff6849',
                                 icon: 'success',
                                 hideAfter: 1000,
@@ -2366,23 +2363,35 @@
                             });
 
                             $('input[name="payment_status"]').val('Completed');
-                            $('input[name="payment_id"]').val(data.paymentID);
-                            $('input[name="payer_id"]').val(data.payerID);
+                            $('input[name="payment_id"]').val(data.orderID);
+                            $('input[name="payer_id"]').val(details.payer.payer_id);
                             $('input[name="payment_method"]').val('paypal');
                             $('#order-place').submit();
                         });
                     },
+
                     onCancel: function(data) {
-                        $('input[name="payment_status"]').val('Failed');
-                        $('input[name="payment_id"]').val(data.paymentID);
-                        $('input[name="payer_id"]').val('');
+                        $('input[name="payment_status"]').val('Cancelled');
+                        $('input[name="payment_id"]').val(data.orderID);
                         $('input[name="payment_method"]').val('paypal');
+                    },
+
+                    onError: function(err) {
+                        console.error('PayPal error:', err);
+                        $.toast({
+                            heading: 'Error!',
+                            position: 'bottom-right',
+                            text: 'An error occurred with PayPal payment',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 5000,
+                            stack: 6
+                        });
                     }
-                }, '#paypal-button-container-popup');
+                }).render('#paypal-button-container-popup');
 
                 paypalButtonInitialized = true;
             }
-
             // Field validation function
             function checkEmptyFileds() {
                 var errorCount = 0;
