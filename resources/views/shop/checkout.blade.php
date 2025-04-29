@@ -340,6 +340,13 @@
                                 <input type="hidden" name="discount-amount-input" id="discount-amount-input"
                                     value="" />
                                 <input type="hidden" name="gift-amount-input" id="gift-amount-input" value="" />
+                                <input type="hidden" name="discount_code" id="discount_code" value="" />
+                                <input type="hidden" name="gift_card_code" id="gift_card_code" value="" />
+                                <input type="hidden" name="total_variation_price" value="{{ $variation }}" />
+                                <input type="hidden" name="shipping_method_name" id="shipping_method_name"
+                                    value="" />
+                                <input type="hidden" name="shipping" id="shipping_amount_input"
+                                    value="0" />
                                 <div id="customer-info-form">
 
                                     <div class="row">
@@ -477,7 +484,7 @@
                                                 <div class="card-body">
                                                     <input type="hidden" name="price" value="{{ $subtotal }}" />
                                                     <input type="hidden" name="product_id" value="" />
-                                                    <input type="hidden" name="qty" value="value['qty']" />
+                                                    <input type="hidden" name="qty" value="" />
                                                     <div id="paypal-button-container-popup"></div>
                                                 </div>
                                             </div>
@@ -710,11 +717,6 @@
 
                                 <input type="hidden" name="total_price" id="total_price"
                                     value="{{ $subtotal + $variation }}" />
-                                <input type="hidden" name="total_variation_price" value="{{ $variation }}" />
-                                <input type="hidden" name="shipping_method_name" id="shipping_method_name"
-                                    value="" />
-                                <input type="hidden" name="shipping_amount" id="shipping_amount_input"
-                                    value="0" />
                             </div>
 
                             <hr>
@@ -792,44 +794,45 @@
             });
 
             // Apply discount
-            $(document).on('click', '#apply-discount', function() {
-                let code = $('#discount-input').val();
+            // $(document).on('click', '#apply-discount', function() {
+            //     let code = $('#discount-input').val();
+            //     $('#discount_code').val(code);
 
-                if (code) {
-                    $.ajax({
-                        url: "{{ route('apply_discount') }}",
-                        method: 'POST',
-                        data: {
-                            discount_code: code,
-                            baseprice: subtotal + variation,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                discount = parseFloat(response.amount);
+            //     if (code) {
+            //         $.ajax({
+            //             url: "{{ route('apply_discount') }}",
+            //             method: 'POST',
+            //             data: {
+            //                 discount_code: code,
+            //                 baseprice: subtotal + variation,
+            //                 _token: '{{ csrf_token() }}'
+            //             },
+            //             success: function(response) {
+            //                 if (response.success) {
+            //                     discount = parseFloat(response.amount);
 
-                                // Update display
-                                $('#discount-row').show();
-                                $('.discount-row').show();
-                                $('#discount-amount').text('-$' + discount.toFixed(2));
-                                $('#discount-amount-input').val(discount.amount);
+            //                     // Update display
+            //                     $('#discount-row').show();
+            //                     $('.discount-row').show();
+            //                     $('#discount-amount').text('-$' + discount.toFixed(2));
+            //                     $('#discount-amount-input').val(discount.amount);
 
-                                // Update discount content
-                                $('#discount-content').html(`
-                                    <span id="discount-code-display">${code}</span>
-                                    <span id="discount-value">-${response.percentage}%</span>
-                                `);
+            //                     // Update discount content
+            //                     $('#discount-content').html(`
+            //                         <span id="discount-code-display">${code}</span>
+            //                         <span id="discount-value">-${response.percentage}%</span>
+            //                     `);
 
-                                updateGrandTotal();
-                            } else {
-                                alert(response.message);
-                            }
-                        }
-                    });
-                } else {
-                    alert('Please enter a discount code');
-                }
-            });
+            //                     updateGrandTotal();
+            //                 } else {
+            //                     alert(response.message);
+            //                 }
+            //             }
+            //         });
+            //     } else {
+            //         alert('Please enter a discount code');
+            //     }
+            // });
 
             // Then your event handlers and other code
             $('#toggle_gift_card').change(function() {
@@ -1589,7 +1592,7 @@
             function applyDiscount(discount) {
                 $('#discount-row').show();
                 $('#discount-amount').text('-$' + discount.amount.toFixed(2));
-                $('#discount-amount-input').val('-$' + discount.amount.toFixed(2));
+                $('#discount-amount-input').val(discount.amount.toFixed(2));
                 $('#discount-content').html(`
                 <span id="discount-code-display">${discount.code}</span>
                 <span id="discount-value">-${discount.percentage}%</span>
@@ -1643,7 +1646,6 @@
                 var tax = parseFloat($('#tax-amount').text().replace('$', '')) || 0;
                 var discount = parseFloat($('#discount-amount').text().replace('-$', '')) || 0;
                 var giftCard = parseFloat($('#gift-amount').text().replace('-$', '')) || 0;
-                console.log(discount, giftCard, tax, shipping, variation, subtotal);
 
                 var grandTotal = subtotal + variation + shipping + tax;
                 grandTotal -= discount + giftCard;
@@ -1660,6 +1662,7 @@
             // Discount Application
             $(document).on('click', '#apply-discount', function() {
                 var discountCode = $('#discount-input').val().trim();
+                $('#discount_code').val(discountCode);
                 if (!discountCode) {
                     toastr.error('Please enter a discount code');
                     return;
@@ -1701,6 +1704,7 @@
             // Gift Card Application
             $(document).on('click', '#apply-gift-card', function() {
                 var giftCardCode = $('#gift-card-input').val().trim();
+                $('#gift_card_code').val(giftCardCode);
                 if (!giftCardCode) {
                     toastr.error('Please enter a gift card code');
                     return;

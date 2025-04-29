@@ -381,7 +381,7 @@ class OrderController extends Controller
         $giftCardAmount = 0;
 
         if ($request->has('discount_code')) {
-            $discount = Discount::where('code', $request->discount)->first();
+            $discount = Discount::where('code', $request->discount_code)->first();
             if ($discount) {
                 $discountAmount = ($subtotal + $variationTotal) * ($discount->percentage / 100);
             }
@@ -389,7 +389,7 @@ class OrderController extends Controller
 
 
         if ($request->has('gift_card_code')) {
-            $giftCard = GiftCard::where('code', $request->giftCard)->first();
+            $giftCard = GiftCard::where('code', $request->gift_card_code)->first();
             if ($giftCard && $giftCard->balance > 0) {
                 $giftCardAmount = min($giftCard->balance, ($subtotal + $variationTotal));
                 // You should also update the gift card balance here
