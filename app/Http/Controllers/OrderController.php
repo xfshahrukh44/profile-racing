@@ -57,6 +57,7 @@ class OrderController extends Controller
     {
         session()->forget('discount');
         session()->forget('percentage');
+        session()->forget('gift_card');
 
         $language = Session::get('language');
         $cart = Session::get('cart');

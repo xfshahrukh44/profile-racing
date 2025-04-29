@@ -618,10 +618,10 @@
                                         </div>
 
                                         <!-- Gift Card (dynamic) -->
-                                        {{-- <div class="summary-item" id="gift-row" style="display:none;">
+                                        <div class="summary-item" id="gift-row" style="display:none;">
                                             <span>Gift Card:</span>
                                             <span id="gift-amount">-$0.00</span>
-                                        </div> --}}
+                                        </div>
 
                                         <hr>
 
@@ -632,7 +632,7 @@
 
 
                                 <!-- Discount Section -->
-                                <div class="discount-section">
+                                <div class="discount-section" style="display: none;">
                                     <div class="apply-discount">
                                         <input type="checkbox" id="toggle_discount"
                                             @if (session()->has('discount')) checked @endif />
@@ -651,9 +651,11 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                {{-- @php
+                                session()->forget('gift_card');
+                            @endphp --}}
                                 <!-- Gift Card Section -->
-                                {{-- <div class="gift-card-section mt-3">
+                                <div class="gift-card-section mt-3" style="display: none;">
                                     <div class="apply-gift-card">
                                         <input type="checkbox" id="toggle_gift_card"
                                             @if (session()->has('gift_card')) checked @endif />
@@ -672,10 +674,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
 
                                 <!-- Order Summary Rows -->
-                                <div class="summary-item discount-row" id="discount-row"
+                                {{-- <div class="summary-item discount-row" id="discount-row"
                                     style="@if (session()->has('discount')) display:flex; @else display:none; @endif">
                                     <span>Discount:</span>
                                     <span id="discount-amount">
@@ -687,7 +689,8 @@
                                     </span>
                                 </div>
 
-                                {{-- <div class="summary-item d-none" id="gift-card-row"
+
+                                <div class="summary-item" id="gift-card-row"
                                     style="@if (session()->has('gift_card')) display:flex; @else display:none; @endif">
                                     <span>Gift Card:</span>
                                     <span id="gift-card-amount">
@@ -754,16 +757,16 @@
             let gift = 0;
 
             // Calculate and update totals
-            function updateGrandTotal() {
-                let total = subtotal + variation + shipping + tax - discount - gift;
+            // function updateGrandTotal() {
+            //     let total = subtotal + variation + shipping + tax - discount - gift;
 
-                // Update display
-                $('#grand-total').text('$' + total.toFixed(2));
-                $('#total-price').val(total.toFixed(2));
+            //     // Update display
+            //     $('#grand-total').text('$' + total.toFixed(2));
+            //     $('#total-price').val(total.toFixed(2));
 
-                // Update Stripe/PayPal buttons
-                $('.grandtotalstripe').text('Pay Now $' + total.toFixed(2));
-            }
+            //     // Update Stripe/PayPal buttons
+            //     $('.grandtotalstripe').text('Pay Now $' + total.toFixed(2));
+            // }
 
             // Discount toggle
             $('#toggle_discount').change(function() {
@@ -854,44 +857,44 @@
             });
 
             // Apply gift card
-            $(document).on('click', '#apply-gift-card', function() {
-                let code = $('#gift-card-input').val();
+            // $(document).on('click', '#apply-gift-card', function() {
+            //     let code = $('#gift-card-input').val();
 
-                if (code) {
-                    $.ajax({
-                        url: "{{ route('apply_gift_card') }}",
-                        method: 'POST',
-                        data: {
-                            code: code,
-                            subtotal: subtotal + variation,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                applyGiftCard({
-                                    code: response.gift_card.code,
-                                    amount: response.gift_card.amount
-                                });
-                                toastr.success('Gift card applied successfully');
-                            } else {
-                                toastr.error(response.message);
-                            }
-                        },
-                        error: function(xhr) {
-                            if (xhr.status === 422) {
-                                var errors = xhr.responseJSON.errors;
-                                for (var field in errors) {
-                                    toastr.error(errors[field][0]);
-                                }
-                            } else {
-                                toastr.error('Error applying gift card');
-                            }
-                        }
-                    });
-                } else {
-                    toastr.error('Please enter a gift card code');
-                }
-            });
+            //     if (code) {
+            //         $.ajax({
+            //             url: "{{ route('apply_gift_card') }}",
+            //             method: 'POST',
+            //             data: {
+            //                 code: code,
+            //                 subtotal: subtotal + variation,
+            //                 _token: '{{ csrf_token() }}'
+            //             },
+            //             success: function(response) {
+            //                 if (response.success) {
+            //                     applyGiftCard({
+            //                         code: response.gift_card.code,
+            //                         amount: response.gift_card.amount
+            //                     });
+            //                     toastr.success('Gift card applied successfully');
+            //                 } else {
+            //                     toastr.error(response.message);
+            //                 }
+            //             },
+            //             error: function(xhr) {
+            //                 if (xhr.status === 422) {
+            //                     var errors = xhr.responseJSON.errors;
+            //                     for (var field in errors) {
+            //                         toastr.error(errors[field][0]);
+            //                     }
+            //                 } else {
+            //                     toastr.error('Error applying gift card');
+            //                 }
+            //             }
+            //         });
+            //     } else {
+            //         toastr.error('Please enter a gift card code');
+            //     }
+            // });
 
             // When shipping method is selected (from your shipping code)
             function updateShippingAndTax(shippingRate, taxRate) {
@@ -926,85 +929,6 @@
         var select_price = 0;
         var f_select_price;
         var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
-    </script>
-    <script>
-        let productId = {!! $get_product_detail->id !!}; // Laravel se product ID le rahe hain
-
-        if (productId === 332) {
-            document.addEventListener("DOMContentLoaded", function() {
-                let checkbox = document.getElementById('add_price_checkbox');
-                let priceElement = document.getElementById('h3_original');
-                let basePrice = parseFloat("{{ $get_product_detail->price }}"); // Laravel price
-
-                if (checkbox) {
-                    checkbox.addEventListener('change', function() {
-                        let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
-                        console.log(selectvalue);
-
-                        let additionalPrice = parseFloat(selectvalue) || 0;
-
-                        if (this.checked) {
-                            console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
-
-                            priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
-                        } else {
-                            priceElement.innerText = `$${basePrice.toFixed(2)}`;
-                        }
-                    });
-                }
-            });
-        } else {
-
-            function updateOptionPrice(selector) {
-                var text = selector.attr('class');
-                var regex = /\d+/;
-                var number = text.match(regex)[0];
-
-                var selectedOption = selector.find('option:selected');
-                var optionPrice = selectedOption.data('price');
-
-                // Check if the selected option is the first option (Choose an option)
-                if (selectedOption.index() === 0) {
-                    selector.next('.span_selected_option_price').html('').hide();
-                    return; // Stop execution if "Choose an option" is selected
-                }
-
-                // Check if a valid option is selected
-                if (optionPrice !== undefined) {
-                    var amount = parseFloat(optionPrice).toFixed(2);
-
-                    if (amount == '0.00') {
-                        selector.next('.span_selected_option_price').html('$0.00').show();
-                    } else {
-                        $('.select_price' + number).val(amount);
-                        selector.next('.span_selected_option_price').html('$' + amount).show();
-                    }
-
-                    var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
-                    $('.select_price' + number).each(function() {
-                        totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
-                    });
-
-                    $('#h3_original').prop('hidden', true);
-                    $('#h3_additional').prop('hidden', false);
-                } else {
-                    selector.next('.span_selected_option_price').html('$0.00').show();
-                }
-            }
-        }
-
-
-        @foreach ($productAttributes_id as $key => $val_product_attribute)
-            var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
-
-            // Initialize on page load
-            updateOptionPrice(dropdown);
-
-            // Add event listener for changes
-            dropdown.on('change', function() {
-                updateOptionPrice($(this));
-            });
-        @endforeach
     </script>
 
 
@@ -1246,7 +1170,13 @@
 
             // Step 2: Back to Customer Info
             $('#back-to-info').click(function() {
+                var subtotal = parseFloat("{{ $subtotal }}");
+                var variation = parseFloat("{{ $variation }}");
+                var grandTotal = (subtotal + variation).toFixed(2);
                 $('#shipping-options-form').hide();
+                $('#shipping-amount').text();
+                $('#shipping-cost').hide();
+                $('#grand-total').text('$' + grandTotal);
                 $('#customer-info-form').show();
             });
 
@@ -1361,9 +1291,9 @@
                                 const radioId = `shipping-method-${method.code}`;
                                 const radioHtml = `
                             <div class="shipping-method-option">
-                                <input type="radio" 
-                                    id="${radioId}" 
-                                    name="shipping_method" 
+                                <input type="radio"
+                                    id="${radioId}"
+                                    name="shipping_method"
                                     value="${method.code}"
                                     data-rate="${response.upsamount}"
                                     data-tax="${response.tax || 0}"
@@ -1416,8 +1346,10 @@
                 // Update hidden fields
                 $('#shipping_method_name').val(selectedMethod);
                 $('#shipping_amount_input').val(shippingRate.toFixed(2));
-                console.log(shippingRate);
                 $('#total_price').val(grandTotal);
+
+                $('.discount-section').show();
+                $('.gift-card-section').show();
             });
 
             // Payment method selection
@@ -1635,22 +1567,94 @@
             // ==================== DISCOUNT & GIFT CARD FUNCTIONALITY ====================
 
             // Initialize from session if exists
-            @if (session()->has('discount'))
-                applyDiscount({
-                    code: "{{ session('discount.code') }}",
-                    percentage: {{ session('discount.percentage') }},
-                    amount: {{ session('discount.amount') }}
-                });
-            @endif
+            // @if (session()->has('discount'))
+            //     applyDiscount({
+            //         code: "{{ session('discount.code') }}",
+            //         percentage: {{ session('discount.percentage') }},
+            //         amount: {{ session('discount.amount') }}
+            //     });
+            // @endif
 
-            @if (session()->has('gift_card'))
-                $(document).ready(function() {
-                    applyGiftCard({
-                        code: "{{ session('gift_card.code') }}",
-                        amount: {{ session('gift_card.amount') }}
-                    });
+            // @if (session()->has('gift_card'))
+            //     $(document).ready(function() {
+            //         applyGiftCard({
+            //             code: "{{ session('gift_card.code') }}",
+            //             amount: {{ session('gift_card.amount') }}
+            //         });
+            //     });
+            // @endif
+
+
+            // Helper Functions
+            function applyDiscount(discount) {
+                $('#discount-row').show();
+                $('#discount-amount').text('-$' + discount.amount.toFixed(2));
+                $('#discount-content').html(`
+                <span id="discount-code-display">${discount.code}</span>
+                <span id="discount-value">-${discount.percentage}%</span>
+                <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
+                `);
+                $('#toggle_discount').prop('disabled', true);
+                updateGrandTotal();
+                removediscount();
+            }
+
+            function removediscount() {
+                $('#remove-discount').on('click', function() {
+                    $('#toggle_discount').prop('checked', false);
+                    $('#discount-content').hide();
+                    $('#discount-amount').text('-$0.00');
+                    $('#discount-row').hide();
+                    $('#toggle_discount').prop('disabled', false);
+                    updateGrandTotal();
+                })
+            }
+
+            // Define all functions first
+            function applyGiftCard(giftCard) {
+
+            }
+
+            // Remove Gift Card Helper
+            function removeGiftCard() {
+                $('#remove-gift-card').on('click', function() {
+                    gift = 0;
+                    $('#toggle_gift_card').prop('checked', false);
+                    $('#gift-row').hide();
+                    $('#gift-amount').text('-$0.00');
+                    $('#gift-amount-input').val(0);
+
+                    // Reset the gift card content back to input
+                    $('#gift-card-content').html(`
+                        <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                        <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                    `);
+                    $('#toggle_gift_card').prop('disabled', false);
+
+                    updateGrandTotal();
                 });
-            @endif
+            }
+
+            function updateGrandTotal() {
+                var subtotal = parseFloat("{{ $subtotal }}") || 0;
+                var variation = parseFloat("{{ $variation }}") || 0;
+                var shipping = parseFloat($('#shipping-amount').text().replace('$', '')) || 0;
+                var tax = parseFloat($('#tax-amount').text().replace('$', '')) || 0;
+                var discount = parseFloat($('#discount-amount').text().replace('-$', '')) || 0;
+                var giftCard = parseFloat($('#gift-amount').text().replace('-$', '')) || 0;
+                console.log(discount, giftCard);
+
+                var grandTotal = subtotal + variation + shipping + tax;
+                grandTotal -= discount + giftCard;
+
+                $('#grand-total').text('$' + grandTotal.toFixed(2));
+                $('#total_price').val(grandTotal.toFixed(2));
+
+                if ($('#payment-form').is(':visible')) {
+                    $('#stripe-amount').text(grandTotal.toFixed(2));
+                    initPayPalButton();
+                }
+            }
 
             // Discount Application
             $(document).on('click', '#apply-discount', function() {
@@ -1715,7 +1719,22 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            applyGiftCard(response.gift_card);
+                            // applyGiftCard(response.gift_card);
+                            var giftCard = response.gift_card;
+                            var gift = parseFloat(giftCard.amount);
+                            $('#gift-row').show();
+                            $('.gift-card-row').show();
+                            $('#gift-amount').text('-$' + gift.toFixed(2));
+                            $('#gift-amount-input').val(gift);
+
+                            $('#gift-card-content').html(`
+                                <span id="gift-card-code-display">${giftCard.code}</span>
+                                <span id="gift-card-value">-$${parseFloat(giftCard.amount).toFixed(2)}</span>
+                                <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
+                            `);
+                            $('#toggle_gift_card').prop('disabled', true);
+                            updateGrandTotal();
+                            removeGiftCard();
                             toastr.success('Gift card applied successfully');
                         } else {
                             toastr.error(response.message);
@@ -1733,86 +1752,6 @@
                     }
                 });
             });
-
-
-            // Helper Functions
-            function applyDiscount(discount) {
-                $('#discount-row').show();
-                $('#discount-amount').text('-$' + discount.amount.toFixed(2));
-                $('#discount-content').html(`
-                <span id="discount-code-display">${discount.code}</span>
-                <span id="discount-value">-${discount.percentage}%</span>
-                <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
-                `);
-                updateGrandTotal();
-                removediscount();
-            }
-
-            function removediscount() {
-                $('#remove-discount').on('click', function() {
-                    $('#toggle_discount').prop('checked', false);
-                    $('#discount-content').hide();
-                    $('#discount-amount').text('-$0.00');
-                    $('#discount-row').hide();
-                    updateGrandTotal();
-                })
-            }
-
-            // Define all functions first
-            function applyGiftCard(giftCard) {
-                gift = parseFloat(giftCard.amount);
-                $('#gift-row').show();
-                $('.gift-card-row').show();
-                $('#gift-amount').text('-$' + gift.toFixed(2));
-                $('#gift-amount-input').val(gift);
-
-                $('#gift-card-content').html(`
-                    <span id="gift-card-code-display">${giftCard.code}</span>
-                    <span id="gift-card-value">-$${parseFloat(giftCard.amount).toFixed(2)}</span>
-                    <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
-                `);
-                updateGrandTotal();
-                removeGiftCard();
-            }
-
-            // Remove Gift Card Helper
-            function removeGiftCard() {
-                $('#remove-gift-card').on('click', function() {
-                    gift = 0;
-                    $('#toggle_gift_card').prop('checked', false);
-                    $('#gift-row').hide();
-                    $('#gift-amount').text('-$0.00');
-                    $('#gift-amount-input').val(0);
-
-                    // Reset the gift card content back to input
-                    $('#gift-card-content').html(`
-                        <input type="text" id="gift-card-input" placeholder="Enter gift card code">
-                        <button id="apply-gift-card" class="btn btn-primary">Apply</button>
-                    `);
-
-                    updateGrandTotal();
-                });
-            }
-
-            function updateGrandTotal() {
-                var subtotal = parseFloat("{{ $subtotal }}") || 0;
-                var variation = parseFloat("{{ $variation }}") || 0;
-                var shipping = parseFloat($('#shipping-amount').text().replace('$', '')) || 0;
-                console.log(discount);
-                var tax = parseFloat($('#tax-amount').text().replace('$', '')) || 0;
-                var discount = parseFloat($('#discount-amount').text().replace('-$', '')) || 0;
-                var giftCard = parseFloat($('#gift-card-amount').text().replace('-$', '')) || 0;
-
-                var grandTotal = subtotal + variation + shipping + tax - discount - giftCard;
-
-                $('#grand-total').text('$' + grandTotal.toFixed(2));
-                $('#total_price').val(grandTotal.toFixed(2));
-
-                if ($('#payment-form').is(':visible')) {
-                    $('#stripe-amount').text(grandTotal.toFixed(2));
-                    initPayPalButton();
-                }
-            }
         });
     </script>
 
