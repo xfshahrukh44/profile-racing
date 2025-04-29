@@ -336,6 +336,10 @@
                         <div class="order_checkout">
                             <form id="order-place" method="POST" action="{{ route('order.place') }}">
                                 @csrf
+                                <input type="hidden" name="payment_method" id="payment_method" value="" />
+                                <input type="hidden" name="discount-amount-input" id="discount-amount-input"
+                                    value="" />
+                                <input type="hidden" name="gift-amount-input" id="gift-amount-input" value="" />
                                 <div id="customer-info-form">
 
                                     <div class="row">
@@ -614,10 +618,10 @@
                                         </div>
 
                                         <!-- Gift Card (dynamic) -->
-                                        <div class="summary-item" id="gift-row" style="display:none;">
+                                        {{-- <div class="summary-item" id="gift-row" style="display:none;">
                                             <span>Gift Card:</span>
                                             <span id="gift-amount">-$0.00</span>
-                                        </div>
+                                        </div> --}}
 
                                         <hr>
 
@@ -649,7 +653,7 @@
                                 </div>
 
                                 <!-- Gift Card Section -->
-                                <div class="gift-card-section mt-3">
+                                {{-- <div class="gift-card-section mt-3">
                                     <div class="apply-gift-card">
                                         <input type="checkbox" id="toggle_gift_card"
                                             @if (session()->has('gift_card')) checked @endif />
@@ -668,10 +672,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- Order Summary Rows -->
-                                <div class="summary-item" id="discount-row"
+                                <div class="summary-item discount-row" id="discount-row"
                                     style="@if (session()->has('discount')) display:flex; @else display:none; @endif">
                                     <span>Discount:</span>
                                     <span id="discount-amount">
@@ -683,7 +687,7 @@
                                     </span>
                                 </div>
 
-                                <div class="summary-item" id="gift-card-row"
+                                {{-- <div class="summary-item d-none" id="gift-card-row"
                                     style="@if (session()->has('gift_card')) display:flex; @else display:none; @endif">
                                     <span>Gift Card:</span>
                                     <span id="gift-card-amount">
@@ -693,7 +697,8 @@
                                             -$0.00
                                         @endif
                                     </span>
-                                </div>
+                                </div> --}}
+
                                 <div class="summary-item grand-total" id="order-total"
                                     style="display:flex; justify-content: space-between; align-items: center;">
                                     <h4 class="m-0">Total:</h4>
@@ -730,8 +735,12 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- <script src="https://www.paypalobjects.com/api/checkout.js"></script> --}}
     <script
-        src="https://www.paypal.com/sdk/js?client-id=AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
+        src="https://www.paypal.com/sdk/js?client-id=AR0NWTUnnZIoWXQR_CVmMcExhY7gigkcBfMzRAarXxJAhMk1M0Cb5vXwRbx24IUU5HY_r94D_dBSro2F&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
         data-sdk-integration-source="button-factory"></script>
+
+    {{-- <script
+        src="https://www.paypal.com/sdk/js?client-id=AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
+        data-sdk-integration-source="button-factory"></script> --}}
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
@@ -745,7 +754,7 @@
             let gift = 0;
 
             // Calculate and update totals
-            function updateTotals() {
+            function updateGrandTotal() {
                 let total = subtotal + variation + shipping + tax - discount - gift;
 
                 // Update display
@@ -764,9 +773,9 @@
                     // If discount already applied, don't show input
                     if (!"{{ session()->get('discount') }}") {
                         $('#discount-content').html(`
-                    <input type="text" id="discount-input" placeholder="Enter discount code">
-                    <button id="apply-discount">Apply</button>
-                `);
+                            <input type="text" id="discount-input" placeholder="Enter discount code">
+                            <button id="apply-discount" class="btn btn-primary">Apply</button>
+                        `);
                     }
                 } else {
                     // Remove discount
@@ -775,7 +784,7 @@
                     $('#discount-amount').text('-$0.00');
                     $('#discount-amount-input').val(0);
                     $('#discount-content').hide();
-                    updateTotals();
+                    updateGrandTotal();
                 }
             });
 
@@ -798,16 +807,17 @@
 
                                 // Update display
                                 $('#discount-row').show();
+                                $('.discount-row').show();
                                 $('#discount-amount').text('-$' + discount.toFixed(2));
                                 $('#discount-amount-input').val(discount);
 
                                 // Update discount content
                                 $('#discount-content').html(`
-                            <span id="discount-code-display">${code}</span>
-                            <span id="discount-value">-${response.percentage}%</span>
-                        `);
+                                    <span id="discount-code-display">${code}</span>
+                                    <span id="discount-value">-${response.percentage}%</span>
+                                `);
 
-                                updateTotals();
+                                updateGrandTotal();
                             } else {
                                 alert(response.message);
                             }
@@ -818,51 +828,68 @@
                 }
             });
 
-            // Gift card toggle
-            $('#toggle_gift').change(function() {
+            // Then your event handlers and other code
+            $('#toggle_gift_card').change(function() {
                 if ($(this).is(':checked')) {
-                    $('#gift-content').show();
+                    $('#gift-card-content').show();
+
+                    var giftCardAmount =
+                        {{ session()->has('gift_card') ? session('gift_card.amount') : 'null' }};
+                    if (giftCardAmount !== null) {
+
+                        $('#gift-card-content').html(`
+                            <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                            <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                        `);
+                    }
                 } else {
                     // Remove gift card
                     gift = 0;
                     $('#gift-row').hide();
                     $('#gift-amount').text('-$0.00');
                     $('#gift-amount-input').val(0);
-                    $('#gift-content').hide();
-                    updateTotals();
+                    $('#gift-card-content').hide();
+                    updateGrandTotal();
                 }
             });
 
             // Apply gift card
-            $(document).on('click', '#apply-gift', function() {
-                let code = $('#gift-input').val();
+            $(document).on('click', '#apply-gift-card', function() {
+                let code = $('#gift-card-input').val();
 
                 if (code) {
                     $.ajax({
                         url: "{{ route('apply_gift_card') }}",
                         method: 'POST',
                         data: {
-                            gift_code: code,
-                            baseprice: subtotal + variation,
+                            code: code,
+                            subtotal: subtotal + variation,
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
                             if (response.success) {
-                                gift = parseFloat(response.amount);
-
-                                // Update display
-                                $('#gift-row').show();
-                                $('#gift-amount').text('-$' + gift.toFixed(2));
-                                $('#gift-amount-input').val(gift);
-
-                                updateTotals();
+                                applyGiftCard({
+                                    code: response.gift_card.code,
+                                    amount: response.gift_card.amount
+                                });
+                                toastr.success('Gift card applied successfully');
                             } else {
-                                alert(response.message);
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 422) {
+                                var errors = xhr.responseJSON.errors;
+                                for (var field in errors) {
+                                    toastr.error(errors[field][0]);
+                                }
+                            } else {
+                                toastr.error('Error applying gift card');
                             }
                         }
                     });
                 } else {
-                    alert('Please enter a gift card code');
+                    toastr.error('Please enter a gift card code');
                 }
             });
 
@@ -880,7 +907,7 @@
                 $('#tax-amount').text('$' + tax.toFixed(2));
                 $('#tax-amount-input').val(tax);
 
-                updateTotals();
+                updateGrandTotal();
             }
 
             // Initialize with any existing discount
@@ -888,736 +915,8 @@
                 $('#discount-row').show();
                 $('#discount-amount').text('-${{ session()->get('discount')->amount }}');
             @endif
+
         });
-
-        // $("#searchTextField").keydown(function() {
-        //     $('#fedex-checker').val(0);
-        //     $('#accordion').slideUp();
-        //     // $('#addressdiv').slideUp();
-        //     $('#desctax').slideUp();
-        //     $('#othertaxli').slideUp();
-        //     $('#cataxli').slideUp();
-        //     $("#shippingdiv").slideUp();
-        // })
-
-        // function initialize() {
-        //     var input = document.getElementById('searchTextField');
-        //     var autocomplete = new google.maps.places.Autocomplete(input);
-        //     google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        //         var place = autocomplete.getPlace();
-        //         var searchAddressComponents = place.address_components,
-        //             searchPostalCode = "",
-        //             searchAddress = "",
-        //             searchCity = "",
-        //             searchState = "",
-        //             searchCountryName = "",
-        //             searchCountryCode = "";
-
-        //         $.each(searchAddressComponents, function() {
-        //             if (this.types[0] == "postal_code") {
-        //                 searchPostalCode = this.short_name;
-        //             }
-        //             if (this.types[0] == "route") {
-        //                 searchAddress = this.short_name;
-        //             }
-        //             if (this.types[0] == "locality") {
-        //                 searchCity = this.short_name;
-        //             }
-        //             if (this.types[0] == "administrative_area_level_1") {
-        //                 searchState = this.short_name;
-        //             }
-        //             if (this.types[0] == "country") {
-        //                 searchCountryName = this.long_name;
-        //                 searchCountryCode = this.short_name;
-        //             }
-        //         });
-
-        //         var addressArray = place.adr_address.split(',')
-
-        //         var country = searchCountryCode;
-        //         var city = searchCity;
-        //         var address = searchAddress;
-        //         var state = searchState;
-
-        //         var postalcode = searchPostalCode;
-        //         $('#country').val(searchCountryCode);
-        //         $('#country-code').val(searchCountryName);
-
-        //         // $('#country option[value="' + country.toString() + '"]').prop('selected', true);
-        //         $('#city').val(city);
-        //         $('#address').val(address);
-        //         $('#state').val(state);
-        //         $('#postal').val(postalcode);
-        //         // $('#addressdiv').slideDown();
-        //         $('#fedex-checker').val(1);
-
-        //         updateShippingMethods(searchCountryName);
-
-
-        //     });
-        // }
-
-        // function updateShippingMethods(country) {
-        //     const shippingMethodSelect = $('#shipping_method');
-        //     shippingMethodSelect.empty(); // Clear existing options
-
-        //     // Define an array of shipping methods for different countries
-        //     const shippingMethodsUSA = [{
-        //             text: "Standard",
-        //             code: "11"
-        //         },
-        //         {
-        //             text: "UPS 2nd Day Air®",
-        //             code: "02"
-        //         },
-        //         {
-        //             text: "UPS 3 Day Select®",
-        //             code: "12"
-        //         },
-        //         {
-        //             text: "UPS Next Day Air®",
-        //             code: "14"
-        //         },
-        //         {
-        //             text: "UPS SurePost",
-        //             code: "93"
-        //         }
-        //     ];
-
-        //     const shippingMethodsOthers = [{
-        //             text: "UPS Standard",
-        //             code: "11"
-        //         },
-        //         {
-        //             text: "UPS Worldwide Expedited®",
-        //             code: "17"
-        //         },
-        //         {
-        //             text: "UPS Worldwide Saver®",
-        //             code: "86"
-        //         },
-        //         {
-        //             text: "UPS Worldwide Express®",
-        //             code: "72"
-        //         },
-        //         {
-        //             text: "UPS SurePost",
-        //             code: "93"
-        //         }
-        //     ];
-
-        //     // Determine shipping methods based on the country
-        //     const selectedShippingMethods = (country.toLowerCase() === 'usa' || country.toLowerCase() === 'united states') ?
-        //         shippingMethodsUSA :
-        //         shippingMethodsOthers;
-
-
-        //     var country = $('#country').val();
-        //     var address = $('#address').val();
-        //     var postal = $('#postal').val();
-
-        //     var city = $('#city').val();
-        //     var state = $('#state').val();
-
-        //     // Append options and make AJAX requests for each method
-        //     selectedShippingMethods.forEach(method => {
-        //         $.ajax({
-        //             headers: {
-        //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //             },
-        //             url: "{{ route('upsservices') }}",
-        //             type: "POST",
-        //             dataType: "json",
-        //             data: {
-        //                 country: country,
-        //                 address: address,
-        //                 state: state,
-        //                 postal: postal,
-        //                 city: city,
-        //                 shipping_method: method.code
-        //             },
-        //             success: function(response) {
-        //                 if (response.status) {
-        //                     // Append the option with upsamount in the text
-        //                     shippingMethodSelect.append(
-        //                         new Option(`${method.text} (${response.upsamount})`, method.code)
-        //                     );
-        //                 } else {
-        //                     console.error('Error in response:', response);
-        //                 }
-        //             },
-        //             error: function(xhr, status, error) {
-        //                 console.error('AJAX error:', error);
-        //             }
-        //         });
-        //     });
-
-
-        //     $('#shippingdiv').slideDown(); // Show the shipping dropdown
-        // }
-
-        // // $(document).on('click', ".btn", function(e){
-        // //   $('#order-place').submit();
-        // // });
-
-        // $('#order-place').append('<input type="hidden" name="subtotal" value="{{ $subtotal }}" id="fedex_token">');
-
-        // $('#upsbutton').click(function() {
-        //     $('#servname').parent().prop('hidden', ($('#country').val() == 'US'));
-        //     $('.shippingbtn').removeClass('active');
-        //     $('#loader').show();
-        //     $(this).addClass("active");
-        //     var country = $('#country').val();
-        //     var address = $('#address').val();
-        //     var postal = $('#postal').val();
-
-        //     var city = $('#city').val();
-        //     var state = $('#state').val();
-        //     var shipping_method = $('#shipping_method').val();
-
-        //     if (country == '' || address == '' || postal == '' || city == '') {
-        //         // toastr.error('Please fill all address fields')
-        //         toastr.error('Please enter a valid address.')
-        //     } else {
-        //         // $('#li_hidden').prop('hidden', false);
-        //         if ($('#country').val() == 'US') {
-        //             $.ajaxSetup({
-        //                 headers: {
-        //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //                 }
-        //             });
-
-        //             $.ajax({
-        //                 _token: "{{ csrf_token() }}",
-        //                 url: "{{ route('upsservices') }}",
-        //                 type: "post",
-        //                 dataType: "json",
-        //                 data: {
-        //                     country: country,
-        //                     address: address,
-        //                     state: state,
-        //                     postal: postal,
-        //                     city: city,
-        //                     shipping_method: shipping_method,
-
-        //                 },
-        //                 success: function(response) {
-        //                     if (response.status) {
-        //                         $('#li_discount').show();
-        //                         $('#li_gift').show();
-        //                         $('#accordion').prop('hidden', false);
-        //                         $('#li_hidden').prop('hidden', false);
-
-        //                         var tax = Number('{{ $subtotal }}') + ((Number(response.tax) /
-        //                             100) * Number('{{ $subtotal }}'));
-        //                         $("#ordertotalli h4").text('$' + tax.toString());
-        //                         var ordertotal = Number(response.upsamount) + Number(tax);
-        //                         // $('#taxli  h4').text(response.tax.toString() + "%")
-        //                         $('#taxli  h4').text('$' + ((response.tax / 100) * parseFloat(
-        //                             '{{ $subtotal }}')).toFixed(2).toString())
-        //                         if (response.description != null) {
-        //                             $('#desctax h4').text(response.description);
-        //                             $('#desctax').slideDown();
-        //                         }
-
-        //                         $('#taxli').slideDown();
-        //                         $('#shippingamount').val(response.upsamount);
-        //                         $('#servname').text('UPS Standard');
-        //                         $('#totalshippingh4').text('$' + response.upsamount.toString());
-        //                         $('#shippingdiv').slideDown();
-        //                         $('#fedexli').hide();
-        //                         $('#upsli').slideDown();
-        //                         $('#grandtotal').text('$ ' + ordertotal.toFixed(2));
-        //                         $('.grandtotalstripe').text('Pay Now $' + ordertotal.toFixed(2));
-        //                         $('#total_price').text('$ ' + ordertotal.toFixed(2));
-        //                         $('#amount').val(Number(ordertotal.toFixed(2)));
-        //                         // $('#authbtn').text('Pay Now $' + ordertotal.toFixed(2));
-        //                         $('#authbtn').text('Pay Now');
-        //                         $('#shippinginput').val("UPS");
-        //                         $('#accordion').slideDown();
-
-        //                         $('#error').text('');
-        //                         $('#error').hide();
-
-        //                     } else {
-        //                         $.toast({
-        //                             heading: 'Alert!',
-        //                             position: 'bottom-right',
-        //                             text: response.message,
-        //                             loaderBg: '#ff6849',
-        //                             icon: 'error',
-        //                             hideAfter: 5000,
-        //                             stack: 6
-        //                         });
-        //                     }
-        //                 },
-        //                 error: function(xhr) {
-        //                     // console.error(xhr);
-        //                     let errorMessage = "An error occurred while processing your request.";
-
-        //                     const errorString = xhr.responseJSON.error;
-
-        //                     // Extract the JSON part from the error string using regex
-        //                     const jsonStringMatch = errorString.match(/{.*}/);
-
-        //                     if (jsonStringMatch) {
-        //                         try {
-        //                             // Parse the JSON string
-        //                             const response = JSON.parse(jsonStringMatch[0]);
-        //                             // Extract the message from the errors array
-        //                             if (response.response && response.response.errors && response
-        //                                 .response.errors[0].message) {
-        //                                 errorMessage = response.response.errors[0].message;
-        //                             }
-        //                         } catch (e) {
-        //                             console.error("Error parsing the JSON string:", e);
-        //                         }
-        //                     }
-
-        //                     $.toast({
-        //                         heading: 'Alert!',
-        //                         position: 'bottom-right',
-        //                         text: errorMessage,
-        //                         loaderBg: '#ff6849',
-        //                         icon: 'error',
-        //                         hideAfter: 5000,
-        //                         stack: 6
-        //                     });
-        //                 }
-        //             });
-        //         } else {
-        //             $.ajaxSetup({
-        //                 headers: {
-        //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //                 }
-        //             });
-        //             $.ajax({
-        //                 _token: "{{ csrf_token() }}",
-        //                 url: "{{ route('upsservices') }}",
-        //                 type: "post",
-        //                 dataType: "json",
-        //                 data: {
-        //                     country: country,
-        //                     address: address,
-        //                     state: state,
-        //                     postal: postal,
-        //                     city: city,
-        //                     shipping_method: shipping_method,
-
-        //                 },
-        //                 success: function(response) {
-        //                     if (response.status) {
-        //                         $('#li_discount').show();
-        //                         $('#li_gift').show();
-        //                         $('#li_hidden').prop('hidden', false);
-        //                         console.clear();
-        //                         var tax = Number('{{ $subtotal }}') + ((Number(response.tax) /
-        //                             100) * Number('{{ $subtotal }}'));
-        //                         $("#ordertotalli h4").text('$' + tax.toString());
-        //                         var ordertotal = Number(response.upsamount) + Number(tax);
-        //                         // $('#taxli  h4').text(response.tax.toString() + "%")
-        //                         $('#taxli  h4').text('$' + ((response.tax / 100) * parseFloat(
-        //                             '{{ $subtotal }}')).toFixed(2).toString())
-        //                         if (response.description != null) {
-        //                             $('#desctax h4').text(response.description);
-        //                             $('#desctax').slideDown();
-        //                         }
-
-        //                         $('#taxli').slideDown();
-        //                         $('#shippingamount').val(response.upsamount);
-        //                         $('#servname').text('UPS Standard');
-        //                         $('#totalshippingh4').text('$' + response.upsamount.toString());
-        //                         $('#shippingdiv').slideDown();
-        //                         $('#fedexli').hide();
-        //                         $('#upsli').slideDown();
-        //                         $('#grandtotal').text('$ ' + ordertotal.toFixed(2));
-        //                         $('.grandtotalstripe').text('Pay Now $' + ordertotal.toFixed(2));
-        //                         $('#total_price').text('$ ' + ordertotal.toFixed(2));
-        //                         $('#amount').val(Number(ordertotal.toFixed(2)));
-        //                         // $('#authbtn').text('Pay Now $' + ordertotal.toFixed(2));
-        //                         $('#authbtn').text('Pay Now');
-        //                         $('#shippinginput').val("UPS");
-        //                         $('#accordion').slideDown();
-
-        //                         $('#error').text('');
-        //                         $('#error').hide();
-
-        //                     } else {
-        //                         $.toast({
-        //                             heading: 'Alert!',
-        //                             position: 'bottom-right',
-        //                             text: response.message,
-        //                             loaderBg: '#ff6849',
-        //                             icon: 'error',
-        //                             hideAfter: 5000,
-        //                             stack: 6
-        //                         });
-        //                     }
-        //                 },
-        //                 error: function(xhr) {
-        //                     // console.error(xhr);
-        //                     let errorMessage = "An error occurred while processing your request.";
-
-        //                     const errorString = xhr.responseJSON.error;
-
-        //                     // Extract the JSON part from the error string using regex
-        //                     const jsonStringMatch = errorString.match(/{.*}/);
-
-        //                     if (jsonStringMatch) {
-        //                         try {
-        //                             // Parse the JSON string
-        //                             const response = JSON.parse(jsonStringMatch[0]);
-        //                             // Extract the message from the errors array
-        //                             if (response.response && response.response.errors && response
-        //                                 .response.errors[0].message) {
-        //                                 errorMessage = response.response.errors[0].message;
-        //                             }
-        //                         } catch (e) {
-        //                             console.error("Error parsing the JSON string:", e);
-        //                         }
-        //                     }
-
-        //                     $.toast({
-        //                         heading: 'Alert!',
-        //                         position: 'bottom-right',
-        //                         text: errorMessage,
-        //                         loaderBg: '#ff6849',
-        //                         icon: 'error',
-        //                         hideAfter: 5000,
-        //                         stack: 6
-        //                     });
-        //                 }
-        //             });
-        //         }
-
-        //     }
-
-        //     $('#loader').hide();
-        //     $(this).removeClass('active');
-
-
-        // });
-
-        // $('#fedexbutton').click(function() {
-        //     if ($('#fedex-checker').val() == 0) {
-        //         $('#error').text('Please Fill out the Address');
-        //         $('#error').show();
-        //     } else {
-        //         alert();
-        //         $('#accordion').slideUp();
-        //         $('.shippingbtn').removeClass('active');
-        //         $(this).addClass("active");
-        //         $('#error').hide();
-        //         $('#servicesdiv').slideUp();
-        //         $('#loader').show();
-        //         var country = $('#country').val();
-        //         var address = $('#address').val();
-        //         var postal = $('#postal').val();
-        //         var city = $('#city').val();
-        //         var token = $('#fedex_token').val();
-        //         var state = $('#state').val();
-
-        //         $.ajaxSetup({
-        //             headers: {
-        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //             }
-        //         });
-
-        //         $.ajax({
-        //             _token: "{{ csrf_token() }}",
-        //             url: "{{ route('shipping') }}",
-        //             type: "post",
-        //             dataType: "json",
-        //             data: {
-        //                 country: country,
-        //                 address: address,
-        //                 city: city,
-        //                 postal: postal,
-        //                 state: state,
-        //                 token: token,
-        //             },
-        //             success: function(response) {
-        //                 if (response.success) {
-        //                     console.log(response.tax)
-        //                     if (response.description != null) {
-        //                         $('#desctax h4').text(response.description);
-        //                         $('#desctax').slideDown();
-        //                     }
-        //                     var tax = Number('{{ $subtotal }}') + ((Number(response.tax) / 100) *
-        //                         Number('{{ $subtotal }}'));
-        //                     $("#ordertotalli h4").text('$' + tax.toString());
-        //                     var ordertotal = (Number(tax) + Number(json[0]['ratedShipmentDetails'][0][
-        //                         'totalNetFedExCharge'
-        //                     ])).toFixed(2);
-        //                     $('#shippingamount').val(json[0]['ratedShipmentDetails'][0][
-        //                         'totalNetFedExCharge'
-        //                     ]);
-        //                     $('#loader').hide();
-        //                     console.log(ordertotal);
-        //                     $('#servname').text("Fedex Standard");
-        //                     $('#shippingtotalfed').text('$ ' + json[0]['ratedShipmentDetails'][0][
-        //                         'totalNetFedExCharge'
-        //                     ].toString());
-        //                     $('#grandtotal').text('$' + ordertotal);
-        //                     $('.grandtotalstripe').text('Pay Now $' + ordertotal);
-        //                     $('#total_price').text('$ ' + ordertotal.toFixed(2));
-        //                     $('#shippingdiv').slideDown();
-        //                     $('#upsli').hide();
-        //                     $('#fedexli').slideDown();
-        //                     // $('#authbtn').text('Pay Now $' + ordertotal);
-        //                     $('#authbtn').text('Pay Now');
-        //                     $('#amount').val(ordertotal);
-        //                     $('#shippinginput').val("Fedex");
-        //                     $('#accordion').slideDown();
-        //                 } else {
-        //                     $('#loader').hide();
-        //                     if (response.err)
-        //                         $('#error').text(response.error);
-        //                     $('#error').show();
-        //                 }
-
-        //             }
-        //         })
-        //     }
-        // });
-
-        // $('#accordion .btn-link').on('click', function(e) {
-        //     if (!$(this).hasClass('collapsed')) {
-        //         e.stopPropagation();
-        //     }
-        //     $('#payment_method').val($(this).attr('data-payment'));
-        // });
-
-
-        // $('.bttn').on('change', function() {
-        //     var count = 0;
-        //     if ($(this).prop("checked") == true) {
-        //         if ($('#f-name').val() == "") {
-        //             $('.fname').text('first name is required field');
-        //         } else {
-        //             $('.fname').text("");
-        //             count++;
-        //         }
-        //         if ($('#l-name').val() == "") {
-        //             $('.lname').text('last name is required field');
-        //         } else {
-        //             $('.lname').text("");
-        //             count++;
-        //         }
-
-        //         if (count == 2) {
-        //             $('#paypal-button-container-popup').show();
-        //         } else {
-        //             $(this).prop("checked", false);
-
-        //             $.toast({
-        //                 heading: 'Alert!',
-        //                 position: 'bottom-right',
-        //                 text: 'Please fill the required fields before proceeding to pay',
-        //                 loaderBg: '#ff6849',
-        //                 icon: 'error',
-        //                 hideAfter: 5000,
-        //                 stack: 6
-        //             });
-
-        //             return false;
-
-        //         }
-
-        //     } else {
-        //         $('#paypal-button-container-popup').hide();
-        //         // $('.btn').show();
-        //     }
-
-        //     $('input[name="' + this.name + '"]').not(this).prop('checked', false);
-        //     //$(this).siblings('input[type="checkbox"]').prop('checked', false);
-        // });
-
-        // let paypalAmountText = $('#grandtotal').text();
-        // let paypalAmount = parseFloat(paypalAmountText.replace(/[$,]/g, ''));
-        // console.log(paypalAmount);
-
-        // paypal.Button.render({
-        //     env: 'production', //production
-
-        //     style: {
-        //         label: 'checkout',
-        //         size: 'responsive',
-        //         shape: 'rect',
-        //         color: 'gold'
-        //     },
-        //     client: {
-        //         // sandbox: 'AR0NWTUnnZIoWXQR_CVmMcExhY7gigkcBfMzRAarXxJAhMk1M0Cb5vXwRbx24IUU5HY_r94D_dBSro2F',
-        //         production: 'AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38',
-        //     },
-        //     validate: function(actions) {
-        //         actions.disable();
-        //         paypalActions = actions;
-        //     },
-
-        //     onClick: function(e) {
-        //         var errorCount = checkEmptyFileds();
-
-        //         if (errorCount == 1) {
-        //             $.toast({
-        //                 heading: 'Alert!',
-        //                 position: 'bottom-right',
-        //                 text: 'Please fill the required fields before proceeding to pay',
-        //                 loaderBg: '#ff6849',
-        //                 icon: 'error',
-        //                 hideAfter: 5000,
-        //                 stack: 6
-        //             });
-        //             paypalActions.disable();
-        //         } else {
-        //             paypalActions.enable();
-        //         }
-        //     },
-        //     payment: function(data, actions) {
-        //         return actions.payment.create({
-        //             payment: {
-        //                 transactions: [{
-        //                     amount: {
-        //                         // total: {{ number_format((float) $subtotal + $variation, 2, '.', '') }},
-        //                         total: paypalAmount,
-        //                         currency: 'USD'
-        //                     }
-        //                 }]
-        //             }
-        //         });
-        //     },
-        //     onAuthorize: function(data, actions) {
-        //         return actions.payment.execute().then(function() {
-        //             // generateNotification('success','Payment Authorized');
-
-        //             $.toast({
-        //                 heading: 'Success!',
-        //                 position: 'bottom-right',
-        //                 text: 'Payment Authorized',
-        //                 loaderBg: '#ff6849',
-        //                 icon: 'success',
-        //                 hideAfter: 1000,
-        //                 stack: 6
-        //             });
-
-        //             var params = {
-        //                 payment_status: 'Completed',
-        //                 paymentID: data.paymentID,
-        //                 payerID: data.payerID
-        //             };
-
-        //             // console.log(data.paymentID);
-        //             // return false;
-        //             $('input[name="payment_status"]').val('Completed');
-        //             $('input[name="payment_id"]').val(data.paymentID);
-        //             $('input[name="payer_id"]').val(data.payerID);
-        //             $('input[name="payment_method"]').val('paypal');
-        //             $('#order-place').submit();
-        //         });
-        //     },
-        //     onCancel: function(data, actions) {
-        //         var params = {
-        //             payment_status: 'Failed',
-        //             paymentID: data.paymentID
-        //         };
-        //         $('input[name="payment_status"]').val('Failed');
-        //         $('input[name="payment_id"]').val(data.paymentID);
-        //         $('input[name="payer_id"]').val('');
-        //         $('input[name="payment_method"]').val('paypal');
-        //     }
-        // }, '#paypal-button-container-popup');
-
-
-        // var stripe = Stripe('{{ env('STRIPE_KEY') }}');
-
-        // // Create an instance of Elements.
-        // var elements = stripe.elements();
-        // var style = {
-        //     base: {
-        //         color: '#32325d',
-        //         lineHeight: '18px',
-        //         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        //         fontSmoothing: 'antialiased',
-        //         fontSize: '16px',
-        //         '::placeholder': {
-        //             color: '#aab7c4'
-        //         }
-        //     },
-        //     invalid: {
-        //         color: '#fa755a',
-        //         iconColor: '#fa755a'
-        //     }
-        // };
-        // var card = elements.create('card', {
-        //     style: style
-        // });
-        // card.mount('#card-element');
-
-        // card.addEventListener('change', function(event) {
-        //     var displayError = document.getElementById('card-errors');
-        //     if (event.error) {
-        //         $(displayError).show();
-        //         displayError.textContent = event.error.message;
-        //     } else {
-        //         $(displayError).hide();
-        //         displayError.textContent = '';
-        //     }
-        // });
-
-        // var form = document.getElementById('order-place');
-
-        // $('#stripe-submit').click(function() {
-        //     stripe.createToken(card).then(function(result) {
-        //         var errorCount = checkEmptyFileds();
-        //         if ((result.error) || (errorCount == 1)) {
-        //             // Inform the user if there was an error.
-        //             if (result.error) {
-        //                 var errorElement = document.getElementById('card-errors');
-        //                 $(errorElement).show();
-        //                 errorElement.textContent = result.error.message;
-        //             } else {
-        //                 $.toast({
-        //                     heading: 'Alert!',
-        //                     position: 'bottom-right',
-        //                     text: 'Please fill the required fields before proceeding to pay',
-        //                     loaderBg: '#ff6849',
-        //                     icon: 'error',
-        //                     hideAfter: 5000,
-        //                     stack: 6
-        //                 });
-        //             }
-        //         } else {
-        //             // Send the token to your server.
-        //             stripeTokenHandler(result.token);
-        //         }
-        //     });
-        // });
-
-        // function stripeTokenHandler(token) {
-        //     // Insert the token ID into the form so it gets submitted to the server
-        //     var form = document.getElementById('order-place');
-        //     var hiddenInput = document.createElement('input');
-        //     hiddenInput.setAttribute('type', 'hidden');
-        //     hiddenInput.setAttribute('name', 'stripeToken');
-        //     hiddenInput.setAttribute('value', token.id);
-        //     form.appendChild(hiddenInput);
-        //     form.submit();
-        // }
-
-
-        // function checkEmptyFileds() {
-        //     var errorCount = 0;
-        //     $('form#order-place').find('.form-control').each(function() {
-        //         if ($(this).prop('required')) {
-        //             if (!$(this).val()) {
-        //                 $(this).parent().find('.invalid-feedback').addClass('d-block');
-        //                 $(this).parent().find('.invalid-feedback strong').html('Field is Required');
-        //                 errorCount = 1;
-        //             }
-        //         }
-        //     });
-        //     return errorCount;
-        // }
     </script>
 
     <script>
@@ -1875,80 +1174,6 @@
                 }
             });
         });
-
-
-
-        // ✅ Undo Button Click
-        // $(document).on('click', '.undoCart', function() {
-        //     let button = $(this);
-
-        //     // ✅ Fetch and parse product data safely
-        //     let productData = JSON.parse(button.attr('data-product'));
-
-        //     if (!productData || !productData.product_id) {
-        //         toastr.error("Error: Product data missing!");
-        //         return;
-        //     }
-
-        //     $.ajax({
-        //         url: "{{ route('undoCart') }}",
-        //         type: "POST",
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         data: {
-        //             "_token": "{{ csrf_token() }}",
-        //             product_id: productData.product_id,
-        //             name: productData.name,
-        //             price: productData.price,
-        //             qty: productData.qty
-        //         },
-        //         success: function(response) {
-        //             if (response.status) {
-        //                 toastr.success("Product restored!");
-
-        //                 $('.checkout_product').each(function() {
-        //                     if ($(this).find('[name="product_id"]').val() == productData
-        //                         .product_id) {
-        //                         $(this).show();
-        //                     }
-        //                 });
-
-        //                 button.closest('.col-lg-12').remove(); // ✅ Remove Undo button container
-
-        //                 // ✅ Remove from localStorage
-        //                 let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
-        //                 hiddenProducts = hiddenProducts.filter(id => id !== productData.product_id);
-        //                 localStorage.setItem('hiddenProducts', JSON.stringify(hiddenProducts));
-
-        //                 $('#cart_count').text(response.cart_count);
-        //                 $("#update-cart").load(location.href + " #update-cart");
-        //                 $(".YouOrder").load(location.href + " .YouOrder");
-        //             } else {
-        //                 toastr.error("Undo failed!");
-        //             }
-        //         }
-        //     });
-        // });
-
-        // $(document).ready(function() {
-        //     let hiddenProducts = JSON.parse(localStorage.getItem('hiddenProducts')) || [];
-
-        //     $('.checkout_product').each(function() {
-        //         let product_id = $(this).find('[name="product_id"]').val();
-        //         if (hiddenProducts.includes(product_id)) {
-        //             $(this).hide();
-
-        //             $(this).after(`
-    //     <div class="col-lg-12">
-    //         <div class="undo_btn_form">
-    //             <button class="undoCart btn btn-warning" data-product='${JSON.stringify({ product_id })}'>Undo</button>
-    //         </div>
-    //     </div>
-    // `);
-        //         }
-        //     });
-        // });
     </script>
 
     <script>
@@ -2191,6 +1416,7 @@
                 // Update hidden fields
                 $('#shipping_method_name').val(selectedMethod);
                 $('#shipping_amount_input').val(shippingRate.toFixed(2));
+                console.log(shippingRate);
                 $('#total_price').val(grandTotal);
             });
 
@@ -2281,6 +1507,7 @@
                     }
 
                     // Create new token input
+                    $('input[name="payment_method"]').val('stripe');
                     var hiddenInput = document.createElement('input');
                     hiddenInput.setAttribute('type', 'hidden');
                     hiddenInput.setAttribute('name', 'stripeToken');
@@ -2417,9 +1644,11 @@
             @endif
 
             @if (session()->has('gift_card'))
-                applyGiftCard({
-                    code: "{{ session('gift_card.code') }}",
-                    amount: {{ session('gift_card.amount') }}
+                $(document).ready(function() {
+                    applyGiftCard({
+                        code: "{{ session('gift_card.code') }}",
+                        amount: {{ session('gift_card.amount') }}
+                    });
                 });
             @endif
 
@@ -2505,33 +1734,71 @@
                 });
             });
 
+
             // Helper Functions
             function applyDiscount(discount) {
                 $('#discount-row').show();
                 $('#discount-amount').text('-$' + discount.amount.toFixed(2));
                 $('#discount-content').html(`
-        <span id="discount-code-display">${discount.code}</span>
-        <span id="discount-value">-${discount.percentage}%</span>
-        <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
-    `);
+                <span id="discount-code-display">${discount.code}</span>
+                <span id="discount-value">-${discount.percentage}%</span>
+                <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
+                `);
                 updateGrandTotal();
+                removediscount();
             }
 
+            function removediscount() {
+                $('#remove-discount').on('click', function() {
+                    $('#toggle_discount').prop('checked', false);
+                    $('#discount-content').hide();
+                    $('#discount-amount').text('-$0.00');
+                    $('#discount-row').hide();
+                    updateGrandTotal();
+                })
+            }
+
+            // Define all functions first
             function applyGiftCard(giftCard) {
-                $('#gift-card-row').show();
-                $('#gift-card-amount').text('-$' + giftCard.amount.toFixed(2));
+                gift = parseFloat(giftCard.amount);
+                $('#gift-row').show();
+                $('.gift-card-row').show();
+                $('#gift-amount').text('-$' + gift.toFixed(2));
+                $('#gift-amount-input').val(gift);
+
                 $('#gift-card-content').html(`
-        <span id="gift-card-code-display">${giftCard.code}</span>
-        <span id="gift-card-value">-$${giftCard.amount.toFixed(2)}</span>
-        <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
-    `);
+                    <span id="gift-card-code-display">${giftCard.code}</span>
+                    <span id="gift-card-value">-$${parseFloat(giftCard.amount).toFixed(2)}</span>
+                    <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
+                `);
                 updateGrandTotal();
+                removeGiftCard();
+            }
+
+            // Remove Gift Card Helper
+            function removeGiftCard() {
+                $('#remove-gift-card').on('click', function() {
+                    gift = 0;
+                    $('#toggle_gift_card').prop('checked', false);
+                    $('#gift-row').hide();
+                    $('#gift-amount').text('-$0.00');
+                    $('#gift-amount-input').val(0);
+
+                    // Reset the gift card content back to input
+                    $('#gift-card-content').html(`
+                        <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                        <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                    `);
+
+                    updateGrandTotal();
+                });
             }
 
             function updateGrandTotal() {
                 var subtotal = parseFloat("{{ $subtotal }}") || 0;
                 var variation = parseFloat("{{ $variation }}") || 0;
                 var shipping = parseFloat($('#shipping-amount').text().replace('$', '')) || 0;
+                console.log(discount);
                 var tax = parseFloat($('#tax-amount').text().replace('$', '')) || 0;
                 var discount = parseFloat($('#discount-amount').text().replace('-$', '')) || 0;
                 var giftCard = parseFloat($('#gift-card-amount').text().replace('-$', '')) || 0;

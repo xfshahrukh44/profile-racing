@@ -548,6 +548,7 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request)
     {
+        // dd($request->all());
         $validateArr = [
             'country' => 'required|max:50',
             'first_name' => 'required|max:255',
@@ -647,8 +648,10 @@ class OrderController extends Controller
         $order->order_variation_total = $variationTotal;
 
         // Calculate final total
+        dd($subtotal, $variationTotal, $shippingAmount, $discountAmount, $giftCardAmount);
         $order->order_total = ($subtotal + $variationTotal + $shippingAmount) - $discountAmount - $giftCardAmount;
         $order->user_id = $id;
+
 
         // Handle payment
         if ($request->payment_method == 'paypal') {
@@ -657,7 +660,7 @@ class OrderController extends Controller
             $order->card_token = $request->payer_id;
         } elseif ($request->payment_method == 'cash') {
             $order->order_status = "succeeded";
-        } else {
+        } elseif ($request->payment_method == 'stripe') {
             // Stripe payment
             try {
                 Stripe\Stripe::setApiKey(config('services.stripe.secret'));
@@ -686,6 +689,8 @@ class OrderController extends Controller
             } catch (Exception $e) {
                 return redirect()->back()->with('stripe_error', $e->getMessage());
             }
+        } else {
+            $order->order_status = "succeeded";
         }
 
         // Generate invoice number
