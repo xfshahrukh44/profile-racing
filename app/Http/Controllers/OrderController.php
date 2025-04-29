@@ -329,7 +329,7 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $validateArr = [
             'country' => 'required|max:50',
             'first_name' => 'required|max:255',
@@ -381,7 +381,7 @@ class OrderController extends Controller
         $giftCardAmount = 0;
 
         if ($request->has('discount_code')) {
-            $discount = Discount::where('code', $request->discount_code)->first();
+            $discount = Discount::where('code', $request->discount)->first();
             if ($discount) {
                 $discountAmount = ($subtotal + $variationTotal) * ($discount->percentage / 100);
             }
@@ -389,7 +389,7 @@ class OrderController extends Controller
 
 
         if ($request->has('gift_card_code')) {
-            $giftCard = GiftCard::where('code', $request->gift_card_code)->first();
+            $giftCard = GiftCard::where('code', $request->giftCard)->first();
             if ($giftCard && $giftCard->balance > 0) {
                 $giftCardAmount = min($giftCard->balance, ($subtotal + $variationTotal));
                 // You should also update the gift card balance here
@@ -399,7 +399,7 @@ class OrderController extends Controller
         }
 
         // Calculate shipping - prefer request value over session
-        $shippingAmount = $request->shippingRate ?? ($cart['shipping'] ?? 0);
+        $shippingAmount = $request->shipping ?? ($cart['shipping'] ?? 0);
 
         // Create the order
         $order = new orders();

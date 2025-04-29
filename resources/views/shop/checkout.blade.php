@@ -812,7 +812,7 @@
                                 $('#discount-row').show();
                                 $('.discount-row').show();
                                 $('#discount-amount').text('-$' + discount.toFixed(2));
-                                $('#discount-amount-input').val(discount);
+                                $('#discount-amount-input').val(discount.amount);
 
                                 // Update discount content
                                 $('#discount-content').html(`
@@ -1589,6 +1589,7 @@
             function applyDiscount(discount) {
                 $('#discount-row').show();
                 $('#discount-amount').text('-$' + discount.amount.toFixed(2));
+                $('#discount-amount-input').val('-$' + discount.amount.toFixed(2));
                 $('#discount-content').html(`
                 <span id="discount-code-display">${discount.code}</span>
                 <span id="discount-value">-${discount.percentage}%</span>
@@ -1642,7 +1643,7 @@
                 var tax = parseFloat($('#tax-amount').text().replace('$', '')) || 0;
                 var discount = parseFloat($('#discount-amount').text().replace('-$', '')) || 0;
                 var giftCard = parseFloat($('#gift-amount').text().replace('-$', '')) || 0;
-                console.log(discount, giftCard);
+                console.log(discount, giftCard, tax, shipping, variation, subtotal);
 
                 var grandTotal = subtotal + variation + shipping + tax;
                 grandTotal -= discount + giftCard;
