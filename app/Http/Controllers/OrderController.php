@@ -18,11 +18,13 @@ use App\Attributes;
 use App\imagetable;
 use App\newsletter;
 use Stripe\Customer;
-use Stripe\Discount;
 use App\AttributeValue;
+use App\Models\Discount;
+use App\Models\Giftcard;
 use App\orders_products;
 use Illuminate\Http\Request;
 use App\Http\Traits\HelperTrait;
+use App\Models\Discount as enter;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Redirect;
 
@@ -389,7 +391,7 @@ class OrderController extends Controller
 
 
         if ($request->has('gift_card_code')) {
-            $giftCard = GiftCard::where('code', $request->gift_card_code)->first();
+            $giftCard = Giftcard::where('code', $request->gift_card_code)->first();
             if ($giftCard && $giftCard->balance > 0) {
                 $giftCardAmount = min($giftCard->balance, ($subtotal + $variationTotal));
                 // You should also update the gift card balance here
@@ -430,7 +432,7 @@ class OrderController extends Controller
         $order->order_variation_total = $variationTotal;
 
         // Calculate final total
-        dd($subtotal, $variationTotal, $shippingAmount, $discountAmount, $giftCardAmount);
+        // dd($subtotal, $variationTotal, $shippingAmount, $discountAmount, $giftCardAmount);
         $order->order_total = ($subtotal + $variationTotal + $shippingAmount) - $discountAmount - $giftCardAmount;
         $order->user_id = $id;
 
@@ -456,7 +458,7 @@ class OrderController extends Controller
 
                 $charge = \Stripe\Charge::create([
                     'customer' => $customer->id,
-                    'amount' => $order->order_total * 100, // Use the calculated total
+                   'amount' => (int) round($order->order_total * 100),
                     'currency' => 'USD',
                     'description' => "Payment From Website",
                     'metadata' => ["name" => $request->first_name, "email" => $request->email],
