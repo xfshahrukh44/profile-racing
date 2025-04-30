@@ -739,13 +739,13 @@
         integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- <script src="https://www.paypalobjects.com/api/checkout.js"></script> --}}
-    <script
-        src="https://www.paypal.com/sdk/js?client-id=AR0NWTUnnZIoWXQR_CVmMcExhY7gigkcBfMzRAarXxJAhMk1M0Cb5vXwRbx24IUU5HY_r94D_dBSro2F&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
-        data-sdk-integration-source="button-factory"></script>
-
     {{-- <script
-        src="https://www.paypal.com/sdk/js?client-id=AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
+        src="https://www.paypal.com/sdk/js?client-id=AR0NWTUnnZIoWXQR_CVmMcExhY7gigkcBfMzRAarXxJAhMk1M0Cb5vXwRbx24IUU5HY_r94D_dBSro2F&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
         data-sdk-integration-source="button-factory"></script> --}}
+
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AQvr4F-7nIL9x_75uXUyX3X2gQgHfcg-jf_5V2ptEXECMLaXH-DFv-vTktIfZqHG8XZAEhv0wv40zl38&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
+        data-sdk-integration-source="button-factory"></script>
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
