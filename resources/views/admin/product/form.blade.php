@@ -160,6 +160,7 @@
         <div class="col-md-12">
             <h4 class="card-title" id="repeat-form">Add Variation</h4>
         </div>
+        @dump($product->attributes)
 
         @foreach($product->attributes as $pro_att_edits)
             <div class="col-md-12">
@@ -170,7 +171,7 @@
                             <label for="email-addr">Attribute</label>
                             <br>
                             <select class="form-control" id="attribute_id" name="attribute_id[]" onchange="getval(this)" disabled>
-                                <option value="{{ $pro_att_edits->value }}">{{ $pro_att_edits->attributesValues->value }}</option>
+                                <option value="{{ $pro_att_edits->attribute_id }}">{{ $pro_att_edits->attribute->name }}</option>
                             <!-- @foreach($att as $atts)
                                 <option value="{{ $atts->id}}">{{ $atts->name}}</option>
                                 @endforeach -->

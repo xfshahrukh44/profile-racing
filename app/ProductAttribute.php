@@ -37,10 +37,15 @@ class ProductAttribute extends Model
         return $this->belongsTo('App\AttributeValue', 'value', 'id');
     }
 
+    public function attributeValue()
+    {
+        return $this->belongsTo('App\AttributeValue', 'value', 'id');
+    }
+
     public function attribute()
     {
         return $this->belongsTo('App\Attributes', 'attribute_id', 'id');
     }
 
-    
+
 }

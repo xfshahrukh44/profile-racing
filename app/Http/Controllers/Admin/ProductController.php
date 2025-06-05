@@ -281,8 +281,6 @@ class ProductController extends Controller
                           ->where('product_id', $id)
                           ->get();
 
-
-
             return view('admin.product.edit', compact('product','items','product_images','att'));
         }
         return response(view('403'), 403);
