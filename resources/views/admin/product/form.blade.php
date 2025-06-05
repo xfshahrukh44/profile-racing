@@ -39,7 +39,7 @@
         </div>
 
 
-
+        @if($product->category)
         <div class="row" style="margin-left: 0;">
 
             <div class="col-md-4">
@@ -67,6 +67,7 @@
 
 
         </div>
+        @endif
 
 
         <div class="col-md-12">
@@ -160,7 +161,6 @@
         <div class="col-md-12">
             <h4 class="card-title" id="repeat-form">Add Variation</h4>
         </div>
-        @dump($product->attributes)
 
         @foreach($product->attributes as $pro_att_edits)
             <div class="col-md-12">
