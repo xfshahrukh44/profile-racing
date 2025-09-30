@@ -14,6 +14,8 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16"
         href="{{ asset(!empty($favicon->img_path) ? $favicon->img_path : '') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <title>{{ config('app.name') }}</title>
     <!-- ============================================================== -->
     <!-- All CSS LINKS IN BELOW FILE -->
@@ -132,8 +134,8 @@
 
 
     <div class="cart-icon-btn">
-        <a href="javascript:;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"
-            class="offcanvasRight">
+        <a href="javascript:;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight" class="offcanvasRight">
             <i class="fa-solid fa-cart-shopping"></i>
         </a>
     </div>

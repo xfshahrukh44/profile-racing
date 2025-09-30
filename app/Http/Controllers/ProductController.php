@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\inquiry;
-
+use Illuminate\Support\Facades\Mail;
 use App\newsletter;
 use App\Program;
 use App\imagetable;
@@ -104,27 +104,21 @@ class ProductController extends Controller
     public function saveCart(Request $request)
     {
         $var_item = $request->variation;
-
-        // dd($var_item);
-
         $result = array();
 
         $product_detail = DB::table('products')->where('id', $request->product_id)->first();
 
         $id = isset($request->product_id) ? $request->product_id : '';
-        $qty = isset($request->qty) ? intval($request->qty) : '1';
+        $qty = isset($request->qty) ? intval($request->qty) : 1;
 
-        // dd($qty);
-
-        $cart = array();
+        $cart = [];
         $cartId = $id;
-        if (Session::has('cart')) {
 
+        if (Session::has('cart')) {
             $cart = Session::get('cart');
         }
 
         $price = $product_detail->price;
-
 
         if ($id != "" && intval($qty) > 0) {
 
@@ -134,14 +128,13 @@ class ProductController extends Controller
 
             $productFirstrow = Product::where('id', $id)->first();
 
-
-
             $cart[$cartId]['id'] = $id;
             $cart[$cartId]['name'] = $productFirstrow->product_title;
             $cart[$cartId]['baseprice'] = $price;
             $cart[$cartId]['qty'] = $qty;
             $cart[$cartId]['variation_price'] = 0;
 
+            // Example: bundle item
             if ($id == 332 && $request->has('bundle_selected_optional_1')) {
                 $additionalProduct = Product::find(335);
                 if ($additionalProduct) {
@@ -155,40 +148,63 @@ class ProductController extends Controller
                     ];
                 }
             }
-            $cart[$cartId]['id'] = $id;
-            $cart[$cartId]['name'] = $productFirstrow->product_title;
-            $cart[$cartId]['baseprice'] = $price;
-            $cart[$cartId]['qty'] = $qty;
-            $cart[$cartId]['variation_price'] = 0;
 
-
+            // Variations
             foreach ($var_item as $key => $value) {
+                $data = ProductAttribute::where('product_id', $request->product_id)
+                    ->where('value', $value)
+                    ->first();
 
-                $data = ProductAttribute::where('product_id', $_POST['product_id'])->where('value', $value)->first();
-
-                $cart[$cartId]['variation'][$data->id]['attribute'] = $data->attribute->name;
-                $cart[$cartId]['variation'][$data->id]['attribute_val'] = $data->attributesValues->value;
-                $cart[$cartId]['variation'][$data->id]['attribute_price'] = $data->price;
-                $cart[$cartId]['variation_price'] += $data->price;
+                if ($data) {
+                    $cart[$cartId]['variation'][$data->id]['attribute'] = $data->attribute->name;
+                    $cart[$cartId]['variation'][$data->id]['attribute_val'] = $data->attributesValues->value;
+                    $cart[$cartId]['variation'][$data->id]['attribute_price'] = $data->price;
+                    $cart[$cartId]['variation_price'] += $data->price;
+                }
             }
 
-
-            // dd(Session::get('cart'));
-
+            // Save in session
             Session::put('cart', $cart);
+
+            // ✅ Save in abandoned_carts table
+            if (auth()->check()) {
+                $email = auth()->user()->email;
+                $userId = auth()->id();
+            } else {
+                // Agar guest checkout allow hai to email form se lena hoga
+                $email = $request->email ?? null;
+                $userId = null;
+            }
+
+            if ($email) {
+                DB::table('abandoned_carts')->insert([
+                    'user_id'       => $userId,
+                    'email'         => $email,
+                    'cart_data'     => json_encode($cart),
+                    'is_checked_out' => false,
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
+                ]);
+
+                // ✅ Testing: turant email send karo
+                Mail::raw('You have added a product to your cart, but you haven’t completed the checkout yet.', function ($message) use ($email) {
+                    $message->to($email)
+                        ->subject('Cart Reminder - Checkout Pending');
+                });
+            }
 
             Session::flash('message', 'Product Added to cart Successfully');
             Session::flash('alert-class', 'alert-success');
-            //			return redirect('/cart');
             session()->put('added-to-cart', true);
+
             return redirect()->back();
         } else {
-
             Session::flash('flash_message', 'Sorry! You can not proceed with 0 quantity');
             Session::flash('alert-class', 'alert-success');
             return back();
         }
     }
+
 
     public function datacart(Request $request)
     {
@@ -358,8 +374,7 @@ class ProductController extends Controller
         $order = orders::where('id', $order_id)->first();
         $order_products = orders_products::where('orders_id', $order_id)->get();
 
-        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);
-        ;
+        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);;
     }
 
     public function checkout()

@@ -201,6 +201,21 @@
         </div>
     </div>
 </footer>
+<div class="modal fade" id="newsletterModal" tabindex="-1" aria-labelledby="newsletterModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newsletterModalLabel">Newsletter Subscription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p id="modal-message"></p>
+                <button id="unsubscribeBtn" class="btn btn-danger mt-3">Unsubscribe</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="productSearchModal" tabindex="-1" aria-labelledby="productSearchModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">

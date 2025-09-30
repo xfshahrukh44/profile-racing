@@ -299,6 +299,18 @@ class HomeController extends Controller
         }
     }
 
+    public function newsletterUnsubscribe(Request $request)
+    {
+        $deleted = newsletter::where('newsletter_email', $request->newsletter_email)->delete();
+
+        if ($deleted) {
+            return response()->json(['message' => 'You have unsubscribed successfully!', 'status' => true]);
+        } else {
+            return response()->json(['message' => 'Email not found!', 'status' => false]);
+        }
+    }
+
+
     public function updateContent(Request $request)
     {
         $id = $request->input('id');
