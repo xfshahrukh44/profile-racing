@@ -8,48 +8,49 @@
         <div class="offcanvas-body">
             <div class="sdie-modal">
                 <?php $subtotal2 = 0;
-                $addon_total2 = $total_variation2 = 0;
-                0; ?>
+$addon_total2 = $total_variation2 = 0;
+0; ?>
                 <div class="main-modal">
                     @foreach (session()->get('cart') as $key => $value)
-                        <?php
+                                        <?php
                         $prod_image = App\Product::where('id', $value['id'])->first();
-                        ?>
-                        <div class="product-img">
-                            <figure>
-                                <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
-                            </figure>
-                            <div class="product-discription">
-                                <h4>
-                                    {{ $value['name'] }}
-                                    {{-- <a onclick="window.location.href='{{ route('remove_cart', [$value['id']]) }}'"><i
-                                            class="fa-solid fa-xmark"></i></a> --}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?>
+                                        <div class="product-img">
+                                            <figure>
+                                                <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
+                                            </figure>
+                                            <div class="product-discription">
+                                                <h4>
+                                                    {{ $value['name'] }}
+                                                    {{-- <a onclick="window.location.href='{{ route('remove_cart', [$value['id']]) }}'"><i
+                                                            class="fa-solid fa-xmark"></i></a> --}}
 
-                                    @if (isset($value['id']))
-                                        <a href='{{ route('remove_cart', $value['id']) }}'">
-                                            <i class="fa-solid fa-xmark"></i>
-                                        </a>
-                                    @endif
+                                                    @if (isset($value['id']))
+                                                        <a href='{{ route('remove_cart', $value['id']) }}'">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class="
+                                                            fa-solid fa-xmark"></i>
+                                                        </a>
+                                                    @endif
 
-                                </h4>
-                                {{-- <h6>Black</h6> --}}
-                                <div class="counter">
-                                    <div class="quantity">
-                                        <a href="#" class=" minus-1"><span>-</span></a>
-                                        <input name="row[]" type="number" class="quantity__input input-1"
-                                            value="{{ $value['qty'] }}">
-                                        <a href="#" class=" plus-1"><span>+</span></a>
-                                    </div>
-                                    <?php $t_var = 0; ?>
-                                    @foreach ($value['variation'] as $key => $values)
-                                        <?php $t_var += $values['attribute_price']; ?>
-                                    @endforeach
-                                    <span>${{ number_format(($value['baseprice'] + $t_var) * $value['qty'], 2) }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" name="product_id" id="" value="<?php echo $value['id']; ?>">
-                        <?php $subtotal2 += $value['baseprice'] * $value['qty'];
+                                                </h4>
+                                                {{-- <h6>Black</h6> --}}
+                                                <div class="counter">
+                                                    <div class="quantity">
+                                                        <a href="#" class=" minus-1"><span>-</span></a>
+                                                        <input name="row[]" type="number" class="quantity__input input-1"
+                                                            value="{{ $value['qty'] }}">
+                                                        <a href="#" class=" plus-1"><span>+</span></a>
+                                                    </div>
+                                                    <?php    $t_var = 0; ?>
+                                                    @foreach ($value['variation'] as $key => $values)
+                                                        <?php        $t_var += $values['attribute_price']; ?>
+                                                    @endforeach
+                                                    <span>${{ number_format(($value['baseprice'] + $t_var) * $value['qty'], 2) }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="product_id" id="" value="<?php    echo $value['id']; ?>">
+                                        <?php    $subtotal2 += $value['baseprice'] * $value['qty'];
                         $total_variation2 += $value['variation_price']; ?>
                     @endforeach
                 </div>
@@ -66,6 +67,89 @@
         </div>
     </form>
 </div>
+
+<div class="offcanvas offcanvas-start side-compliance" tabindex="-1" id="ada_compliance"
+    aria-labelledby="ada_complianceLabel">
+    <div class="offcanvas-header justify-content-end">
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <img src="{{ asset('images/ada-compliance-side.png') }}" alt="">
+    </div>
+</div>
+
+
+<div class="modaL_order2">
+    <div class="modal fade upsell-popup" id="staticBackdrop1" tabindex="-1" aria-labelledby="staticBackdrop1"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body"
+                    style="background: #000 url(img/popup.html);background-size: cover;background-position: -100px 0;position: relative;">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
+
+                        </div>
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
+                            <div class="poppup-css">
+                                <h5 class="popup-coupon-hd">Avail Profile Racing <span>50% Discount Now!</span></h5>
+                            </div>
+                            <form class="form_submission" id="contactform" method="post">
+
+                                @csrf
+
+                                <div class="row">
+
+
+                                    <div class="col-lg-12">
+                                        <div class="lable-txt">
+
+                                            <input type="hidden" value="contact_form" name="form_name">
+
+                                            <input placeholder="Name" type="text" name="fname" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="lable-txt">
+
+                                            <input placeholder="Email *" type="text" name="email" required>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-12">
+
+                                        <textarea name="notes" placeholder="Comment" id="" cols="30" rows="10"
+                                            required></textarea>
+
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn">
+                                            Send </button>
+                                        <br>
+
+                                        <div id="contactformsresult"> </div>
+
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <footer>
     <div class="container">
@@ -139,7 +223,8 @@
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div class="locate-text">
-                            <a style="text-decoration:none; color:#fff;" href=""> {!! App\Http\Traits\HelperTrait::returnFlag(519) !!} </a>
+                            <a style="text-decoration:none; color:#fff;" href="">
+                                {!! App\Http\Traits\HelperTrait::returnFlag(519) !!} </a>
                         </div>
                     </div>
                     <div class="location">
@@ -147,7 +232,8 @@
                             <i class="fa-regular fa-envelope"></i>
                         </div>
                         <div class="locate-text">
-                            <a style="text-decoration:none; color:#fff;" href="mailto:{!! App\Http\Traits\HelperTrait::returnFlag(218) !!}">
+                            <a style="text-decoration:none; color:#fff;"
+                                href="mailto:{!! App\Http\Traits\HelperTrait::returnFlag(218) !!}">
                                 {!! App\Http\Traits\HelperTrait::returnFlag(218) !!} </a>
                         </div>
                     </div>
@@ -156,7 +242,8 @@
                             <i class="fa-solid fa-phone"></i>
                         </div>
                         <div class="locate-text">
-                            <a style="text-decoration:none; color:#fff;" href="tel:{!! App\Http\Traits\HelperTrait::returnFlag(59) !!}">
+                            <a style="text-decoration:none; color:#fff;"
+                                href="tel:{!! App\Http\Traits\HelperTrait::returnFlag(59) !!}">
                                 {!! App\Http\Traits\HelperTrait::returnFlag(59) !!} </a>
                         </div>
                     </div>
@@ -171,13 +258,17 @@
                     </div>
 
                     <div class="last-icon">
-                        <a target="_blank" style="text-decoration:none;" href="{!! App\Http\Traits\HelperTrait::returnFlag(1960) !!}"> <i
+                        <a target="_blank" style="text-decoration:none;"
+                            href="{!! App\Http\Traits\HelperTrait::returnFlag(1960) !!}"> <i
                                 class="fa-brands fa-twitter"> </i> </a>
-                        <a target="_blank" style="text-decoration:none;" href="{!! App\Http\Traits\HelperTrait::returnFlag(682) !!}"><i
+                        <a target="_blank" style="text-decoration:none;"
+                            href="{!! App\Http\Traits\HelperTrait::returnFlag(682) !!}"><i
                                 class="fa-brands fa-square-facebook"></i> </a>
-                        <a target="_blank" style="text-decoration:none;" href="{!! App\Http\Traits\HelperTrait::returnFlag(1973) !!}"><i
+                        <a target="_blank" style="text-decoration:none;"
+                            href="{!! App\Http\Traits\HelperTrait::returnFlag(1973) !!}"><i
                                 class="fa-brands fa-youtube"></i> </a>
-                        <a target="_blank" style="text-decoration:none;" href="{!! App\Http\Traits\HelperTrait::returnFlag(1962) !!}"><i
+                        <a target="_blank" style="text-decoration:none;"
+                            href="{!! App\Http\Traits\HelperTrait::returnFlag(1962) !!}"><i
                                 class="fa-solid fab fa-instagram"></i> </a>
                     </div>
 
@@ -206,12 +297,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body main-search">
-                <input type="text" id="productSearchInput" class="form-control"
-                    placeholder="Search for products...">
+                <input type="text" id="productSearchInput" class="form-control" placeholder="Search for products...">
                 <button type="button" class="btn btn-bustom" id="productSearchButton">Search</button>
             </div>
         </div>
     </div>
 </div>
-{{-- <script> --}}
-{{-- </script> --}}
