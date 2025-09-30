@@ -232,6 +232,7 @@ Route::get('learn-to-play', 'HomeController@play')->name('play');
 
 Route::post('careerSubmit', 'HomeController@careerSubmit')->name('contactUsSubmit');
 Route::post('newsletter-submit', 'HomeController@newsletterSubmit')->name('newsletterSubmit');
+Route::post('newsletter-unsubscribe', 'HomeController@newsletterUnsubscribe')->name('newsletterUnsubscribe');
 Route::post('update-content', 'HomeController@updateContent')->name('update-content');
 
 //=================================================================//
