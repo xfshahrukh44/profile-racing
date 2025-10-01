@@ -26,7 +26,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $fillable = ['product_title', 'description', 'price'];
+    protected $fillable = ['product_title', 'description', 'price', 'type'];
 
     public function categorys()
     {
@@ -37,6 +37,27 @@ class Product extends Model
     {
         // return $this->hasMany('App\ProductAttribute', 'product_id', 'id');
         return $this->hasMany(ProductAttribute::class, 'product_id', 'id')->with(['attribute', 'attributeValue']);
+    }
+
+    public function product()
+    {
+        return $this->belongsToMany(Product::class, 'bundle_items', 'product_id', 'bundle_id')->withPivot('quantity');
+    }
+
+    public function bundles()
+    {
+        return $this->belongsToMany(Product::class, 'bundle_items', 'product_id', 'bundle_id')
+            ->withPivot('quantity');
+    }
+
+    public function scopeBundles($query)
+    {
+        return $query->where('type', 'bundle');
+    }
+
+    public function scopeSimple($query)
+    {
+        return $query->where('type', 'simple');
     }
 
 }

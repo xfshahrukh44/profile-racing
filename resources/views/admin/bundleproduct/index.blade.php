@@ -26,7 +26,7 @@
         </div>
         <div class="content-header-right col-md-6 col-12">
             <div class="btn-group float-md-right">
-                <a class="btn btn-info mb-1" href="{{ url('admin/product/create') }}">Add Product</a>
+                <a class="btn btn-info mb-1" href="{{ url('admin/bundleproduct/create') }}">Add Product</a>
             </div>
         </div>
     </div>
@@ -72,7 +72,7 @@
                                                 <td>{{ $item->categorys->name }}</td>
                                                 <td><img src="{{asset($item->image)}}" alt="" title="" width="150"></td>
                                                 <td>
-                                                    <a href="{{ url('/admin/product/' . $item->id . '/edit') }}">
+                                                    <a href="{{ url('/admin/bundleproduct/' . $item->id . '/edit') }}">
                                                         <button class="btn btn-primary btn-sm">
                                                             <i class="fa fa-pencil-square-o" aria-hidden="true"> </i> Edit
                                                         </button>

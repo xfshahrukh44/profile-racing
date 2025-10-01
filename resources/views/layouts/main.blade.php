@@ -177,7 +177,7 @@
             width: 50%;
             content: "";
             height: 85%;
-            background: url(images/upsell-popup.jpg) 0 0 / cover no-repeat;
+            background: url({{asset('images/upsell-popup.jpg')}}) 0 0 / cover no-repeat;
             position: absolute;
             top: 50%;
             left: -3.125rem;
@@ -336,11 +336,19 @@
             @endif
         });
     </script>
-    <script>
-        setInterval(function () {
+    <!-- <script>
+        $(document).ready(function () {
             $('#staticBackdrop1').modal('show');
-        }, 10000);
-    </script>
+
+           
+            $('#staticBackdrop1').on('hidden.bs.modal', function () {
+                setTimeout(function () {
+                    $('#staticBackdrop1').modal('show');
+                }, 10000);
+            });
+        });
+    </script> -->
+
 
 
 </body>

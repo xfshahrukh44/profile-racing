@@ -131,6 +131,16 @@ Route::group(['middleware' => ['auth', 'roles'], 'roles' => 'admin', 'prefix' =>
     Route::get('status/pending/{id}', 'Admin\\ProductController@updatestatusPending')->name('status.pending');
 
 
+    Route::resource('bundleproduct', 'Admin\\BundleProductController');
+    Route::get('product/{id}/delete', ['as' => 'product.delete', 'uses' => 'Admin\\BundleProductController@destroy']);
+    Route::get('order/list', ['as' => 'order.list', 'uses' => 'Admin\\BundleProductController@orderList']);
+    Route::get('order/detail/{id}', ['as' => 'order.list.detail', 'uses' => 'Admin\\BundleProductController@orderListDetail']);
+
+    //Order Status Change Routes//
+    Route::get('status/completed/{id}', 'Admin\\BundleProductController@updatestatuscompleted')->name('status.completed');
+    Route::get('status/pending/{id}', 'Admin\\BundleProductController@updatestatusPending')->name('status.pending');
+
+
 });
 
 //==============================================================//
@@ -220,8 +230,13 @@ Route::get('/measurements', 'FrontController@measurements')->name('front.measure
 Route::get('/warranty-info', 'FrontController@warrantyInfo')->name('front.warrantyInfo');
 Route::get('/privacy', 'FrontController@privacy')->name('front.privacy');
 
+// admin product page
 Route::get('/set_sub_category', 'Admin\ProductController@set_sub_category')->name('set_sub_category');
 Route::get('/set_child_sub_category', 'Admin\ProductController@set_child_sub_category')->name('set_child_sub_category');
+
+// admin bundleproduct page
+Route::get('/set_sub_category', 'Admin\BundleProductController@set_sub_category')->name('set_sub_category');
+Route::get('/set_child_sub_category', 'Admin\BundleProductController@set_child_sub_category')->name('set_child_sub_category');
 
 
 Route::get('upcoming-classes', 'HomeController@upcoming_classes')->name('upcoming-classes');
