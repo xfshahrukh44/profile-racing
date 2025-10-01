@@ -179,7 +179,7 @@
                                     <div class="opt-sec2-text">
                                         <p> {{ \Illuminate\Support\Str::limit($val_product->product_title, 50, $end = '...') }}
                                         </p>
-                                        <h6>${{ $val_product->price }} <?php if ($val_product->maximum_price != '' && $val_product->maximum_price != '0') {
+                                        <h6>${{ $val_product->price_with_increment }} <?php if ($val_product->maximum_price != '' && $val_product->maximum_price != '0') {
                                             echo ' - $' . $val_product->maximum_price;
                                         } ?> </h6>
                                         <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->

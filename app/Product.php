@@ -1,8 +1,9 @@
 <?php
 
 namespace App;
-
+use Illuminate\Support\Facades\DB;
 use App\ProductAttribute;
+use App\Models\Childsubcategory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -39,4 +40,26 @@ class Product extends Model
         return $this->hasMany(ProductAttribute::class, 'product_id', 'id')->with(['attribute', 'attributeValue']);
     }
 
+    // Relations
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category'); // Ensure 'category' column in products table
+    }
+
+    public function childsubcategories()
+    {
+        return $this->hasMany(Childsubcategory::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category', 'id');
+    }
+
+    public function getPriceWithIncrementAttribute()
+    {
+        $category = DB::table('categories')->where('id', $this->category)->first();
+        $increment = $category->price_increment ?? 0;
+        return $this->price + ($this->price * $increment / 100);
+    }
 }

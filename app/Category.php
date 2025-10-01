@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use App\Models\Childsubcategory;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
@@ -25,7 +25,21 @@ class Category extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'heading', 'detail', 'icon', 'image'];
+    protected $fillable = ['name', 'heading', 'detail', 'icon', 'image', 'price_increment'];
 
-    
+        // Relations
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function childsubcategories()
+    {
+        return $this->hasMany(Childsubcategory::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

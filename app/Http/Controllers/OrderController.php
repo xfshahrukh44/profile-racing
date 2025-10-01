@@ -57,6 +57,7 @@ class OrderController extends Controller
 
     public function checkout($id = '')
     {
+        // dd(session()->all());
         session()->forget('discount');
         session()->forget('percentage');
         session()->forget('gift_card');
@@ -71,7 +72,6 @@ class OrderController extends Controller
         }
 
         $productIds = array_keys($cart);
-
         $previouslyFetched = session()->get('fetched_products', []);
 
         $product_detail = DB::table('products')
@@ -79,14 +79,18 @@ class OrderController extends Controller
             ->whereNotIn('id', $previouslyFetched)
             ->limit(5)
             ->get();
-        // dd($product_detail);
+
+        // ✅ Add increment price
+        foreach ($product_detail as $product) {
+            $category = DB::table('categories')->where('id', $product->category)->first();
+            $price_increment = $category->price_increment ?? 0;
+            $product->price_with_increment = $product->price + ($product->price * $price_increment / 100);
+        }
 
         $newFetchedIds = $product_detail->pluck('id')->toArray();
         session()->put('fetched_products', array_merge($previouslyFetched, $newFetchedIds));
 
-
         $countries = DB::table('countries')->get();
-
 
         return view('shop.checkout', [
             'cart' => $cart,
@@ -95,6 +99,7 @@ class OrderController extends Controller
             'product_detail' => $product_detail,
         ]);
     }
+
 
     public function getStates(Request $request)
     {
@@ -458,7 +463,7 @@ class OrderController extends Controller
 
                 $charge = \Stripe\Charge::create([
                     'customer' => $customer->id,
-                   'amount' => (int) round($order->order_total * 100),
+                    'amount' => (int) round($order->order_total * 100),
                     'currency' => 'USD',
                     'description' => "Payment From Website",
                     'metadata' => ["name" => $request->first_name, "email" => $request->email],

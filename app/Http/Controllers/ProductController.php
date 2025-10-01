@@ -100,48 +100,49 @@ class ProductController extends Controller
             return redirect('/');
         }
     }
-
     public function saveCart(Request $request)
     {
         $var_item = $request->variation;
-        $result = array();
-
-        $product_detail = DB::table('products')->where('id', $request->product_id)->first();
-
-        $id = isset($request->product_id) ? $request->product_id : '';
-        $qty = isset($request->qty) ? intval($request->qty) : 1;
-
         $cart = [];
-        $cartId = $id;
+        $cartId = $request->product_id;
+        $qty = isset($request->qty) ? intval($request->qty) : 1;
 
         if (Session::has('cart')) {
             $cart = Session::get('cart');
         }
 
-        $price = $product_detail->price;
+        $product_detail = Product::find($request->product_id); // Product model se fetch
+        if (!$product_detail) {
+            Session::flash('flash_message', 'Product not found');
+            Session::flash('alert-class', 'alert-danger');
+            return back();
+        }
 
-        if ($id != "" && intval($qty) > 0) {
+        // ✅ Use price_with_increment instead of original price
+        $price = $request->exist_price;
+        
+        // dd($price);
+        if ($cartId != "" && $qty > 0) {
 
             if (array_key_exists($cartId, $cart)) {
                 unset($cart[$cartId]);
             }
 
-            $productFirstrow = Product::where('id', $id)->first();
-
-            $cart[$cartId]['id'] = $id;
-            $cart[$cartId]['name'] = $productFirstrow->product_title;
-            $cart[$cartId]['baseprice'] = $price;
+            $cart[$cartId]['id'] = $cartId;
+            $cart[$cartId]['name'] = $product_detail->product_title;
+            $cart[$cartId]['baseprice'] = $price; // incremented price stored
             $cart[$cartId]['qty'] = $qty;
             $cart[$cartId]['variation_price'] = 0;
+            $cart[$cartId]['variation'] = [];
 
             // Example: bundle item
-            if ($id == 332 && $request->has('bundle_selected_optional_1')) {
+            if ($cartId == 332 && $request->has('bundle_selected_optional_1')) {
                 $additionalProduct = Product::find(335);
                 if ($additionalProduct) {
                     $cart[335] = [
                         'id' => 335,
                         'name' => $additionalProduct->product_title,
-                        'baseprice' => $additionalProduct->price,
+                        'baseprice' => $additionalProduct->price, // increment price
                         'qty' => $qty,
                         'variation_price' => 0,
                         'variation' => []
@@ -151,7 +152,7 @@ class ProductController extends Controller
 
             // Variations
             foreach ($var_item as $key => $value) {
-                $data = ProductAttribute::where('product_id', $request->product_id)
+                $data = ProductAttribute::where('product_id', $cartId)
                     ->where('value', $value)
                     ->first();
 
@@ -166,27 +167,20 @@ class ProductController extends Controller
             // Save in session
             Session::put('cart', $cart);
 
-            // ✅ Save in abandoned_carts table
-            if (auth()->check()) {
-                $email = auth()->user()->email;
-                $userId = auth()->id();
-            } else {
-                // Agar guest checkout allow hai to email form se lena hoga
-                $email = $request->email ?? null;
-                $userId = null;
-            }
+            // Save in abandoned_carts table
+            $email = auth()->check() ? auth()->user()->email : ($request->email ?? null);
+            $userId = auth()->check() ? auth()->id() : null;
 
             if ($email) {
                 DB::table('abandoned_carts')->insert([
-                    'user_id'       => $userId,
-                    'email'         => $email,
-                    'cart_data'     => json_encode($cart),
+                    'user_id' => $userId,
+                    'email' => $email,
+                    'cart_data' => json_encode($cart),
                     'is_checked_out' => false,
-                    'created_at'    => now(),
-                    'updated_at'    => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
 
-                // ✅ Testing: turant email send karo
                 Mail::raw('You have added a product to your cart, but you haven’t completed the checkout yet.', function ($message) use ($email) {
                     $message->to($email)
                         ->subject('Cart Reminder - Checkout Pending');
@@ -199,11 +193,12 @@ class ProductController extends Controller
 
             return redirect()->back();
         } else {
-            Session::flash('flash_message', 'Sorry! You can not proceed with 0 quantity');
-            Session::flash('alert-class', 'alert-success');
+            Session::flash('flash_message', 'Sorry! You cannot proceed with 0 quantity');
+            Session::flash('alert-class', 'alert-danger');
             return back();
         }
     }
+
 
 
     public function datacart(Request $request)

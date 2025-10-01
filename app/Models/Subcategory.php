@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Models;
-
+use App\Category;
+use App\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class Subcategory extends Model
@@ -14,10 +15,10 @@ class Subcategory extends Model
     protected $table = 'subcategories';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -27,5 +28,19 @@ class Subcategory extends Model
      */
     protected $fillable = ['category', 'subcategory', 'image'];
 
-    
+    // Relations
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function childsubcategories()
+    {
+        return $this->hasMany(Childsubcategory::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
