@@ -336,19 +336,15 @@
             @endif
         });
     </script>
-    <!-- <script>
+    <script>
         $(document).ready(function () {
-            $('#staticBackdrop1').modal('show');
-
-           
-            $('#staticBackdrop1').on('hidden.bs.modal', function () {
-                setTimeout(function () {
+            setInterval(function () {
+                if (!$('#staticBackdrop1').hasClass('show')) {
                     $('#staticBackdrop1').modal('show');
-                }, 10000);
-            });
+                }
+            }, 20000);
         });
-    </script> -->
-
+    </script>
 
 
 </body>
