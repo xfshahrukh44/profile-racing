@@ -282,6 +282,7 @@ class HomeController extends Controller
 
         return response()->json(['message' => 'Thank you for contacting us. We will get back to you asap', 'status' => true]);
         return back();
+        // return back();
     }
 
     public function newsletterSubmit(Request $request)
