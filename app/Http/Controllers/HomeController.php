@@ -56,7 +56,6 @@ class HomeController extends Controller
 
     public function index()
     {
-
         $page = DB::table('pages')->where('id', 1)->first();
         $section = DB::table('section')->where('page_id', 1)->get();
         $banner = DB::table('banners')->get();
@@ -66,8 +65,16 @@ class HomeController extends Controller
 
         $get_product = DB::table('products')->where('status', '1')->take(6)->get();
 
+        // ✅ Har product pe incremented price add karo
+        foreach ($get_product as $product) {
+            $category = DB::table('categories')->where('id', $product->category)->first();
+            $price_increment = $category->price_increment ?? 0;
+            $product->price_with_increment = $product->price + ($product->price * $price_increment / 100);
+        }
+
         return view('welcome', compact('page', 'section', 'banner', 'blog', 'instagram', 'get_product', 'news'));
     }
+
 
 
     public function about()
@@ -215,16 +222,23 @@ class HomeController extends Controller
 
     public function product_detail($id = '', $cat = "", $subcat = "", $childsubcat = "")
     {
-
         $page = DB::table('pages')->where('id', 1)->first();
 
+        // Get the product
         $get_product_detail = DB::table('products')->where('id', $id)->where('status', '1')->first();
 
-        // dd($get_product_detail);
+        if ($get_product_detail) {
+            // Get the category
+            $category = DB::table('categories')->where('id', $get_product_detail->category)->first();
 
+            // Calculate price with increment
+            $price_increment = $category->price_increment ?? 0; // use 0 if null
+            $get_product_detail->price_with_increment = $get_product_detail->price + ($get_product_detail->price * $price_increment / 100);
+        }
 
         return view('product_detail', compact('page', 'get_product_detail'));
     }
+
 
 
 

@@ -273,15 +273,15 @@
 
 
                 <?php
-
-    use App\Product;
-
-    $get_category = DB::table('categories')->get();
-    $route_category = Request::segment(3);
-    $route_subcategory = Request::segment(4);
-    $route_child_subcategory = Request::segment(5);
-
-                                                ?>
+                
+                use App\Product;
+                
+                $get_category = DB::table('categories')->get();
+                $route_category = Request::segment(3);
+                $route_subcategory = Request::segment(4);
+                $route_child_subcategory = Request::segment(5);
+                
+                ?>
 
                 <div class="col-md-3">
 
@@ -702,29 +702,30 @@
                             @if ($get_product_detail->id === 332)
                                                     <?php
                                 $product = Product::find(335);
-                                                                                                                                                                                                                                                                ?>
-                                                    <h3 id="h3_original">${{ $get_product_detail->price }} <?php    if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
+                                ?>
+                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
                                     echo ' - $' . $get_product_detail->maximum_price;
-                                } ?></h3>
+                                } ?>
+                                </h3>
                             @else
-                                                    <h3 id="h3_original">${{ $get_product_detail->price }} <?php    if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
+                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
                                     echo ' - $' . $get_product_detail->maximum_price;
                                 } ?></h3>
                             @endif
-                            <h3 id="h3_additional" hidden>${{ $get_product_detail->price }} <?php if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
-        echo ' - $' . $get_product_detail->maximum_price;
-    } ?></h3>
+                            <h3 id="h3_additional" hidden>${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
+                                echo ' - $' . $get_product_detail->maximum_price;
+                            } ?></h3>
                             <input type="hidden" name="exist_price" id="exist_price" value=0>
 
 
                             @foreach ($productAttributes_id as $key => $val_product_attribute)
                                                     <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }} </h6>
 
-                                                    <?php
-
+                                <?php
+                                
                                 $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get();
-
-                                                                                                                                                                                                                                                                ?>
+                                
+                                ?>
 
                                                     <input type="hidden" name="select_price"
                                                         class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}"
@@ -792,12 +793,11 @@
                                                         </div>
 
 
-                                                        {{--
-                                                        <script>
-                                                            document.getElementById('add_price_checkbox').addEventListener('change', function () {
-                                                                let priceElement = document.getElementById('h3_original');
-                                                                let basePrice = parseFloat("{{ $get_product_detail->price }}"); // Laravel se price lena
-                                                                let additionalPrice = parseFloat(this.value);
+                                    {{-- <script>
+                                        document.getElementById('add_price_checkbox').addEventListener('change', function() {
+                                            let priceElement = document.getElementById('h3_original');
+                                            let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); // Laravel se price lena
+                                            let additionalPrice = parseFloat(this.value);
 
                                                                 if (this.checked) {
                                                                     priceElement.innerText = `$${(basePrice + additionalPrice).toFixed(2)}`;
@@ -856,7 +856,7 @@
         var temp_price = 0;
         var select_price = 0;
         var f_select_price;
-        var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
+        var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
     </script>
     <script>
         let productId = {!! $get_product_detail->id !!}; // Laravel se product ID le rahe hain
@@ -865,7 +865,7 @@
             document.addEventListener("DOMContentLoaded", function () {
                 let checkbox = document.getElementById('add_price_checkbox');
                 let priceElement = document.getElementById('h3_original');
-                let basePrice = parseFloat("{{ $get_product_detail->price }}"); // Laravel price
+                let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); // Laravel price
 
                 if (checkbox) {
                     checkbox.addEventListener('change', function () {
@@ -910,8 +910,8 @@
                         selector.next('.span_selected_option_price').html('$' + amount).show();
                     }
 
-                    var totalPrice = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
-                    $('.select_price' + number).each(function () {
+                    var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                    $('.select_price' + number).each(function() {
                         totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
                     });
 
@@ -939,7 +939,7 @@
 
 
     <script type="text/javascript">
-                                        var t_price = parseFloat('{{ $get_product_detail->price }}').toFixed(2);
+        var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;
@@ -952,7 +952,7 @@
         //             temp_p += parseFloat(stringWithoutDollarSign);
         //         }
         //     });
-        //     t_price = parseFloat('{{ $get_product_detail->price }}') + temp_p; // Update t_price
+        //     t_price = parseFloat('{{ $get_product_detail->price_with_increment }}') + temp_p; // Update t_price
         //     $('#exist_price').val(t_price);
         //     $('#h3_additional').html('$' + t_price.toFixed(2));
         // });
@@ -970,7 +970,7 @@
             });
 
             // Update total price
-            var t_price = parseFloat('{{ $get_product_detail->price }}') + temp_p;
+            var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}') + temp_p;
             $('#exist_price').val(t_price);
             $('#h3_additional').html('$' + t_price.toFixed(2));
         }
@@ -997,7 +997,7 @@
         //     let option_label = $(this).find('option:selected').text();
         //     if (option_label.includes('+$')) {
         //         let amount = parseFloat(option_label.split('+$')[1]);
-        //         let price = parseFloat({{ $get_product_detail->price }});
+        //         let price = parseFloat({{ $get_product_detail->price_with_increment }});
         //         let additional_price = (amount + price).toFixed(2);
         //         $(this).next('.span_selected_option_price').html('$' + amount.toFixed(2));
         //         $('#h3_original').prop('hidden', true);
