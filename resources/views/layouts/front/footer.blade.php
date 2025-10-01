@@ -7,13 +7,18 @@
         @csrf
         <div class="offcanvas-body">
             <div class="sdie-modal">
-                <?php $subtotal2 = 0;
-                $addon_total2 = $total_variation2 = 0;
-                0; ?>
+                <?php
+                $subtotal2 = 0;
+                $total_variation2 = 0;
+                ?>
                 <div class="main-modal">
                     @foreach (session()->get('cart') as $key => $value)
                         <?php
-                        $prod_image = App\Product::where('id', $value['id'])->first();
+                        // Incremented price ke saath product fetch karen
+                        $prod_image = App\Product::find($value['id']);
+                        $basePrice = $value['baseprice']; // price_with_increment session se
+                        $qty = $value['qty'];
+                        $variation_total = 0;
                         ?>
                         <div class="product-img">
                             <figure>
@@ -22,35 +27,39 @@
                             <div class="product-discription">
                                 <h4>
                                     {{ $value['name'] }}
-                                    {{-- <a onclick="window.location.href='{{ route('remove_cart', [$value['id']]) }}'"><i
-                                            class="fa-solid fa-xmark"></i></a> --}}
-
                                     @if (isset($value['id']))
-                                        <a href='{{ route('remove_cart', $value['id']) }}'">
+                                        <a href='{{ route('remove_cart', $value['id']) }}'>
                                             <i class="fa-solid fa-xmark"></i>
                                         </a>
                                     @endif
-
                                 </h4>
-                                {{-- <h6>Black</h6> --}}
                                 <div class="counter">
                                     <div class="quantity">
-                                        <a href="#" class=" minus-1"><span>-</span></a>
+                                        <a href="#" class="minus-1"><span>-</span></a>
                                         <input name="row[]" type="number" class="quantity__input input-1"
-                                            value="{{ $value['qty'] }}">
-                                        <a href="#" class=" plus-1"><span>+</span></a>
+                                            value="{{ $qty }}">
+                                        <a href="#" class="plus-1"><span>+</span></a>
                                     </div>
-                                    <?php $t_var = 0; ?>
-                                    @foreach ($value['variation'] as $key => $values)
-                                        <?php $t_var += $values['attribute_price']; ?>
-                                    @endforeach
-                                    <span>${{ number_format(($value['baseprice'] + $t_var) * $value['qty'], 2) }}</span>
+
+                                    {{-- Variations --}}
+                                    @if (isset($value['variation']))
+                                        @foreach ($value['variation'] as $var_key => $var_val)
+                                            <?php $variation_total += $var_val['attribute_price']; ?>
+                                        @endforeach
+                                    @endif
+
+                                    {{-- Total price for this item --}}
+                                    <span>${{ number_format(($basePrice + $variation_total) * $qty, 2) }}</span>
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="product_id" id="" value="<?php echo $value['id']; ?>">
-                        <?php $subtotal2 += $value['baseprice'] * $value['qty'];
-                        $total_variation2 += $value['variation_price']; ?>
+
+                        <input type="hidden" name="product_id" value="{{ $value['id'] }}">
+
+                        <?php
+                        $subtotal2 += $basePrice * $qty;
+                        $total_variation2 += $value['variation_price'] ?? 0;
+                        ?>
                     @endforeach
                 </div>
 
@@ -65,7 +74,90 @@
             </div>
         </div>
     </form>
+
 </div>
+
+<div class="offcanvas offcanvas-start side-compliance" tabindex="-1" id="ada_compliance"
+    aria-labelledby="ada_complianceLabel">
+    <div class="offcanvas-header justify-content-end">
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <img src="{{ asset('images/ada-compliance-side.png') }}" alt="">
+    </div>
+</div>
+
+
+<div class="modaL_order2">
+    <div class="modal fade upsell-popup" id="staticBackdrop1" tabindex="-1" aria-labelledby="staticBackdrop1"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body"
+                    style="background: #000 url(img/popup.html);background-size: cover;background-position: -100px 0;position: relative;">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
+
+                        </div>
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
+                            <div class="poppup-css">
+                                <h5 class="popup-coupon-hd">Avail Profile Racing <span>50% Discount Now!</span></h5>
+                            </div>
+                            <form class="form_submission" id="contactform" method="post">
+
+                                @csrf
+
+                                <div class="row">
+
+
+                                    <div class="col-lg-12">
+                                        <div class="lable-txt">
+
+                                            <input type="hidden" value="contact_form" name="form_name">
+
+                                            <input placeholder="Name" type="text" name="fname" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="lable-txt">
+
+                                            <input placeholder="Email *" type="text" name="email" required>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-12">
+
+                                        <textarea name="notes" placeholder="Comment" id="" cols="30" rows="10" required></textarea>
+
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn">
+                                            Send </button>
+                                        <br>
+
+                                        <div id="contactformsresult"> </div>
+
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <footer>
     <div class="container">
@@ -139,7 +231,8 @@
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div class="locate-text">
-                            <a style="text-decoration:none; color:#fff;" href=""> {!! App\Http\Traits\HelperTrait::returnFlag(519) !!} </a>
+                            <a style="text-decoration:none; color:#fff;" href="">
+                                {!! App\Http\Traits\HelperTrait::returnFlag(519) !!} </a>
                         </div>
                     </div>
                     <div class="location">
@@ -201,6 +294,21 @@
         </div>
     </div>
 </footer>
+<div class="modal fade" id="newsletterModal" tabindex="-1" aria-labelledby="newsletterModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newsletterModalLabel">Newsletter Subscription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p id="modal-message"></p>
+                <button id="unsubscribeBtn" class="btn btn-danger mt-3">Unsubscribe</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="productSearchModal" tabindex="-1" aria-labelledby="productSearchModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
@@ -213,5 +321,3 @@
         </div>
     </div>
 </div>
-{{-- <script> --}}
-{{-- </script> --}}

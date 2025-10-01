@@ -14,10 +14,10 @@ class Childsubcategory extends Model
     protected $table = 'childsubcategories';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -27,5 +27,19 @@ class Childsubcategory extends Model
      */
     protected $fillable = ['subcategory', 'childsubcategory'];
 
-    
+    // Relations
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function childsubcategories()
+    {
+        return $this->hasMany(Childsubcategory::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

@@ -1,8 +1,9 @@
 <?php
 
 namespace App;
-
+use Illuminate\Support\Facades\DB;
 use App\ProductAttribute;
+use App\Models\Childsubcategory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -26,7 +27,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $fillable = ['product_title', 'description', 'price'];
+    protected $fillable = ['product_title', 'description', 'price', 'type'];
 
     public function categorys()
     {
@@ -39,4 +40,47 @@ class Product extends Model
         return $this->hasMany(ProductAttribute::class, 'product_id', 'id')->with(['attribute', 'attributeValue']);
     }
 
+    public function product()
+    {
+        return $this->belongsToMany(Product::class, 'bundle_items', 'product_id', 'bundle_id')->withPivot('quantity');
+    }
+
+    public function bundles()
+    {
+        return $this->belongsToMany(Product::class, 'bundle_items', 'product_id', 'bundle_id')
+            ->withPivot('quantity');
+    }
+
+    public function scopeBundles($query)
+    {
+        return $query->where('type', 'bundle');
+    }
+
+    public function scopeSimple($query)
+    {
+        return $query->where('type', 'simple');
+    }
+
+    // Relations
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category'); // Ensure 'category' column in products table
+    }
+
+    public function childsubcategories()
+    {
+        return $this->hasMany(Childsubcategory::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category', 'id');
+    }
+
+    public function getPriceWithIncrementAttribute()
+    {
+        $category = DB::table('categories')->where('id', $this->category)->first();
+        $increment = $category->price_increment ?? 0;
+        return $this->price + ($this->price * $increment / 100);
+    }
 }

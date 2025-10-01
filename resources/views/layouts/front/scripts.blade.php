@@ -8,6 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
 </script>
@@ -148,7 +149,7 @@
         $('.editable').each(function() {
             $(this).append(
                 '<div class="editable-wrapper"><a href="javascript:" class="edit" title="Edit" onclick="editContent(this)"><i class="far fa-edit"></i></a><a href="javascript:" class="update" title="Update" onclick="updateContent(this)"><i class="far fa-share-square"></i></a></div>'
-                );
+            );
         });
     }
 
@@ -191,7 +192,7 @@
     }
 </script>
 
-<script type="text/javascript">
+{{-- <script type="text/javascript">
     $('#newForm').on('submit', function(e) {
         $('#newsresult').html('');
         e.preventDefault();
@@ -214,6 +215,62 @@
                         "</div>");
                 }
             },
+        });
+    });
+</script> --}}
+<script>
+    $('#newForm').off('submit').on('submit', function(e) {
+        e.preventDefault();
+        $('#newsresult').html('');
+
+        let email = $('#newemail').val();
+
+        $.ajax({
+            url: "newsletter-submit",
+            type: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                newsletter_email: email
+            },
+            success: function(response) {
+                if (response.status) {
+                    // Modal message update
+                    $('#modal-message').html(response.message +
+                        "<br><small>If you want to unsubscribe click below.</small>");
+
+                    // Email ko button ke andar save karo
+                    $('#unsubscribeBtn').data('email', email);
+
+                    // Modal show karo
+                    let myModal = new bootstrap.Modal(document.getElementById('newsletterModal'));
+                    myModal.show();
+
+                } else {
+                    $('#newsresult').html("<div class='alert alert-danger'>" + response.message +
+                        "</div>");
+                }
+            },
+        });
+    });
+
+
+    $(document).on('click', '#unsubscribeBtn', function() {
+        let email = $(this).data('email');
+
+        $.ajax({
+            url: "newsletter-unsubscribe",
+            type: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                newsletter_email: email
+            },
+            success: function(response) {
+                $('#modal-message').html(response.message);
+
+                if (response.status) {
+                    $('#unsubscribeBtn').hide(); // unsubscribe successful → button hide
+                }
+            }
         });
     });
 </script>

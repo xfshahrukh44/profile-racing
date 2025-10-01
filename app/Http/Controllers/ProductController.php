@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\inquiry;
-
+use Illuminate\Support\Facades\Mail;
 use App\newsletter;
 use App\Program;
 use App\imagetable;
@@ -100,95 +100,106 @@ class ProductController extends Controller
             return redirect('/');
         }
     }
-
     public function saveCart(Request $request)
     {
         $var_item = $request->variation;
+        $cart = [];
+        $cartId = $request->product_id;
+        $qty = isset($request->qty) ? intval($request->qty) : 1;
 
-        // dd($var_item);
-
-        $result = array();
-
-        $product_detail = DB::table('products')->where('id', $request->product_id)->first();
-
-        $id = isset($request->product_id) ? $request->product_id : '';
-        $qty = isset($request->qty) ? intval($request->qty) : '1';
-
-        // dd($qty);
-
-        $cart = array();
-        $cartId = $id;
         if (Session::has('cart')) {
-
             $cart = Session::get('cart');
         }
 
-        $price = $product_detail->price;
+        $product_detail = Product::find($request->product_id); // Product model se fetch
+        if (!$product_detail) {
+            Session::flash('flash_message', 'Product not found');
+            Session::flash('alert-class', 'alert-danger');
+            return back();
+        }
 
-
-        if ($id != "" && intval($qty) > 0) {
+        // ✅ Use price_with_increment instead of original price
+        $price = $request->exist_price;
+        
+        // dd($price);
+        if ($cartId != "" && $qty > 0) {
 
             if (array_key_exists($cartId, $cart)) {
                 unset($cart[$cartId]);
             }
 
-            $productFirstrow = Product::where('id', $id)->first();
-
-
-
-            $cart[$cartId]['id'] = $id;
-            $cart[$cartId]['name'] = $productFirstrow->product_title;
-            $cart[$cartId]['baseprice'] = $price;
+            $cart[$cartId]['id'] = $cartId;
+            $cart[$cartId]['name'] = $product_detail->product_title;
+            $cart[$cartId]['baseprice'] = $price; // incremented price stored
             $cart[$cartId]['qty'] = $qty;
             $cart[$cartId]['variation_price'] = 0;
+            $cart[$cartId]['variation'] = [];
 
-            if ($id == 332 && $request->has('bundle_selected_optional_1')) {
+            // Example: bundle item
+            if ($cartId == 332 && $request->has('bundle_selected_optional_1')) {
                 $additionalProduct = Product::find(335);
                 if ($additionalProduct) {
                     $cart[335] = [
                         'id' => 335,
                         'name' => $additionalProduct->product_title,
-                        'baseprice' => $additionalProduct->price,
+                        'baseprice' => $additionalProduct->price, // increment price
                         'qty' => $qty,
                         'variation_price' => 0,
                         'variation' => []
                     ];
                 }
             }
-            $cart[$cartId]['id'] = $id;
-            $cart[$cartId]['name'] = $productFirstrow->product_title;
-            $cart[$cartId]['baseprice'] = $price;
-            $cart[$cartId]['qty'] = $qty;
-            $cart[$cartId]['variation_price'] = 0;
 
-
+            // Variations
             foreach ($var_item as $key => $value) {
+                $data = ProductAttribute::where('product_id', $cartId)
+                    ->where('value', $value)
+                    ->first();
 
-                $data = ProductAttribute::where('product_id', $_POST['product_id'])->where('value', $value)->first();
-
-                $cart[$cartId]['variation'][$data->id]['attribute'] = $data->attribute->name;
-                $cart[$cartId]['variation'][$data->id]['attribute_val'] = $data->attributesValues->value;
-                $cart[$cartId]['variation'][$data->id]['attribute_price'] = $data->price;
-                $cart[$cartId]['variation_price'] += $data->price;
+                if ($data) {
+                    $cart[$cartId]['variation'][$data->id]['attribute'] = $data->attribute->name;
+                    $cart[$cartId]['variation'][$data->id]['attribute_val'] = $data->attributesValues->value;
+                    $cart[$cartId]['variation'][$data->id]['attribute_price'] = $data->price;
+                    $cart[$cartId]['variation_price'] += $data->price;
+                }
             }
 
-
-            // dd(Session::get('cart'));
-
+            // Save in session
             Session::put('cart', $cart);
+
+            // Save in abandoned_carts table
+            $email = auth()->check() ? auth()->user()->email : ($request->email ?? null);
+            $userId = auth()->check() ? auth()->id() : null;
+
+            if ($email) {
+                DB::table('abandoned_carts')->insert([
+                    'user_id' => $userId,
+                    'email' => $email,
+                    'cart_data' => json_encode($cart),
+                    'is_checked_out' => false,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                Mail::raw('You have added a product to your cart, but you haven’t completed the checkout yet.', function ($message) use ($email) {
+                    $message->to($email)
+                        ->subject('Cart Reminder - Checkout Pending');
+                });
+            }
 
             Session::flash('message', 'Product Added to cart Successfully');
             Session::flash('alert-class', 'alert-success');
-            //			return redirect('/cart');
             session()->put('added-to-cart', true);
+
             return redirect()->back();
         } else {
-
-            Session::flash('flash_message', 'Sorry! You can not proceed with 0 quantity');
-            Session::flash('alert-class', 'alert-success');
+            Session::flash('flash_message', 'Sorry! You cannot proceed with 0 quantity');
+            Session::flash('alert-class', 'alert-danger');
             return back();
         }
     }
+
+
 
     public function datacart(Request $request)
     {
@@ -358,8 +369,7 @@ class ProductController extends Controller
         $order = orders::where('id', $order_id)->first();
         $order_products = orders_products::where('orders_id', $order_id)->get();
 
-        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);
-        ;
+        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);;
     }
 
     public function checkout()
