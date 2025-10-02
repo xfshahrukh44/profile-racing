@@ -703,17 +703,17 @@
                                                     <?php
                                 $product = Product::find(335);
                                 ?>
-                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
-                                    echo ' - $' . $get_product_detail->maximum_price;
+                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                                    echo ' - $' . $get_product_detail->maximum_price_with_increment;
                                 } ?>
                                 </h3>
                             @else
-                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
-                                    echo ' - $' . $get_product_detail->maximum_price;
+                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                                    echo ' - $' . $get_product_detail->maximum_price_with_increment;
                                 } ?></h3>
                             @endif
-                            <h3 id="h3_additional" hidden>${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price != '' && $get_product_detail->maximum_price != '0') {
-                                echo ' - $' . $get_product_detail->maximum_price;
+                            <h3 id="h3_additional" hidden>${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                                echo ' - $' . $get_product_detail->maximum_price_with_increment;
                             } ?></h3>
                             <input type="hidden" name="exist_price" id="exist_price" value=0>
 

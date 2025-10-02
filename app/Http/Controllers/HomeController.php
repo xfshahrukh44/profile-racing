@@ -216,8 +216,26 @@ class HomeController extends Controller
         $query->orderBy('created_at', 'ASC');
         $get_product = $query->paginate(12);
 
+        // 🔥 Apply increment on price + maximum_price
+        foreach ($get_product as $product) {
+            $category = DB::table('categories')->where('id', $product->category)->first();
+            $price_increment = $category->price_increment ?? 0;
+
+            // Price with increment
+            $product->price_with_increment = $product->price + ($product->price * $price_increment / 100);
+
+            // Maximum price with increment
+            if (!empty($product->maximum_price) && $product->maximum_price > 0) {
+                $product->maximum_price_with_increment = $product->maximum_price + ($product->maximum_price * $price_increment / 100);
+            } else {
+                $product->maximum_price_with_increment = null; // agar max price hi nahi hai
+            }
+        }
+
         return view('product', compact('page', 'get_product'));
     }
+
+
 
 
     public function product_detail($id = '', $cat = "", $subcat = "", $childsubcat = "")
@@ -226,15 +244,22 @@ class HomeController extends Controller
 
         // Get the product
         $get_product_detail = DB::table('products')->where('id', $id)->where('status', '1')->first();
-
         if ($get_product_detail) {
             // Get the category
             $category = DB::table('categories')->where('id', $get_product_detail->category)->first();
 
             // Calculate price with increment
             $price_increment = $category->price_increment ?? 0; // use 0 if null
+
+            // Normal price increment
             $get_product_detail->price_with_increment = $get_product_detail->price + ($get_product_detail->price * $price_increment / 100);
+
+            // Maximum price increment
+            if (isset($get_product_detail->maximum_price)) {
+                $get_product_detail->maximum_price_with_increment = $get_product_detail->maximum_price + ($get_product_detail->maximum_price * $price_increment / 100);
+            }
         }
+        // dd($get_product_detail);
 
         return view('product_detail', compact('page', 'get_product_detail'));
     }
