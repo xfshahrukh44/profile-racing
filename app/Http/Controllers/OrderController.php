@@ -84,7 +84,8 @@ class OrderController extends Controller
         foreach ($product_detail as $product) {
             $category = DB::table('categories')->where('id', $product->category)->first();
             $price_increment = $category->price_increment ?? 0;
-            $product->price_with_increment = $product->price + ($product->price * $price_increment / 100);
+            $finalprice = $product->price + ($product->price * $price_increment / 100);
+            $product->price_with_increment = number_format($finalprice, 2);
         }
 
         $newFetchedIds = $product_detail->pluck('id')->toArray();

@@ -65,12 +65,13 @@ class HomeController extends Controller
 
         $get_product = DB::table('products')->where('status', '1')->take(6)->get();
 
-        // ✅ Har product pe incremented price add karo
         foreach ($get_product as $product) {
             $category = DB::table('categories')->where('id', $product->category)->first();
             $price_increment = $category->price_increment ?? 0;
-            $product->price_with_increment = $product->price + ($product->price * $price_increment / 100);
+            $finalprice = $product->price + ($product->price * $price_increment / 100);
+            $product->price_with_increment = number_format($finalprice, 2);
         }
+
 
         return view('welcome', compact('page', 'section', 'banner', 'blog', 'instagram', 'get_product', 'news'));
     }
@@ -216,19 +217,19 @@ class HomeController extends Controller
         $query->orderBy('created_at', 'ASC');
         $get_product = $query->paginate(12);
 
-        // 🔥 Apply increment on price + maximum_price
         foreach ($get_product as $product) {
             $category = DB::table('categories')->where('id', $product->category)->first();
             $price_increment = $category->price_increment ?? 0;
 
-            // Price with increment
-            $product->price_with_increment = $product->price + ($product->price * $price_increment / 100);
+            $finalprice = $product->price + ($product->price * $price_increment / 100);
+            $product->price_with_increment = number_format($finalprice, 2);
 
             // Maximum price with increment
             if (!empty($product->maximum_price) && $product->maximum_price > 0) {
-                $product->maximum_price_with_increment = $product->maximum_price + ($product->maximum_price * $price_increment / 100);
+                $finalprice = $product->maximum_price + ($product->maximum_price * $price_increment / 100);
+                $product->maximum_price_with_increment = number_format($finalprice, 2);
             } else {
-                $product->maximum_price_with_increment = null; // agar max price hi nahi hai
+                $product->maximum_price_with_increment = null;
             }
         }
 
@@ -252,11 +253,13 @@ class HomeController extends Controller
             $price_increment = $category->price_increment ?? 0; // use 0 if null
 
             // Normal price increment
-            $get_product_detail->price_with_increment = $get_product_detail->price + ($get_product_detail->price * $price_increment / 100);
+            $finalprice = $get_product_detail->price + ($get_product_detail->price * $price_increment / 100);
+            $get_product_detail->price_with_increment = number_format($finalprice, 2);
 
             // Maximum price increment
             if (isset($get_product_detail->maximum_price)) {
-                $get_product_detail->maximum_price_with_increment = $get_product_detail->maximum_price + ($get_product_detail->maximum_price * $price_increment / 100);
+                $finalprice = $get_product_detail->maximum_price + ($get_product_detail->maximum_price * $price_increment / 100);
+                $get_product_detail->maximum_price_with_increment = number_format($finalprice, 2);
             }
         }
         // dd($get_product_detail);

@@ -1,4 +1,5 @@
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="static" 
+     data-bs-keyboard="false">
     <div class="offcanvas-header">
         <h5 id="offcanvasRightLabel">CART</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -8,8 +9,8 @@
         <div class="offcanvas-body">
             <div class="sdie-modal">
                 <?php
-$subtotal2 = 0;
-$total_variation2 = 0;
+                    $subtotal2 = 0;
+                    $total_variation2 = 0;
                 ?>
                 <div class="main-modal">
                     @foreach (session()->get('cart') as $key => $value)
@@ -19,7 +20,7 @@ $total_variation2 = 0;
                         $basePrice = $value['baseprice']; // price_with_increment session se
                         $qty = $value['qty'];
                         $variation_total = 0;
-                                            ?>
+                                                                ?>
                                         <div class="product-img">
                                             <figure>
                                                 <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
@@ -59,7 +60,7 @@ $total_variation2 = 0;
                                         <?php
                         $subtotal2 += $basePrice * $qty;
                         $total_variation2 += $value['variation_price'] ?? 0;
-                                            ?>
+                                                                ?>
                     @endforeach
                 </div>
 
@@ -78,7 +79,8 @@ $total_variation2 = 0;
 </div>
 
 <div class="offcanvas offcanvas-start side-compliance" tabindex="-1" id="ada_compliance"
-    aria-labelledby="ada_complianceLabel">
+    aria-labelledby="ada_complianceLabel" data-bs-backdrop="static" 
+     data-bs-keyboard="false">
     <div class="offcanvas-header justify-content-end">
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>

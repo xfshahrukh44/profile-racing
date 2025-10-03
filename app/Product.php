@@ -81,6 +81,8 @@ class Product extends Model
     {
         $category = DB::table('categories')->where('id', $this->category)->first();
         $increment = $category->price_increment ?? 0;
-        return $this->price + ($this->price * $increment / 100);
+        $finalPrice = $this->price + ($this->price * $increment / 100);
+        return round($finalPrice, 2);
+
     }
 }
