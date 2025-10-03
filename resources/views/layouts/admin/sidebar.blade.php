@@ -177,6 +177,11 @@
                     <span class="menu-title" data-i18n="eCommerce">Account Settings</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="javascript:;"><i class="fa-brands fa-mailchimp"></i>
+                    <span class="menu-title" data-i18n="eCommerce">Mailchimp Account</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
