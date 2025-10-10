@@ -295,6 +295,122 @@
                 max-width: 60%;
             }
         }
+
+        @media(max-width:1199px) {
+            .upsell-popup .modal-dialog {
+                max-width: 80%;
+            }
+
+            .last-icon {
+                display: flex;
+                align-items: center;
+            }
+
+            .last-icon a {
+                width: 20%;
+            }
+
+            .last-icon i {
+                height: 35px;
+                width: 35px;
+            }
+        }
+
+        @media(max-width:991px) {
+            #staticBackdrop1 .modal-body:after {
+                left: 5px;
+                width: 50%;
+                height: 80%;
+                background-position: top;
+            }
+
+            .modaL_order2 .modal-body h5 {
+                font-size: 1.2rem;
+            }
+
+            h5.popup-coupon-hd {}
+
+            .modaL_order2 .modal-body h5 span {
+                margin-top: 10px;
+            }
+
+            .modaL_order2 .modal-body .poppup-css {
+                padding: 0.5rem !important;
+            }
+
+            .last-icon {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .last-icon a {
+                width: 25%;
+            }
+        }
+
+        @media(max-width:991px) {
+            .opt-sec5-text p span {
+                display: unset;
+            }
+
+            .opt-sec5-main {
+                width: 250px;
+                height: 205px;
+            }
+
+            .opt-sec5-img img {
+                width: 100%;
+                height: 200px;
+            }
+
+            .opt-sec5-text {
+                top: 75px;
+            }
+
+            .section4 {
+                height: 400px;
+            }
+        }
+
+        @media(max-width:767px) {
+
+            #staticBackdrop1 .modal-body {
+                padding-top: 300px;
+            }
+
+            #staticBackdrop1 .modal-body:after {
+                top: 140px;
+                height: 35%;
+                width: 95%;
+                left: 12px;
+            }
+
+            .last-icon {
+                flex-wrap: nowrap;
+                margin-top: 20px;
+            }
+
+            .last-icon i {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
+            }
+        }
+
+        @media(max-width:575px) {
+            .section3 {
+                padding: 50px 0px;
+            }
+
+            .opt-sec5-main {
+                width: 190px;
+                margin: auto;
+            }
+
+            .upsell-popup .modal-dialog {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 

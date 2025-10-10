@@ -103,10 +103,10 @@
                 <div class="modal-body"
                     style="background: #000 url(img/popup.html);background-size: cover;background-position: -100px 0;position: relative;">
                     <div class="row align-items-center">
-                        <div class="col-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
+                        <div class="col-6 col-md-6 col-lg-6">
 
                         </div>
-                        <div class="col-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
+                        <div class="col-12 col-md-6 col-lg-6">
                             <div class="poppup-css">
                                 <h5 class="popup-coupon-hd">Avail Profile Racing <span>50% Discount Now!</span></h5>
                             </div>
