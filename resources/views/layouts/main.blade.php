@@ -336,7 +336,7 @@
             @endif
         });
     </script>
-    <script>
+    <!-- <script>
         $(document).ready(function () {
             setInterval(function () {
                 if (!$('#staticBackdrop1').hasClass('show')) {
@@ -344,7 +344,33 @@
                 }
             }, 20000);
         });
+    </script> -->
+    <script>
+        $(document).ready(function () {
+
+            setTimeout(function () {
+
+                var offcanvas1 = document.getElementById('ada_compliance');
+                var offcanvas2 = document.getElementById('offcanvasRight');
+
+                var isOpen1 = offcanvas1.classList.contains('show');
+                var isOpen2 = offcanvas2.classList.contains('show');
+
+                if (!isOpen1 && !isOpen2) {
+
+                    var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop1'));
+                    myModal.show();
+                } else {
+
+                    $('#ada_compliance, #offcanvasRight').on('hidden.bs.offcanvas', function () {
+                        var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop1'));
+                        myModal.show();
+                    });
+                }
+            }, 20000);
+        });
     </script>
+
 
 
 </body>
