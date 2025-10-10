@@ -224,6 +224,7 @@ span.block {
 .opt-sec3-img img {
     height: 200px;
     width: 100%;
+    object-fit: cover;
 }
 
 .section3 {
@@ -389,6 +390,7 @@ span.block {
     position: relative;
     z-index: 1;
     top: 100px;
+    right: 0;
     left: 0px;
     text-align: center;
     opacity: 0;

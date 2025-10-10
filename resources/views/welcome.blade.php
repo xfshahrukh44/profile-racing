@@ -135,7 +135,7 @@
                     <div class="col-lg-4 col-md-6 col-12">
                         <div class="opt-sec3-main">
                             <a href="{{ route('front.newsDetail',['id' => $val->id]) }}">
-                                <div class="opt-sec3-img" style="height: 250px; width: 387px;">
+                                <div class="opt-sec3-img">
                                     <figure>
                                         <img src="{{$val->image}}" alt="" class="img-fluid">
                                     </figure>
