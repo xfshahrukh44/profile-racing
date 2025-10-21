@@ -244,6 +244,26 @@
         .component-image img {
             color: white;
         }
+
+        h3.mob-view {
+            color: white;
+            margin: 25px 0;
+            display: none;
+        }
+
+        @media(max-width:991px) {
+            .category {
+                display: none;
+            }
+
+            h3.main-mob-view {
+                display: none;
+            }
+
+            h3.mob-view {
+                display: block;
+            }
+        }
     </style>
 @endsection
 
@@ -254,16 +274,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="inner-headings">
-                                                                <h2>PRODUCTS</h2>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </section> -->
+                                                                                                                    <div class="container">
+                                                                                                                        <div class="row">
+                                                                                                                            <div class="col-lg-12">
+                                                                                                                                <div class="inner-headings">
+                                                                                                                                    <h2>PRODUCTS</h2>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </section> -->
 
 
 
@@ -273,15 +293,15 @@
 
 
                 <?php
-                
-                use App\Product;
-                
-                $get_category = DB::table('categories')->get();
-                $route_category = Request::segment(3);
-                $route_subcategory = Request::segment(4);
-                $route_child_subcategory = Request::segment(5);
-                
-                ?>
+
+    use App\Product;
+
+    $get_category = DB::table('categories')->get();
+    $route_category = Request::segment(3);
+    $route_subcategory = Request::segment(4);
+    $route_child_subcategory = Request::segment(5);
+
+                                                                                    ?>
 
                 <div class="col-md-3">
 
@@ -346,90 +366,11 @@
 
                 </div>
 
-                <?php
-    $get_multiple_images = DB::table('product_imagess')->where('product_id', $get_product_detail->id)->get();
-                                                ?>
-
-                <!-- <div class="col-lg-5">
-                                                    <div class="inner-img">
-                                                        <div class="swiper mySwiper2">
-                                                            <div class="swiper-wrapper">
-
-                                                                <div class="swiper-slide">
-                                                                    <img src="{{ asset($get_product_detail->image) }}"
-                                                                        style="height: 430px;width: 430px;" />
-                                                                </div>
-
-                                                                @foreach ($get_multiple_images as $key => $val_images)
-                                                                    <div class="swiper-slide">
-                                                                        <img src="{{ asset($val_images->image) }}" style="height: 430px;width: 430px;" />
-                                                                    </div>
-                                                                @endforeach
-
-                                                            </div>
-                                                        </div>
-                                                        <div thumbsSlider="" class="swiper mySwiper">
-                                                            <div class="swiper-wrapper">
-                                                                <div class="swiper-slide">
-                                                                    <img src="{{ asset($get_product_detail->image) }}"
-                                                                        style="height: 100px; width: 100px;" />
-                                                                </div>
-                                                                @foreach ($get_multiple_images as $key => $val_images)
-                                                                    <div class="swiper-slide">
-                                                                        <img src="{{ asset($val_images->image) }}" style="height: 100px; width: 100px;" />
-                                                                    </div>
-                                                                @endforeach
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <br><br>
-                                                    <hr style="border:1px solid #5f5f5f;">
-
-                                                    <div class="col-lg-12">
-
-                                                        <div class="inner-producttt">
-
-                                                            <div class="productmain">
-                                                                <button class="clicktabs activee" onclick="opencity(event , 'porduct1')" id="showonly">
-                                                                    Description </button>
-                                                                <button class="clicktabs" onclick="opencity(event , 'porduct2')"> Additional Information
-                                                                </button>
-                                                            </div>
-
-                                                            <br>
-
-                                                            <div class="contentinfo">
-
-                                                                <div class="cycleinfo" id="porduct1">
-
-                                                                    {!! $get_product_detail->description !!}
-
-                                                                </div>
-
-
-                                                                <div class="cycleinfo" id="porduct2" style="display:none;">
-
-                                                                    {!! $get_product_detail->additional_information !!}
-
-                                                                </div>
-
-
-                                                            </div>
-
-
-                                                        </div>
-
-                                                    </div>
-
-
-
-                                                </div> -->
-
+                <?php $get_multiple_images = DB::table('product_imagess')->where('product_id', $get_product_detail->id)->get(); ?>
 
                 <div class="col-lg-5">
                     <div class="inner-img">
+                        <h3 style="font-family: PEPSI_pl;" class="mob-view"> {{ $get_product_detail->product_title }} </h3>
                         <div class="swiper mySwiper2">
                             <div class="swiper-wrapper">
                                 {{-- Bundle ki main image --}}
@@ -503,7 +444,6 @@
                     <br><br>
                     <hr style="border:1px solid #5f5f5f;">
 
-                    {{-- BUNDLE COMPONENTS SECTION - Naya Section Add Karein --}}
 
 
                     <div class="col-lg-12">
@@ -658,8 +598,7 @@
             })
             ->get();
     }
-                                                ?>
-                {{-- @dd($productAttributes_id); --}}
+                                                                                                                                        ?>
 
 
 
@@ -698,50 +637,61 @@
 
                         <div class="inner-product-details">
                             <!-- <h4>TECHDEV-PROFILERACING</h4> -->
-                            <h3 style="font-family: PEPSI_pl;"> {{ $get_product_detail->product_title }} </h3>
+                            <h3 style="font-family: PEPSI_pl;" class="main-mob-view">
+                                {{ $get_product_detail->product_title }}
+                            </h3>
+                            @php
+                                $minPrice = $get_product_detail->price;
+                                $maxPrice = $get_product_detail->maximum_price;
+                            @endphp
                             @if ($get_product_detail->id === 332)
                                                     <?php
                                 $product = Product::find(335);
-                                ?>
-                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?>
+                                                    <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php    if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
                                     echo ' - $' . $get_product_detail->maximum_price_with_increment;
                                 } ?>
-                                </h3>
+                                                    </h3>
                             @else
-                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
-                                    echo ' - $' . $get_product_detail->maximum_price_with_increment;
+                                                    <h3 id="originproductprice">${{ $minPrice }} <?php    if ($maxPrice != '' && $maxPrice != '0') {
+                                    echo ' - $' . $maxPrice;
                                 } ?></h3>
                             @endif
                             <h3 id="h3_additional" hidden>${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
-                                echo ' - $' . $get_product_detail->maximum_price_with_increment;
-                            } ?></h3>
+        echo ' - $' . $get_product_detail->maximum_price_with_increment;
+    } ?></h3>
                             <input type="hidden" name="exist_price" id="exist_price" value=0>
 
 
                             @foreach ($productAttributes_id as $key => $val_product_attribute)
                                                     <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }} </h6>
 
-                                <?php
-                                
+                                                    <?php
+
                                 $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get();
-                                
-                                ?>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?>
 
                                                     <input type="hidden" name="select_price"
                                                         class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}"
                                                         value=0>
+                                                    <input type="hidden" name="variation[{{ $val_product_attribute->attribute_id }}][qty]"
+                                                        value="{{ $get_product_detail->qty ?? 1 }}">
                                                     <select
                                                         class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option"
                                                         name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]">
 
                                                         <option value="">Choose an option</option>
                                                         @foreach ($get_attribute_values as $key => $val_attr_value)
-                                                            <option data-price="{{ $val_attr_value->price }}" value="{{ $val_attr_value->value }}">
+                                                            <option data-price="{{ $val_attr_value->price }}" data-qty="{{ $val_attr_value->qty ?? 0 }}"
+                                                                value="{{ $val_attr_value->value }}">
                                                                 {{ App\AttributeValue::find($val_attr_value->value)->value }}
                                                             </option>
                                                         @endforeach
 
                                                     </select>
+
+
 
                                                     @if ($get_product_detail->id === 332)
                                                         <div class="bundled_product bundled_product_summary product bundled_item_optional">
@@ -793,11 +743,12 @@
                                                         </div>
 
 
-                                    {{-- <script>
-                                        document.getElementById('add_price_checkbox').addEventListener('change', function() {
-                                            let priceElement = document.getElementById('h3_original');
-                                            let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); // Laravel se price lena
-                                            let additionalPrice = parseFloat(this.value);
+                                                        {{--
+                                                        <script>
+                                                            document.getElementById('add_price_checkbox').addEventListener('change', function () {
+                                                                let priceElement = document.getElementById('h3_original');
+                                                                let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); // Laravel se price lena
+                                                                let additionalPrice = parseFloat(this.value);
 
                                                                 if (this.checked) {
                                                                     priceElement.innerText = `$${(basePrice + additionalPrice).toFixed(2)}`;
@@ -885,6 +836,42 @@
             });
         } else {
 
+            // function updateOptionPrice(selector) {
+            //     var text = selector.attr('class');
+            //     var regex = /\d+/;
+            //     var number = text.match(regex)[0];
+
+            //     var selectedOption = selector.find('option:selected');
+            //     var optionPrice = selectedOption.data('price');
+
+            //     // Check if the selected option is the first option (Choose an option)
+            //     if (selectedOption.index() === 0) {
+            //         selector.next('.span_selected_option_price').html('').hide();
+            //         return; // Stop execution if "Choose an option" is selected
+            //     }
+
+            //     // Check if a valid option is selected
+            //     if (optionPrice !== undefined) {
+            //         var amount = parseFloat(optionPrice).toFixed(2);
+
+            //         if (amount == '0.00') {
+            //             selector.next('.span_selected_option_price').html('$0.00').show();
+            //         } else {
+            //             $('.select_price' + number).val(amount);
+            //             selector.next('.span_selected_option_price').html('$' + amount).show();
+            //         }
+
+            //         var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+            //         $('.select_price' + number).each(function () {
+            //             totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
+            //         });
+
+            //         $('#h3_original').prop('hidden', true);
+            //         $('#h3_additional').prop('hidden', false);
+            //     } else {
+            //         selector.next('.span_selected_option_price').html('$0.00').show();
+            //     }
+            // }
             function updateOptionPrice(selector) {
                 var text = selector.attr('class');
                 var regex = /\d+/;
@@ -892,26 +879,55 @@
 
                 var selectedOption = selector.find('option:selected');
                 var optionPrice = selectedOption.data('price');
+                var optionQty = selectedOption.data('qty');
+                var attributeValueId = selectedOption.data('attribute-value-id');
+                var addToCartBtn = $('#addCart');
 
-                // Check if the selected option is the first option (Choose an option)
                 if (selectedOption.index() === 0) {
                     selector.next('.span_selected_option_price').html('').hide();
-                    return; // Stop execution if "Choose an option" is selected
+                    addToCartBtn.prop('disabled', false)  // default enable
+                        .css({
+                            'opacity': '1',
+                            'cursor': 'pointer'
+                        });
+                    return;
                 }
 
-                // Check if a valid option is selected
                 if (optionPrice !== undefined) {
                     var amount = parseFloat(optionPrice).toFixed(2);
 
-                    if (amount == '0.00') {
-                        selector.next('.span_selected_option_price').html('$0.00').show();
-                    } else {
-                        $('.select_price' + number).val(amount);
-                        selector.next('.span_selected_option_price').html('$' + amount).show();
+                    let displayText = '$' + amount;
+
+                    if (optionQty !== undefined) {
+                        if (parseInt(optionQty) > 0) {
+                            displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
+
+                            // ✅ Enable Add to Cart
+                            addToCartBtn.prop('disabled', false)
+                                .css({
+                                    'opacity': '1',
+                                    'cursor': 'pointer',
+                                    'background': 'red'
+                                });
+                        } else {
+                            displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
+
+                            // ❌ Disable Add to Cart
+                            addToCartBtn.prop('disabled', true)
+                                .css({
+                                    'opacity': '0.5',
+                                    'cursor': 'not-allowed',
+                                    'background': '#888'
+                                });
+                        }
                     }
 
+                    selector.next('.span_selected_option_price').html(displayText).show();
+
+                    $('.select_price' + number).val(amount);
+
                     var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
-                    $('.select_price' + number).each(function() {
+                    $('.select_price' + number).each(function () {
                         totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
                     });
 
@@ -921,6 +937,8 @@
                     selector.next('.span_selected_option_price').html('$0.00').show();
                 }
             }
+
+
         }
 
 
@@ -939,7 +957,7 @@
 
 
     <script type="text/javascript">
-        var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                                                            var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;

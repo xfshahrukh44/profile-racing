@@ -32,6 +32,10 @@ form#order-place label {
     color: white;
 }
 
+.shipping-method-option:hover label {
+    color: black !important;
+}
+
 .shipping-icon {
     position: relative;
     z-index: 0;

@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\inquiry;
-use Illuminate\Support\Facades\Mail;
-use App\newsletter;
-use App\Program;
-use App\imagetable;
-use SoapClient;
-use App\Product;
-use App\Category;
-use App\Banner;
-use App\ProductAttribute;
 use DB;
 use View;
 use Session;
-use App\Http\Traits\HelperTrait;
+use App\Banner;
 use App\orders;
-use App\orders_products;
+use SoapClient;
+use App\inquiry;
+use App\Product;
+use App\Program;
+use App\Section;
+use App\Category;
+use App\imagetable;
+use App\newsletter;
+use GuzzleHttp\Client;
 use App\Models\Discount;
 use App\Models\GiftCard;
-use App\Section;
-use GuzzleHttp\Client;
+use App\orders_products;
+use App\ProductAttribute;
+use Illuminate\Http\Request;
+use App\Mail\AbandonedCartMail;
+use App\Http\Traits\HelperTrait;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Session\Session as SessionSession;
 
 class ProductController extends Controller
@@ -120,7 +121,7 @@ class ProductController extends Controller
 
         // ✅ Use price_with_increment instead of original price
         $price = $request->exist_price;
-        
+
         // dd($price);
         if ($cartId != "" && $qty > 0) {
 
@@ -132,6 +133,8 @@ class ProductController extends Controller
             $cart[$cartId]['name'] = $product_detail->product_title;
             $cart[$cartId]['baseprice'] = $price; // incremented price stored
             $cart[$cartId]['qty'] = $qty;
+            $cart[$cartId]['variation_price'] = 0;
+            $cart[$cartId]['variation'] = [];
             $cart[$cartId]['variation_price'] = 0;
             $cart[$cartId]['variation'] = [];
 
@@ -161,30 +164,40 @@ class ProductController extends Controller
                     $cart[$cartId]['variation'][$data->id]['attribute_val'] = $data->attributesValues->value;
                     $cart[$cartId]['variation'][$data->id]['attribute_price'] = $data->price;
                     $cart[$cartId]['variation_price'] += $data->price;
+                    $cart[$cartId]['attribute_value_id'] += $data->id;
                 }
             }
 
-            // Save in session
             Session::put('cart', $cart);
 
-            // Save in abandoned_carts table
             $email = auth()->check() ? auth()->user()->email : ($request->email ?? null);
             $userId = auth()->check() ? auth()->id() : null;
 
             if ($email) {
-                DB::table('abandoned_carts')->insert([
-                    'user_id' => $userId,
-                    'email' => $email,
-                    'cart_data' => json_encode($cart),
-                    'is_checked_out' => false,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
 
-                Mail::raw('You have added a product to your cart, but you haven’t completed the checkout yet.', function ($message) use ($email) {
-                    $message->to($email)
-                        ->subject('Cart Reminder - Checkout Pending');
-                });
+                $recentEmail = DB::table('abandoned_carts')
+                    ->where('email', $email)
+                    ->where('created_at', '>=', now()->subHour())
+                    ->exists();
+
+                if (!$recentEmail) {
+
+                    DB::table('abandoned_carts')->insert([
+                        'user_id' => $userId,
+                        'email' => $email,
+                        'cart_data' => json_encode($cart),
+                        'is_checked_out' => false,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                    Mail::raw('You have added a product to your cart, but you haven’t completed the checkout yet.', function ($message) use ($email) {
+                        $message->to($email)
+                            ->subject('Cart Reminder - Checkout Pending');
+                    });
+                    // Mail::to($email)->later(now()->addHour(), new AbandonedCartMail($cart));
+
+                }
             }
 
             Session::flash('message', 'Product Added to cart Successfully');
@@ -369,7 +382,8 @@ class ProductController extends Controller
         $order = orders::where('id', $order_id)->first();
         $order_products = orders_products::where('orders_id', $order_id)->get();
 
-        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);;
+        return view('account.invoice')->with('title', 'Invoice #' . $order_id)->with(compact('order', 'order_products'))->with('order_id', $order_id);
+        ;
     }
 
     public function checkout()

@@ -11,10 +11,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-</script>
+    </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-</script>
+    </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
     integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -27,7 +27,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-</script>
+    </script>
 
 
 <script>
@@ -39,13 +39,13 @@
     //   )
     // })
 
-    $(document).ready(function() {
-        $('.inner-shop').click(function() {
+    $(document).ready(function () {
+        $('.inner-shop').click(function () {
             $('.inner-drop').show()
         })
     })
-    $(document).ready(function() {
-        $('.inner-shop-2').click(function() {
+    $(document).ready(function () {
+        $('.inner-shop-2').click(function () {
             $('.inner-drop-2').show()
         })
     })
@@ -56,7 +56,7 @@
     //   })
     // })
 
-    $('.hover-links').hover(function() {
+    $('.hover-links').hover(function () {
         var isHovered = $(this).is(':hover')
         if (isHovered) {
             $(this).children('.dropdown-links').stop().slideDown(300)
@@ -97,7 +97,7 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <!-- Initialize Swiper -->
-<script>
+<!-- <script>
     // Initialize Swiper without autoplay
     let swiper_obj = new Swiper(".mySwiper-banner", {
         spaceBetween: 30,
@@ -111,13 +111,61 @@
             el: ".swiper-pagination",
             clickable: true,
         },
-        autoplay: false, // Disable autoplay initially
+        autoplay: false,
     });
 
-    $('.mySwiperVideo').on('ended', function() {
+    $('.mySwiperVideo').on('ended', function () {
         swiper_obj.autoplay.start();
     });
+</script> -->
+
+<script>
+    const swiper_obj = new Swiper(".mySwiper-banner", {
+        spaceBetween: 30,
+        loop: true,
+        effect: "flip",
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        autoplay: false, // We'll handle autoplay manually
+    });
+
+    function handleSlideChange() {
+        // Stop autoplay first
+        swiper_obj.autoplay.stop();
+
+        const activeSlide = swiper_obj.slides[swiper_obj.activeIndex];
+        const video = activeSlide.querySelector("video");
+        const img = activeSlide.querySelector("img");
+
+        if (video) {
+            // If it's a video — play it, then move to next when ends
+            video.currentTime = 0;
+            video.play();
+
+            video.onended = function () {
+                swiper_obj.slideNext();
+                handleSlideChange(); // Repeat for next slide
+            };
+        } else if (img) {
+            // If it's an image — wait 2 seconds then move to next
+            setTimeout(() => {
+                swiper_obj.slideNext();
+                handleSlideChange(); // Repeat for next slide
+            }, 2000);
+        }
+    }
+
+    // Run when Swiper is initialized
+    swiper_obj.on('init', handleSlideChange);
+    swiper_obj.init();
 </script>
+
 
 
 <script>
@@ -146,7 +194,7 @@
 
 <script>
     function editableContent() {
-        $('.editable').each(function() {
+        $('.editable').each(function () {
             $(this).append(
                 '<div class="editable-wrapper"><a href="javascript:" class="edit" title="Edit" onclick="editContent(this)"><i class="far fa-edit"></i></a><a href="javascript:" class="update" title="Update" onclick="updateContent(this)"><i class="far fa-share-square"></i></a></div>'
             );
@@ -181,7 +229,7 @@
                 keyword: keyword,
                 htmlContent: htmlContent,
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     toastr.success(response.message);
                 } else {
@@ -192,8 +240,9 @@
     }
 </script>
 
-{{-- <script type="text/javascript">
-    $('#newForm').on('submit', function(e) {
+{{--
+<script type="text/javascript">
+    $('#newForm').on('submit', function (e) {
         $('#newsresult').html('');
         e.preventDefault();
 
@@ -206,7 +255,7 @@
                 "_token": "{{ csrf_token() }}",
                 newsletter_email: email
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     $('#newsresult').html("<div class='alert alert-success'>" + response.message +
                         "</div>");
@@ -219,7 +268,7 @@
     });
 </script> --}}
 <script>
-    $('#newForm').off('submit').on('submit', function(e) {
+    $('#newForm').off('submit').on('submit', function (e) {
         e.preventDefault();
         $('#newsresult').html('');
 
@@ -232,7 +281,7 @@
                 "_token": "{{ csrf_token() }}",
                 newsletter_email: email
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     // Modal message update
                     $('#modal-message').html(response.message +
@@ -254,7 +303,7 @@
     });
 
 
-    $(document).on('click', '#unsubscribeBtn', function() {
+    $(document).on('click', '#unsubscribeBtn', function () {
         let email = $(this).data('email');
 
         $.ajax({
@@ -264,7 +313,7 @@
                 "_token": "{{ csrf_token() }}",
                 newsletter_email: email
             },
-            success: function(response) {
+            success: function (response) {
                 $('#modal-message').html(response.message);
 
                 if (response.status) {
@@ -277,7 +326,7 @@
 
 
 <script type="text/javascript">
-    $('#contactform').on('submit', function(e) {
+    $('#contactform').on('submit', function (e) {
         //alert('hogaya');
         $('#contactformsresult').html('');
         e.preventDefault();
@@ -287,7 +336,7 @@
             type: "POST",
             data: $("#contactform").serialize(),
 
-            success: function(response) {
+            success: function (response) {
                 if (response.status) {
                     document.getElementById("contactform").reset();
                     $('#contactformsresult').html("<div class='alert alert-success'>" + response
@@ -302,7 +351,7 @@
 </script>
 
 <script>
-    document.getElementById('productSearchButton').addEventListener('click', function() {
+    document.getElementById('productSearchButton').addEventListener('click', function () {
         let query = document.getElementById('productSearchInput').value;
         if (query) {
             window.location.href = `{{ url('product') }}?search=${encodeURIComponent(query)}`;

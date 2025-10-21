@@ -337,16 +337,13 @@
                             <form id="order-place" method="POST" action="{{ route('order.place') }}">
                                 @csrf
                                 <input type="hidden" name="payment_method" id="payment_method" value="" />
-                                <input type="hidden" name="discount-amount-input" id="discount-amount-input"
-                                    value="" />
+                                <input type="hidden" name="discount-amount-input" id="discount-amount-input" value="" />
                                 <input type="hidden" name="gift-amount-input" id="gift-amount-input" value="" />
                                 <input type="hidden" name="discount_code" id="discount_code" value="" />
                                 <input type="hidden" name="gift_card_code" id="gift_card_code" value="" />
                                 <input type="hidden" name="total_variation_price" value="{{ $variation }}" />
-                                <input type="hidden" name="shipping_method_name" id="shipping_method_name"
-                                    value="" />
-                                <input type="hidden" name="shipping" id="shipping_amount_input"
-                                    value="0" />
+                                <input type="hidden" name="shipping_method_name" id="shipping_method_name" value="" />
+                                <input type="hidden" name="shipping" id="shipping_amount_input" value="0" />
                                 <div id="customer-info-form">
 
                                     <div class="row">
@@ -366,67 +363,60 @@
                                             <h3>Contact</h3>
                                         </div>
 
-                                        @if (Auth::check())
-                                            <?php $_getUser = DB::table('users')
-                                                ->where('id', '=', Auth::user()->id)
-                                                ->first(); ?>
+                                        <?php $_getUser = DB::table('users')
+        ->where('id', '=', Auth::user()->id)
+        ->first(); ?>
 
-                                            <div class="form-group">
-                                                <input class="form-control left" name="email" placeholder="Email *"
-                                                    type="email"
-                                                    value="{{ old('email') ? old('email') : $_getUser->email }}" required>
-                                            </div>
+                                        <div class="form-group">
+                                            <input class="form-control left" name="email" placeholder="Email *" type="email"
+                                                value="{{ old('email') ? old('email') : $_getUser->email }}" required>
+                                        </div>
 
-                                            <div class="section-heading dark-color">
-                                                <h3>Shipping address</h3>
-                                            </div>
+                                        <div class="section-heading dark-color">
+                                            <h3>Shipping address</h3>
+                                        </div>
 
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <input class="form-control" id="first_name" name="first_name"
-                                                            value="{{ old('first_name') ? old('first_name') : $_getUser->name }}"
-                                                            placeholder="First Name *" type="text" required>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <input class="form-control" id="last_name" name="last_name"
-                                                            value="{{ old('last_name') ? old('last_name') : $_getUser->name }}"
-                                                            placeholder="Last Name *" type="text" required>
-                                                    </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <input class="form-control" id="first_name" name="first_name"
+                                                        value="{{ old('first_name') ? old('first_name') : $_getUser->name }}"
+                                                        placeholder="First Name *" type="text" required>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input class="form-control" id="last_name" name="last_name"
+                                                        value="{{ old('last_name') ? old('last_name') : $_getUser->name }}"
+                                                        placeholder="Last Name *" type="text" required>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div class="form-group">
-                                                <input class="form-control" type="text" name="company" value=""
-                                                    placeholder="Company (optional)">
-                                            </div>
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="company" value=""
+                                                placeholder="Company (optional)">
+                                        </div>
 
-                                            <div class="form-group">
-                                                <input class="form-control" type="text" id="searchTextField"
-                                                    name="googleaddress" placeholder="Address" required>
-                                            </div>
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" id="searchTextField"
+                                                name="googleaddress" placeholder="Address" required>
+                                        </div>
 
-                                            <div class="form-group">
-                                                <input class="form-control" type="text" name="street_number"
-                                                    value="" placeholder="Apt/ Unit# (optional)">
-                                            </div>
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="street_number" value=""
+                                                placeholder="Apt/ Unit# (optional)">
+                                        </div>
 
-                                            <!-- Hidden fields for address components -->
-                                            <input type="hidden" name="country" id="country">
-                                            <input type="hidden" name="address_line_1" id="address">
-                                            <input type="hidden" name="city" id="city">
-                                            <input type="hidden" name="postal_code" id="postal">
-                                            <input type="hidden" name="state" id="state">
+                                        <!-- Hidden fields for address components -->
+                                        <input type="hidden" name="country" id="country">
+                                        <input type="hidden" name="address_line_1" id="address">
+                                        <input type="hidden" name="city" id="city">
+                                        <input type="hidden" name="postal_code" id="postal">
+                                        <input type="hidden" name="state" id="state">
 
-                                            <div class="form-group">
-                                                <button type="button" id="continue-to-shipping"
-                                                    class="btn btn-primary">Continue to Shipping</button>
-                                            </div>
-                                        @else
-                                            <a href="{{ url('signin') }}" target="_blank" class="btn proceed_button2">
-                                                You can not purchase without authentication (Please Signin Now)
-                                            </a>
-                                        @endif
+                                        <div class="form-group">
+                                            <button type="button" id="continue-to-shipping" class="btn btn-primary">Continue
+                                                to Shipping</button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -530,43 +520,43 @@
                     <div class="fixed-slides">
                         <div class="YouOrder">
                             @foreach ($cart as $key => $value)
-                                <?php
-                                $prod_image = App\Product::where('id', $value['id'])->first();
-                                ?>
-                                <div class="product-cart">
-                                    <div class="product-img-view">
-                                        <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="product-info">
-                                        <p class="custompp">
-                                            <span>
-                                                {{ $value['name'] }}
-                                                @if (isset($value['id']))
-                                                    <a href='{{ route('remove_cart', $value['id']) }}'">
-                                                        <i class="fa-solid fa-xmark"></i>
-                                                    </a>
-                                                @endif
-                                            </span>
-                                            <span class="customp">
-                                                ${{ $value['baseprice'] * $value['qty'] }} </span>
-                                        </p>
-                                        <p class="custompp"> variation price
-                                            <span class="customp">
-                                                <?php $t_var = 0; ?>
-                                                @foreach ($value['variation'] as $key => $values)
                                                     <?php
-                                                    $t_var += $values['attribute_price'];
-                                                    ?>
-                                                @endforeach
-                                                ${{ $t_var * $value['qty'] }}
-                                                <?php $variation += $t_var * $value['qty']; ?>
-                                            </span>
-                                        </p>
-                                        <?php $subtotal += $value['baseprice'] * $value['qty'];
-                                        $variation += $value['variation_price'];
-                                        ?>
-                                    </div>
-                                </div>
+                                $prod_image = App\Product::where('id', $value['id'])->first();
+                                                                                                                    ?>
+                                                    <div class="product-cart">
+                                                        <div class="product-img-view">
+                                                            <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
+                                                        </div>
+                                                        <div class="product-info">
+                                                            <p class="custompp">
+                                                                <span>
+                                                                    {{ $value['name'] }}
+                                                                    @if (isset($value['id']))
+                                                                        <a href='{{ route('remove_cart', $value['id']) }}'">
+                                                                                                                                                        <i class="
+                                                                            fa-solid fa-xmark"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                </span>
+                                                                <span class="customp">
+                                                                    ${{ $value['baseprice'] * $value['qty'] }} </span>
+                                                            </p>
+                                                            <p class="custompp"> variation price
+                                                                <span class="customp">
+                                                                    <?php    $t_var = 0; ?>
+                                                                    @foreach ($value['variation'] as $key => $values)
+                                                                                                        <?php
+                                                                        $t_var += $values['attribute_price'];
+                                                                                                                                                                                                                                                    ?>
+                                                                    @endforeach
+                                                                    ${{ $t_var * $value['qty'] }}
+
+                                                                </span>
+                                                            </p>
+                                                            <?php    $subtotal += $value['baseprice'] * $value['qty'];
+                                                                                                                            ?>
+                                                        </div>
+                                                    </div>
                             @endforeach
 
                             <div class="amount-wrapper">
@@ -580,153 +570,149 @@
 
                                 <div id="shipping-results">
                                     {{-- <div class="order-summary"> --}}
-                                    {{-- <div id="taxli" style="display:none;">
+                                        {{-- <div id="taxli" style="display:none;">
                                             <h4>Tax: <span id="tax-amount">$0.00</span></h4>
                                         </div> --}}
-                                    {{-- <div id="shipping-cost" style="display:none;">
+                                        {{-- <div id="shipping-cost" style="display:none;">
                                             <h4>Shipping: <span id="shipping-amount">$0.00</span></h4>
                                         </div> --}}
-                                    {{-- <div id="order-total">
+                                        {{-- <div id="order-total">
                                             <h4>Total: <span id="grand-total">$0.00</span></h4>
                                         </div> --}}
-                                    {{-- </div>
-                                     </div> --}}
-
-                                    <!-- Order Summary Section -->
-                                    <div class="order-summary">
-                                        <!-- Subtotal -->
-                                        <div class="summary-item">
-                                            <span>Subtotal:</span>
-                                            <span>${{ number_format($subtotal, 2) }}</span>
-                                        </div>
-
-                                        <!-- Variations -->
-                                        <div class="summary-item">
-                                            <span>Variations:</span>
-                                            <span>${{ number_format($variation, 2) }}</span>
-                                        </div>
-
-                                        <!-- Shipping (will be updated dynamically) -->
-                                        <div class="summary-item" id="shipping-cost" style="display:none;">
-                                            <span>Shipping:</span>
-                                            <span id="shipping-amount">$0.00</span>
-                                        </div>
-
-                                        <!-- Tax (will be updated dynamically) -->
-                                        {{-- <div class="summary-item" id="taxli" style="display:none;">
-                                            <span>Tax:</span>
-                                            <span id="tax-amount">$0.00</span>
-                                        </div> --}}
-
-                                        <!-- Discount (dynamic) -->
-                                        <div class="summary-item" id="discount-row" style="display:none;">
-                                            <span>Discount:</span>
-                                            <span id="discount-amount">-$0.00</span>
-                                        </div>
-
-                                        <!-- Gift Card (dynamic) -->
-                                        <div class="summary-item" id="gift-row" style="display:none;">
-                                            <span>Gift Card:</span>
-                                            <span id="gift-amount">-$0.00</span>
-                                        </div>
-
-                                        <hr>
-
-                                        <!-- Grand Total -->
-
-                                    </div>
-                                </div>
-
-
-                                <!-- Discount Section -->
-                                <div class="discount-section" style="display: none;">
-                                    <div class="apply-discount">
-                                        <input type="checkbox" id="toggle_discount"
-                                            @if (session()->has('discount')) checked @endif />
-                                        <label for="toggle_discount">Apply Discount</label>
-                                        <div id="discount-content"
-                                            style="@if (session()->has('discount')) display:block; @else display:none; @endif">
-                                            @if (session()->has('discount'))
-                                                <span id="discount-code-display">{{ session('discount.code') }}</span>
-                                                <span id="discount-value">-{{ session('discount.percentage') }}%</span>
-                                                <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
-                                            @else
-                                                <input type="text" id="discount-input"
-                                                    placeholder="Enter discount code">
-                                                <button id="apply-discount" class="btn btn-primary">Apply</button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- @php
-                                session()->forget('gift_card');
-                            @endphp --}}
-                                <!-- Gift Card Section -->
-                                <div class="gift-card-section mt-3" style="display: none;">
-                                    <div class="apply-gift-card">
-                                        <input type="checkbox" id="toggle_gift_card"
-                                            @if (session()->has('gift_card')) checked @endif />
-                                        <label for="toggle_gift_card">Apply Gift Card</label>
-                                        <div id="gift-card-content"
-                                            style="@if (session()->has('gift_card')) display:block; @else display:none; @endif">
-                                            @if (session()->has('gift_card'))
-                                                <span id="gift-card-code-display">{{ session('gift_card.code') }}</span>
-                                                <span
-                                                    id="gift-card-value">-${{ number_format(session('gift_card.amount'), 2) }}</span>
-                                                <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
-                                            @else
-                                                <input type="text" id="gift-card-input"
-                                                    placeholder="Enter gift card code">
-                                                <button id="apply-gift-card" class="btn btn-primary">Apply</button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Order Summary Rows -->
-                                {{-- <div class="summary-item discount-row" id="discount-row"
-                                    style="@if (session()->has('discount')) display:flex; @else display:none; @endif">
-                                    <span>Discount:</span>
-                                    <span id="discount-amount">
-                                        @if (session()->has('discount'))
-                                            -${{ number_format(session('discount.amount'), 2) }}
-                                        @else
-                                            -$0.00
-                                        @endif
-                                    </span>
-                                </div>
-
-
-                                <div class="summary-item" id="gift-card-row"
-                                    style="@if (session()->has('gift_card')) display:flex; @else display:none; @endif">
-                                    <span>Gift Card:</span>
-                                    <span id="gift-card-amount">
-                                        @if (session()->has('gift_card'))
-                                            -${{ number_format(session('gift_card.amount'), 2) }}
-                                        @else
-                                            -$0.00
-                                        @endif
-                                    </span>
+                                        {{-- </div>
                                 </div> --}}
 
-                                <div class="summary-item grand-total" id="order-total"
-                                    style="display:flex; justify-content: space-between; align-items: center;">
-                                    <h4 class="m-0">Total:</h4>
-                                    <span id="grand-total">${{ number_format($subtotal + $variation, 2) }}</span>
-                                </div>
+                                <!-- Order Summary Section -->
+                                <div class="order-summary">
+                                    <!-- Subtotal -->
+                                    <div class="summary-item">
+                                        <span>Subtotal:</span>
+                                        <span>${{ number_format($subtotal, 2) }}</span>
+                                    </div>
 
-                                <input type="hidden" name="total_price" id="total_price"
-                                    value="{{ $subtotal + $variation }}" />
+                                    <!-- Variations -->
+                                    <!-- <div class="summary-item">
+                                                <span>Variations:</span>
+                                                <span>${{ number_format($variation, 2) }}</span>
+                                            </div> -->
+
+                                    <!-- Shipping (will be updated dynamically) -->
+                                    <div class="summary-item" id="shipping-cost" style="display:none;">
+                                        <span>Shipping:</span>
+                                        <span id="shipping-amount">$0.00</span>
+                                    </div>
+
+                                    <!-- Tax (will be updated dynamically) -->
+                                    {{-- <div class="summary-item" id="taxli" style="display:none;">
+                                        <span>Tax:</span>
+                                        <span id="tax-amount">$0.00</span>
+                                    </div> --}}
+
+                                    <!-- Discount (dynamic) -->
+                                    <div class="summary-item" id="discount-row" style="display:none;">
+                                        <span>Discount:</span>
+                                        <span id="discount-amount">-$0.00</span>
+                                    </div>
+
+                                    <!-- Gift Card (dynamic) -->
+                                    <div class="summary-item" id="gift-row" style="display:none;">
+                                        <span>Gift Card:</span>
+                                        <span id="gift-amount">-$0.00</span>
+                                    </div>
+
+                                    <hr>
+
+                                    <!-- Grand Total -->
+
+                                </div>
                             </div>
 
-                            <hr>
 
-                            <button type="submit" class="hvr-wobble-skew" style="display:none">Place Order</button>
+                            <!-- Discount Section -->
+                            <div class="discount-section" style="display: none;">
+                                <div class="apply-discount">
+                                    <input type="checkbox" id="toggle_discount" @if (session()->has('discount')) checked
+                                    @endif />
+                                    <label for="toggle_discount">Apply Discount</label>
+                                    <div id="discount-content"
+                                        style="@if (session()->has('discount')) display:block; @else display:none; @endif">
+                                        @if (session()->has('discount'))
+                                            <span id="discount-code-display">{{ session('discount.code') }}</span>
+                                            <span id="discount-value">-{{ session('discount.percentage') }}%</span>
+                                            <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
+                                        @else
+                                            <input type="text" id="discount-input" placeholder="Enter discount code">
+                                            <button id="apply-discount" class="btn btn-primary">Apply</button>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- @php
+                            session()->forget('gift_card');
+                            @endphp --}}
+                            <!-- Gift Card Section -->
+                            <div class="gift-card-section mt-3" style="display: none;">
+                                <div class="apply-gift-card">
+                                    <input type="checkbox" id="toggle_gift_card" @if (session()->has('gift_card')) checked
+                                    @endif />
+                                    <label for="toggle_gift_card">Apply Gift Card</label>
+                                    <div id="gift-card-content"
+                                        style="@if (session()->has('gift_card')) display:block; @else display:none; @endif">
+                                        @if (session()->has('gift_card'))
+                                            <span id="gift-card-code-display">{{ session('gift_card.code') }}</span>
+                                            <span
+                                                id="gift-card-value">-${{ number_format(session('gift_card.amount'), 2) }}</span>
+                                            <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
+                                        @else
+                                            <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                                            <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Summary Rows -->
+                            {{-- <div class="summary-item discount-row" id="discount-row"
+                                style="@if (session()->has('discount')) display:flex; @else display:none; @endif">
+                                <span>Discount:</span>
+                                <span id="discount-amount">
+                                    @if (session()->has('discount'))
+                                    -${{ number_format(session('discount.amount'), 2) }}
+                                    @else
+                                    -$0.00
+                                    @endif
+                                </span>
+                            </div>
+
+
+                            <div class="summary-item" id="gift-card-row"
+                                style="@if (session()->has('gift_card')) display:flex; @else display:none; @endif">
+                                <span>Gift Card:</span>
+                                <span id="gift-card-amount">
+                                    @if (session()->has('gift_card'))
+                                    -${{ number_format(session('gift_card.amount'), 2) }}
+                                    @else
+                                    -$0.00
+                                    @endif
+                                </span>
+                            </div> --}}
+
+                            <div class="summary-item grand-total" id="order-total"
+                                style="display:flex; justify-content: space-between; align-items: center;">
+                                <h4 class="m-0">Total:</h4>
+                                <span id="grand-total">${{ number_format($subtotal + $variation, 2) }}</span>
+                            </div>
+
+                            <input type="hidden" name="total_price" id="total_price" value="{{ $subtotal + $variation }}" />
                         </div>
+
+                        <hr>
+
+                        <button type="submit" class="hvr-wobble-skew" style="display:none">Place Order</button>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </section>
 @endsection
@@ -738,8 +724,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
         integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    {{-- <script src="https://www.paypalobjects.com/api/checkout.js"></script> --}}
-    {{-- <script
+    {{--
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script> --}}
+    {{--
+    <script
         src="https://www.paypal.com/sdk/js?client-id=AR0NWTUnnZIoWXQR_CVmMcExhY7gigkcBfMzRAarXxJAhMk1M0Cb5vXwRbx24IUU5HY_r94D_dBSro2F&components=buttons,marks,messages,payment-fields&enable-funding=paylater,venmo"
         data-sdk-integration-source="button-factory"></script> --}}
 
@@ -749,7 +737,7 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Initialize variables
             let subtotal = parseFloat("{{ $subtotal }}");
             let variation = parseFloat("{{ $variation }}");
@@ -771,16 +759,16 @@
             // }
 
             // Discount toggle
-            $('#toggle_discount').change(function() {
+            $('#toggle_discount').change(function () {
                 if ($(this).is(':checked')) {
                     $('#discount-content').show();
 
                     // If discount already applied, don't show input
                     if (!"{{ session()->get('discount') }}") {
                         $('#discount-content').html(`
-                            <input type="text" id="discount-input" placeholder="Enter discount code">
-                            <button id="apply-discount" class="btn btn-primary">Apply</button>
-                        `);
+                                        <input type="text" id="discount-input" placeholder="Enter discount code">
+                                        <button id="apply-discount" class="btn btn-primary">Apply</button>
+                                    `);
                     }
                 } else {
                     // Remove discount
@@ -835,18 +823,18 @@
             // });
 
             // Then your event handlers and other code
-            $('#toggle_gift_card').change(function() {
+            $('#toggle_gift_card').change(function () {
                 if ($(this).is(':checked')) {
                     $('#gift-card-content').show();
 
                     var giftCardAmount =
-                        {{ session()->has('gift_card') ? session('gift_card.amount') : 'null' }};
+                                    {{ session()->has('gift_card') ? session('gift_card.amount') : 'null' }};
                     if (giftCardAmount !== null) {
 
                         $('#gift-card-content').html(`
-                            <input type="text" id="gift-card-input" placeholder="Enter gift card code">
-                            <button id="apply-gift-card" class="btn btn-primary">Apply</button>
-                        `);
+                                        <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                                        <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                                    `);
                     }
                 } else {
                     // Remove gift card
@@ -922,7 +910,7 @@
                 $('#discount-amount').text('-${{ session()->get('discount')->amount }}');
             @endif
 
-        });
+                    });
     </script>
 
     <script>
@@ -957,7 +945,7 @@
             var temp_p = 0;
 
             // Iterate through each span and calculate the total additional price
-            $('.span_selected_option_price').each(function() {
+            $('.span_selected_option_price').each(function () {
                 if ($(this).text() != '') {
                     var stringWithoutDollarSign = $(this).text().replace("$", "");
                     temp_p += parseFloat(stringWithoutDollarSign);
@@ -974,18 +962,18 @@
 
         updateTotalPrice();
 
-        $('.get_option').on('change', function() {
+        $('.get_option').on('change', function () {
             updateTotalPrice();
         });
 
-        $(document).ready(function() {
-            $(".inner-shop").click(function() {
+        $(document).ready(function () {
+            $(".inner-shop").click(function () {
                 $(".inner-drop").show()
             })
         });
 
-        $(document).ready(function() {
-            $(".inner-shop-2").click(function() {
+        $(document).ready(function () {
+            $(".inner-shop-2").click(function () {
                 $(".inner-drop-2").show()
             })
         });
@@ -1028,7 +1016,7 @@
     </script>
 
     <script>
-        $(document).on('click', '#addCart', function(e) {
+        $(document).on('click', '#addCart', function (e) {
             e.preventDefault();
 
             let button = $(this);
@@ -1054,7 +1042,7 @@
                     price: prod_price,
                     qty: qty,
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.status) {
                         toastr.success(response.message);
                         if (response.cart_count !== undefined) {
@@ -1072,12 +1060,12 @@
                         productshow.hide(); // Hide product
 
                         // let undoBtn = $(`
-                    //         <div class="col-lg-12">
-                    //             <div class="undo_btn_form">
-                    //                 <button class="undoCart btn btn-warning" data-product='${JSON.stringify(productData)}'>Undo</button>
-                    //             </div>
-                    //         </div>
-                    //    `);
+                        //         <div class="col-lg-12">
+                        //             <div class="undo_btn_form">
+                        //                 <button class="undoCart btn btn-warning" data-product='${JSON.stringify(productData)}'>Undo</button>
+                        //             </div>
+                        //         </div>
+                        //    `);
                         // productshow.after(undoBtn);
 
                         // ✅ Save to localStorage
@@ -1096,7 +1084,7 @@
                         toastr.error(response.message);
                     }
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     toastr.error('Error: ' + xhr.responseJSON.message);
                 }
             });
@@ -1104,20 +1092,20 @@
     </script>
 
     <script>
-        $('#shipping_method').click(function() {
+        $('#shipping_method').click(function () {
             $('.icon-down').toggleClass('rotated');
         });
     </script>
 
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Initialize Google Places Autocomplete
             function initAutocomplete() {
                 var input = document.getElementById('searchTextField');
                 var autocomplete = new google.maps.places.Autocomplete(input);
 
-                autocomplete.addListener('place_changed', function() {
+                autocomplete.addListener('place_changed', function () {
                     var place = autocomplete.getPlace();
                     var addressComponents = {
                         postal_code: '',
@@ -1128,7 +1116,7 @@
                     };
 
                     // Extract address components
-                    place.address_components.forEach(function(component) {
+                    place.address_components.forEach(function (component) {
                         if (component.types.includes('postal_code')) {
                             addressComponents.postal_code = component.short_name;
                         }
@@ -1159,7 +1147,7 @@
             initAutocomplete();
 
             // Step 1: Customer Info to Shipping Options
-            $('#continue-to-shipping').click(function() {
+            $('#continue-to-shipping').click(function () {
                 // Validate required fields
                 if (!$('#searchTextField').val()) {
                     toastr.error('Please enter a valid address');
@@ -1172,7 +1160,7 @@
             });
 
             // Step 2: Back to Customer Info
-            $('#back-to-info').click(function() {
+            $('#back-to-info').click(function () {
                 var subtotal = parseFloat("{{ $subtotal }}");
                 var variation = parseFloat("{{ $variation }}");
                 var grandTotal = (subtotal + variation).toFixed(2);
@@ -1184,7 +1172,7 @@
             });
 
             // Step 2: Shipping Options to Payment
-            $('#continue-to-payment').click(function() {
+            $('#continue-to-payment').click(function () {
                 if (!$('input[name="shipping_method"]:checked').val()) {
                     toastr.error('Please select a shipping method');
                     return;
@@ -1202,7 +1190,7 @@
             });
 
             // Step 3: Back to Shipping Options
-            $('#back-to-shipping').click(function() {
+            $('#back-to-shipping').click(function () {
                 $('#payment-form').hide();
                 $('#shipping-options-form').show();
             });
@@ -1210,50 +1198,50 @@
             // Shipping methods configuration
             const shippingMethods = {
                 US: [{
-                        text: "UPS Ground",
-                        code: "03"
-                    },
-                    {
-                        text: "UPS 3 Day Select",
-                        code: "12"
-                    },
-                    {
-                        text: "UPS 2nd Day Air",
-                        code: "02"
-                    },
-                    {
-                        text: "UPS Next Day Air Saver",
-                        code: "13"
-                    },
-                    {
-                        text: "UPS Next Day Air",
-                        code: "01"
-                    },
-                    {
-                        text: "UPS SurePost",
-                        code: "93"
-                    }
+                    text: "UPS Ground",
+                    code: "03"
+                },
+                {
+                    text: "UPS 3 Day Select",
+                    code: "12"
+                },
+                {
+                    text: "UPS 2nd Day Air",
+                    code: "02"
+                },
+                {
+                    text: "UPS Next Day Air Saver",
+                    code: "13"
+                },
+                {
+                    text: "UPS Next Day Air",
+                    code: "01"
+                },
+                {
+                    text: "UPS SurePost",
+                    code: "93"
+                }
                 ],
                 INTERNATIONAL: [{
-                        text: "UPS Standard",
-                        code: "11"
-                    },
-                    {
-                        text: "UPS Worldwide Expedited",
-                        code: "08"
-                    },
-                    {
-                        text: "UPS Worldwide Saver",
-                        code: "65"
-                    },
-                    {
-                        text: "UPS Worldwide Express",
-                        code: "07"
-                    },
-                    {
-                        text: "UPS Worldwide Express Plus",
-                        code: "54"
-                    }
+                    text: "UPS Standard",
+                    code: "11"
+                },
+                {
+                    text: "UPS Worldwide Expedited",
+                    code: "08"
+                },
+                {
+                    text: "UPS Worldwide Saver",
+                    code: "65"
+                },
+                {
+                    text: "UPS Worldwide Express",
+                    code: "07"
+                },
+                {
+                    text: "UPS Worldwide Express Plus",
+                    code: "54"
+                }
                 ]
             };
 
@@ -1289,34 +1277,34 @@
                             shipping_method: method.code,
                             _token: "{{ csrf_token() }}"
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status) {
                                 const radioId = `shipping-method-${method.code}`;
                                 const radioHtml = `
-                            <div class="shipping-method-option">
-                                <input type="radio"
-                                    id="${radioId}"
-                                    name="shipping_method"
-                                    value="${method.code}"
-                                    data-rate="${response.upsamount}"
-                                    data-tax="${response.tax || 0}"
-                                    data-method-name="${method.text}"
-                                    class="shipping-method-radio">
-                                <label for="${radioId}">
-                                    <span class="method-name">${method.text}</span>
-                                    <span class="method-price">$${response.upsamount}</span>
-                                    ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''}
-                                </label>
-                            </div>
-                        `;
+                                        <div class="shipping-method-option">
+                                            <input type="radio"
+                                                id="${radioId}"
+                                                name="shipping_method"
+                                                value="${method.code}"
+                                                data-rate="${response.upsamount}"
+                                                data-tax="${response.tax || 0}"
+                                                data-method-name="${method.text}"
+                                                class="shipping-method-radio">
+                                            <label for="${radioId}">
+                                                <span class="method-name">${method.text}</span>
+                                                <span class="method-price">$${response.upsamount}</span>
+                                                ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''}
+                                            </label>
+                                        </div>
+                                    `;
                                 $('#shipping-methods-container').append(radioHtml);
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             console.error('Error loading shipping method:', method.text, xhr
                                 .responseText);
                         },
-                        complete: function() {
+                        complete: function () {
                             $('#shipping-loading').hide();
                         }
                     });
@@ -1324,29 +1312,54 @@
             }
 
             // When shipping method is selected, update totals
-            $(document).on('change', '.shipping-method-radio', function() {
-                var selectedMethod = $(this).data('method-name');
-                var shippingRate = parseFloat($(this).data('rate'));
+            // $(document).on('change', '.shipping-method-radio', function () {
+            //     var selectedMethod = $(this).data('method-name');
+            //     var shippingRate = parseFloat($(this).data('rate'));
+            //     var taxRate = parseFloat($(this).data('tax')) || 0;
+            //     var subtotal = parseFloat("{{ $subtotal }}");
+            //     var variation = parseFloat("{{ $variation }}");
+
+            //     // Calculate tax amount
+            //     var taxAmount = ((subtotal + variation) * (taxRate / 100)).toFixed(2);
+
+            //     // Calculate grand total
+            //     var grandTotal = (subtotal + variation + parseFloat(taxAmount) + shippingRate).toFixed(2);
+
+            //     // Update display
+            //     $('#shipping-method-name').text(selectedMethod);
+            //     $('#shipping-method-row').show();
+            //     $('#shipping-amount').text('$' + shippingRate.toFixed(2));
+            //     $('#shipping-cost').show();
+            //     $('#tax-amount').text('$' + taxAmount);
+            //     $('#tax-row').show();
+            //     $('#grand-total').text('$' + grandTotal);
+
+            //     // Update hidden fields
+            //     $('#shipping_method_name').val(selectedMethod);
+            //     $('#shipping_amount_input').val(shippingRate.toFixed(2));
+            //     $('#total_price').val(grandTotal);
+
+            //     $('.discount-section').show();
+            //     $('.gift-card-section').show();
+            // });
+            $(document).on('change', '.shipping-method-radio', function () {
+                var selectedMethod = $(this).data('method-name') || '';
+                var shippingRate = parseFloat($(this).data('rate')) || 0;
                 var taxRate = parseFloat($(this).data('tax')) || 0;
-                var subtotal = parseFloat("{{ $subtotal }}");
-                var variation = parseFloat("{{ $variation }}");
+                var subtotal = parseFloat("{{ $subtotal ?? 0 }}") || 0;
+                var variation = parseFloat("{{ $variation ?? 0 }}") || 0;
 
-                // Calculate tax amount
-                var taxAmount = ((subtotal + variation) * (taxRate / 100)).toFixed(2);
+                var taxAmount = ((subtotal + variation) * (taxRate / 100)) || 0;
+                var grandTotal = (subtotal + variation + taxAmount + shippingRate).toFixed(2);
 
-                // Calculate grand total
-                var grandTotal = (subtotal + variation + parseFloat(taxAmount) + shippingRate).toFixed(2);
-
-                // Update display
                 $('#shipping-method-name').text(selectedMethod);
                 $('#shipping-method-row').show();
                 $('#shipping-amount').text('$' + shippingRate.toFixed(2));
                 $('#shipping-cost').show();
-                $('#tax-amount').text('$' + taxAmount);
+                $('#tax-amount').text('$' + taxAmount.toFixed(2));
                 $('#tax-row').show();
                 $('#grand-total').text('$' + grandTotal);
 
-                // Update hidden fields
                 $('#shipping_method_name').val(selectedMethod);
                 $('#shipping_amount_input').val(shippingRate.toFixed(2));
                 $('#total_price').val(grandTotal);
@@ -1356,7 +1369,7 @@
             });
 
             // Payment method selection
-            $('#payment-accordion .btn-link').on('click', function(e) {
+            $('#payment-accordion .btn-link').on('click', function (e) {
                 if (!$(this).hasClass('collapsed')) {
                     e.stopPropagation();
                 }
@@ -1391,7 +1404,7 @@
                 card.mount('#card-element');
             }
 
-            card.addEventListener('change', function(event) {
+            card.addEventListener('change', function (event) {
                 var displayError = document.getElementById('card-errors');
                 if (displayError) {
                     if (event.error) {
@@ -1405,8 +1418,8 @@
             });
 
             // Handle Stripe payment submission
-            $('#stripe-submit').click(function() {
-                stripe.createToken(card).then(function(result) {
+            $('#stripe-submit').click(function () {
+                stripe.createToken(card).then(function (result) {
                     var errorCount = checkEmptyFileds();
                     if ((result.error) || (errorCount == 1)) {
                         if (result.error) {
@@ -1501,7 +1514,7 @@
                         disallowed: []
                     },
 
-                    createOrder: function(data, actions) {
+                    createOrder: function (data, actions) {
                         return actions.order.create({
                             purchase_units: [{
                                 amount: {
@@ -1511,8 +1524,8 @@
                         });
                     },
 
-                    onApprove: function(data, actions) {
-                        return actions.order.capture().then(function(details) {
+                    onApprove: function (data, actions) {
+                        return actions.order.capture().then(function (details) {
                             $.toast({
                                 heading: 'Success!',
                                 position: 'bottom-right',
@@ -1532,13 +1545,13 @@
                         });
                     },
 
-                    onCancel: function(data) {
+                    onCancel: function (data) {
                         $('input[name="payment_status"]').val('Cancelled');
                         $('input[name="payment_id"]').val(data.orderID);
                         $('input[name="payment_method"]').val('paypal');
                     },
 
-                    onError: function(err) {
+                    onError: function (err) {
                         console.error('PayPal error:', err);
                         $.toast({
                             heading: 'Error!',
@@ -1557,7 +1570,7 @@
             // Field validation function
             function checkEmptyFileds() {
                 var errorCount = 0;
-                $('form#order-place').find('.form-control').each(function() {
+                $('form#order-place').find('.form-control').each(function () {
                     if ($(this).prop('required') && !$(this).val()) {
                         $(this).parent().find('.invalid-feedback').addClass('d-block');
                         $(this).parent().find('.invalid-feedback strong').html('Field is Required');
@@ -1571,20 +1584,20 @@
 
             // Initialize from session if exists
             // @if (session()->has('discount'))
-            //     applyDiscount({
-            //         code: "{{ session('discount.code') }}",
-            //         percentage: {{ session('discount.percentage') }},
-            //         amount: {{ session('discount.amount') }}
-            //     });
+                //     applyDiscount({
+                //         code: "{{ session('discount.code') }}",
+                //         percentage: {{ session('discount.percentage') }},
+                //         amount: {{ session('discount.amount') }}
+                //     });
             // @endif
 
             // @if (session()->has('gift_card'))
-            //     $(document).ready(function() {
-            //         applyGiftCard({
-            //             code: "{{ session('gift_card.code') }}",
-            //             amount: {{ session('gift_card.amount') }}
-            //         });
-            //     });
+                //     $(document).ready(function() {
+                //         applyGiftCard({
+                //             code: "{{ session('gift_card.code') }}",
+                //             amount: {{ session('gift_card.amount') }}
+                //         });
+                //     });
             // @endif
 
 
@@ -1594,17 +1607,17 @@
                 $('#discount-amount').text('-$' + discount.amount.toFixed(2));
                 $('#discount-amount-input').val(discount.amount.toFixed(2));
                 $('#discount-content').html(`
-                <span id="discount-code-display">${discount.code}</span>
-                <span id="discount-value">-${discount.percentage}%</span>
-                <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
-                `);
+                            <span id="discount-code-display">${discount.code}</span>
+                            <span id="discount-value">-${discount.percentage}%</span>
+                            <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
+                            `);
                 $('#toggle_discount').prop('disabled', true);
                 updateGrandTotal();
                 removediscount();
             }
 
             function removediscount() {
-                $('#remove-discount').on('click', function() {
+                $('#remove-discount').on('click', function () {
                     $('#toggle_discount').prop('checked', false);
                     $('#discount-content').hide();
                     $('#discount-amount').text('-$0.00');
@@ -1621,7 +1634,7 @@
 
             // Remove Gift Card Helper
             function removeGiftCard() {
-                $('#remove-gift-card').on('click', function() {
+                $('#remove-gift-card').on('click', function () {
                     gift = 0;
                     $('#toggle_gift_card').prop('checked', false);
                     $('#gift-row').hide();
@@ -1630,9 +1643,9 @@
 
                     // Reset the gift card content back to input
                     $('#gift-card-content').html(`
-                        <input type="text" id="gift-card-input" placeholder="Enter gift card code">
-                        <button id="apply-gift-card" class="btn btn-primary">Apply</button>
-                    `);
+                                    <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                                    <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                                `);
                     $('#toggle_gift_card').prop('disabled', false);
 
                     updateGrandTotal();
@@ -1660,7 +1673,7 @@
             }
 
             // Discount Application
-            $(document).on('click', '#apply-discount', function() {
+            $(document).on('click', '#apply-discount', function () {
                 var discountCode = $('#discount-input').val().trim();
                 $('#discount_code').val(discountCode);
                 if (!discountCode) {
@@ -1680,7 +1693,7 @@
                         subtotal: currentTotal,
                         _token: "{{ csrf_token() }}"
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             applyDiscount(response.discount);
                             toastr.success('Discount applied successfully');
@@ -1688,7 +1701,7 @@
                             toastr.error(response.message);
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         if (xhr.status === 422) {
                             var errors = xhr.responseJSON.errors;
                             for (var field in errors) {
@@ -1702,7 +1715,7 @@
             });
 
             // Gift Card Application
-            $(document).on('click', '#apply-gift-card', function() {
+            $(document).on('click', '#apply-gift-card', function () {
                 var giftCardCode = $('#gift-card-input').val().trim();
                 $('#gift_card_code').val(giftCardCode);
                 if (!giftCardCode) {
@@ -1722,7 +1735,7 @@
                         subtotal: currentTotal,
                         _token: "{{ csrf_token() }}"
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             // applyGiftCard(response.gift_card);
                             var giftCard = response.gift_card;
@@ -1733,10 +1746,10 @@
                             $('#gift-amount-input').val(gift);
 
                             $('#gift-card-content').html(`
-                                <span id="gift-card-code-display">${giftCard.code}</span>
-                                <span id="gift-card-value">-$${parseFloat(giftCard.amount).toFixed(2)}</span>
-                                <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
-                            `);
+                                            <span id="gift-card-code-display">${giftCard.code}</span>
+                                            <span id="gift-card-value">-$${parseFloat(giftCard.amount).toFixed(2)}</span>
+                                            <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
+                                        `);
                             $('#toggle_gift_card').prop('disabled', true);
                             updateGrandTotal();
                             removeGiftCard();
@@ -1745,7 +1758,7 @@
                             toastr.error(response.message);
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         if (xhr.status === 422) {
                             var errors = xhr.responseJSON.errors;
                             for (var field in errors) {

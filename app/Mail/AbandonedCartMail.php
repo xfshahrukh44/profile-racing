@@ -12,7 +12,7 @@ class AbandonedCartMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $cart; // ✅ cart ko mail me accessible banane ke liye
+    public $cart; 
 
     /**
      * Create a new message instance.
@@ -38,9 +38,9 @@ class AbandonedCartMail extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'emails.abandoned_cart', // ye blade file hogi
+            markdown: 'emails.abandoned_cart', 
             with: [
-                'cart' => $this->cart, // ✅ cart ko view me bhejna
+                'cart' => $this->cart, 
             ],
         );
     }
