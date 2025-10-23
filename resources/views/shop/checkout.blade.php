@@ -485,8 +485,8 @@
                                                     <button class="btn btn-link" data-toggle="collapse"
                                                         data-target="#collapseTwo" aria-expanded="true"
                                                         aria-controls="collapseTwo" data-payment="stripe">
-                                                        Pay with Credit Card <img src="{{ asset('images/payment1.png') }}"
-                                                            alt="" width="150">
+                                                        Stripe Payment <img src="{{ asset('images/payment1.png') }}" alt=""
+                                                            width="150">
                                                     </button>
                                                 </h5>
                                             </div>
@@ -522,7 +522,7 @@
                             @foreach ($cart as $key => $value)
                                                     <?php
                                 $prod_image = App\Product::where('id', $value['id'])->first();
-                                                                                                                    ?>
+                                                                                                                                                                            ?>
                                                     <div class="product-cart">
                                                         <div class="product-img-view">
                                                             <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
@@ -533,7 +533,7 @@
                                                                     {{ $value['name'] }}
                                                                     @if (isset($value['id']))
                                                                         <a href='{{ route('remove_cart', $value['id']) }}'">
-                                                                                                                                                        <i class="
+                                                                                                                                                                                                                        <i class="
                                                                             fa-solid fa-xmark"></i>
                                                                         </a>
                                                                     @endif
@@ -547,14 +547,14 @@
                                                                     @foreach ($value['variation'] as $key => $values)
                                                                                                         <?php
                                                                         $t_var += $values['attribute_price'];
-                                                                                                                                                                                                                                                    ?>
+                                                                                                                                                                                                                                                                                                                                                                                    ?>
                                                                     @endforeach
                                                                     ${{ $t_var * $value['qty'] }}
 
                                                                 </span>
                                                             </p>
                                                             <?php    $subtotal += $value['baseprice'] * $value['qty'];
-                                                                                                                            ?>
+                                                                                                                                                                                    ?>
                                                         </div>
                                                     </div>
                             @endforeach
@@ -592,9 +592,9 @@
 
                                     <!-- Variations -->
                                     <!-- <div class="summary-item">
-                                                <span>Variations:</span>
-                                                <span>${{ number_format($variation, 2) }}</span>
-                                            </div> -->
+                                                        <span>Variations:</span>
+                                                        <span>${{ number_format($variation, 2) }}</span>
+                                                    </div> -->
 
                                     <!-- Shipping (will be updated dynamically) -->
                                     <div class="summary-item" id="shipping-cost" style="display:none;">
@@ -766,9 +766,9 @@
                     // If discount already applied, don't show input
                     if (!"{{ session()->get('discount') }}") {
                         $('#discount-content').html(`
-                                        <input type="text" id="discount-input" placeholder="Enter discount code">
-                                        <button id="apply-discount" class="btn btn-primary">Apply</button>
-                                    `);
+                                                <input type="text" id="discount-input" placeholder="Enter discount code">
+                                                <button id="apply-discount" class="btn btn-primary">Apply</button>
+                                            `);
                     }
                 } else {
                     // Remove discount
@@ -828,13 +828,13 @@
                     $('#gift-card-content').show();
 
                     var giftCardAmount =
-                                    {{ session()->has('gift_card') ? session('gift_card.amount') : 'null' }};
+                                            {{ session()->has('gift_card') ? session('gift_card.amount') : 'null' }};
                     if (giftCardAmount !== null) {
 
                         $('#gift-card-content').html(`
-                                        <input type="text" id="gift-card-input" placeholder="Enter gift card code">
-                                        <button id="apply-gift-card" class="btn btn-primary">Apply</button>
-                                    `);
+                                                <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                                                <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                                            `);
                     }
                 } else {
                     // Remove gift card
@@ -910,7 +910,7 @@
                 $('#discount-amount').text('-${{ session()->get('discount')->amount }}');
             @endif
 
-                    });
+                            });
     </script>
 
     <script>
@@ -1281,22 +1281,22 @@
                             if (response.status) {
                                 const radioId = `shipping-method-${method.code}`;
                                 const radioHtml = `
-                                        <div class="shipping-method-option">
-                                            <input type="radio"
-                                                id="${radioId}"
-                                                name="shipping_method"
-                                                value="${method.code}"
-                                                data-rate="${response.upsamount}"
-                                                data-tax="${response.tax || 0}"
-                                                data-method-name="${method.text}"
-                                                class="shipping-method-radio">
-                                            <label for="${radioId}">
-                                                <span class="method-name">${method.text}</span>
-                                                <span class="method-price">$${response.upsamount}</span>
-                                                ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''}
-                                            </label>
-                                        </div>
-                                    `;
+                                                <div class="shipping-method-option">
+                                                    <input type="radio"
+                                                        id="${radioId}"
+                                                        name="shipping_method"
+                                                        value="${method.code}"
+                                                        data-rate="${response.upsamount}"
+                                                        data-tax="${response.tax || 0}"
+                                                        data-method-name="${method.text}"
+                                                        class="shipping-method-radio">
+                                                    <label for="${radioId}">
+                                                        <span class="method-name">${method.text}</span>
+                                                        <span class="method-price">$${response.upsamount}</span>
+                                                        ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''}
+                                                    </label>
+                                                </div>
+                                            `;
                                 $('#shipping-methods-container').append(radioHtml);
                             }
                         },
@@ -1607,10 +1607,10 @@
                 $('#discount-amount').text('-$' + discount.amount.toFixed(2));
                 $('#discount-amount-input').val(discount.amount.toFixed(2));
                 $('#discount-content').html(`
-                            <span id="discount-code-display">${discount.code}</span>
-                            <span id="discount-value">-${discount.percentage}%</span>
-                            <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
-                            `);
+                                    <span id="discount-code-display">${discount.code}</span>
+                                    <span id="discount-value">-${discount.percentage}%</span>
+                                    <button id="remove-discount" class="btn btn-sm btn-link">Remove</button>
+                                    `);
                 $('#toggle_discount').prop('disabled', true);
                 updateGrandTotal();
                 removediscount();
@@ -1643,9 +1643,9 @@
 
                     // Reset the gift card content back to input
                     $('#gift-card-content').html(`
-                                    <input type="text" id="gift-card-input" placeholder="Enter gift card code">
-                                    <button id="apply-gift-card" class="btn btn-primary">Apply</button>
-                                `);
+                                            <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                                            <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                                        `);
                     $('#toggle_gift_card').prop('disabled', false);
 
                     updateGrandTotal();
@@ -1746,10 +1746,10 @@
                             $('#gift-amount-input').val(gift);
 
                             $('#gift-card-content').html(`
-                                            <span id="gift-card-code-display">${giftCard.code}</span>
-                                            <span id="gift-card-value">-$${parseFloat(giftCard.amount).toFixed(2)}</span>
-                                            <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
-                                        `);
+                                                    <span id="gift-card-code-display">${giftCard.code}</span>
+                                                    <span id="gift-card-value">-$${parseFloat(giftCard.amount).toFixed(2)}</span>
+                                                    <button id="remove-gift-card" class="btn btn-sm btn-link">Remove</button>
+                                                `);
                             $('#toggle_gift_card').prop('disabled', true);
                             updateGrandTotal();
                             removeGiftCard();
