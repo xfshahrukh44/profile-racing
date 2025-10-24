@@ -345,7 +345,7 @@ class OrderController extends Controller
             'address_line_1' => 'required|max:255',
             'city' => 'required|max:50',
             'email' => 'required|max:255|email',
-            // 'phone_no' => 'required|max:20',
+            'phone_no' => 'required|max:20',
         ];
 
         $messageArr = [
