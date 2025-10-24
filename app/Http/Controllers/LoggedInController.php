@@ -199,7 +199,8 @@ class LoggedInController extends Controller
     {
 		$order_id = $id;
 		$order = orders::where('id',$order_id)->first();
-		$order_products = orders_products::where('orders_id',$order_id)->get();
+		$order_products = DB::table('orders_products')->where('orders_id',$orders_id)->get();
+		
 		
 		return view('account.invoice')->with('title','Invoice #'.$order_id)->with(compact('order','order_products'))->with('order_id',$order_id);; 
 	}
