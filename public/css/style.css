@@ -794,3 +794,7 @@ footer:before {
     font-weight: 700;
     font-size: 16px;
 }
+
+.offcanvas-backdrop.show {
+    opacity: 0;
+}

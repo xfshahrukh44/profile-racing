@@ -410,7 +410,6 @@ class OrderController extends Controller
         // Calculate shipping - prefer request value over session
         $shippingAmount = $request->shipping ?? ($cart['shipping'] ?? 0);
 
-
         // Create the order
         $order = new orders();
         $order->delivery_country = $request->country;
@@ -443,7 +442,6 @@ class OrderController extends Controller
         // dd($subtotal, $variationTotal, $shippingAmount, $discountAmount, $giftCardAmount);
         $order->order_total = ($subtotal + $variationTotal + $shippingAmount) - $discountAmount - $giftCardAmount;
         $order->user_id = $id;
-
 
         // Handle payment
         if ($request->payment_method == 'paypal') {
@@ -489,31 +487,27 @@ class OrderController extends Controller
         $order->invoice_number = 'INV-' . time() . '-' . rand(1000, 9999);
 
         if ($order->save()) {
-            // dd($order);
             // Save order products
             foreach ($cart as $key => $value) {
-                // dd($order->orders_id, $value['name']);
                 if ($value['name'] != '') {
                     $variantPrice = 0;
                     foreach ($value['variation'] as $variation) {
                         $variantPrice += $variation['attribute_price'];
                     }
 
-                    $orderProduct = new orders_products();
-
-                    $orderProduct->order_products_product_id = $value['id'];
-                    $orderProduct->user_id = $id;
-                    $orderProduct->order_products_name = $value['name'];
-                    $orderProduct->order_products_price = $value['baseprice'];
-                    $orderProduct->orders_id = $order->orders_id;
-                    $orderProduct->order_products_qty = $value['qty'];
-                    $orderProduct->mat_language = $value['mat_language'] ?? null;
-                    $orderProduct->shipping = $shippingAmount;
-                    $orderProduct->order_products_subtotal = ($value['baseprice'] * $value['qty']) + $variantPrice;
-                    $orderProduct->t_variation_price = $variantPrice * $value['qty'];
-                    $orderProduct->variants = json_encode($value['variation']);
-
-                    $orderProduct->save();
+                    orders_products::create([
+                        'order_products_product_id' => $value['id'],
+                        'user_id' => $id,
+                        'order_products_name' => $value['name'],
+                        'order_products_price' => $value['baseprice'],
+                        'orders_id' => $order->id,
+                        'order_products_qty' => $value['qty'],
+                        'mat_language' => $value['mat_language'] ?? null,
+                        'shipping' => $shippingAmount,
+                        'order_products_subtotal' => ($value['baseprice'] * $value['qty']) + $variantPrice,
+                        't_variation_price' => $variantPrice * $value['qty'],
+                        'variants' => json_encode($value['variation'])
+                    ]);
 
                     foreach ($value['variation'] as $variation_id => $variation_data) {
                         if (isset($variation_data['attribute_value_id'])) {

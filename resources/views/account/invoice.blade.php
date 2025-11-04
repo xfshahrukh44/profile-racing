@@ -42,26 +42,33 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div>
-                                    <span class="text-sm text-grey-m2 align-middle">To:</span>
+                                    <span class="text-sm text-grey-m2 align-middle"><strong>To:</strong></span>
                                     <span class="text-600 text-110 text-blue align-middle">{{ $order->delivery_first_name }}
                                         {{ $order->delivery_last_name }}</span>
                                 </div>
                                 <div class="text-grey-m2">
                                     <div class="my-1">
+                                        <strong>Address:</strong>
                                         {{ $order->delivery_address_1 }}
                                     </div>
+                                    <!-- <div class="my-1">
+                                                                                                            {{ $order->delivery_address_2 }}
+                                                                                                        </div> -->
                                     <div class="my-1">
-                                        {{ $order->delivery_address_2 }}
+                                        <strong> Country:</strong>
+                                        {{ $order->delivery_country }}
                                     </div>
                                     <div class="my-1">
-                                        {{ $order->delivery_country }} {{ $order->delivery_city }}, {{ $order->area }},
-                                        {{ $order->landmark }}
+                                        <strong> City:</strong>
+                                        {{ $order->delivery_city }}
                                     </div>
                                     <div class="my-1">
+                                        <strong> Email:</strong>
                                         <i class="fa fa-envelope fa-flip-horizontal text-secondary"></i>
                                         <b class="text-600">{{ $order->order_email }}</b>
                                     </div>
                                     <div class="my-1">
+                                        <strong> Phone:</strong>
                                         <i class="fa fa-phone fa-flip-horizontal text-secondary"></i>
                                         <b class="text-600">{{ $order->delivery_phone_no }}</b>
                                     </div>
@@ -118,15 +125,12 @@
                                         </div>
                                         <div class="d-none d-sm-block col-3">
 
-                                            <?php
-                                            
-                                            $variants = json_decode($order_product->variants);
-                                            
-                                            ?>
+                                            <?php    $variants = json_decode($order_product->variants); ?>
 
                                             @foreach ($variants as $key => $value)
                                                 <p class="mb-0" style="font-size:11px;"> {{ $value->attribute }} -
-                                                    {{ $value->attribute_val }} - ${{ $value->attribute_price }}</p>
+                                                    {{ $value->attribute_val }} - ${{ $value->attribute_price }}
+                                                </p>
                                             @endforeach
 
 
@@ -137,8 +141,8 @@
                                         <div class="d-none d-sm-block col-2">${{ $order_product->order_products_subtotal }}
                                         </div>
                                     </div>
-                                    <?php $subtotal += $order_product->order_products_qty * $order_product->order_products_price; ?>
-                                    <?php $count++; ?>
+                                    <?php    $subtotal += $order_product->order_products_qty * $order_product->order_products_price; ?>
+                                    <?php    $count++; ?>
                                 @endforeach
                             </div>
 
@@ -164,8 +168,7 @@
                                                 Shipping
                                             </div>
                                             <div class="col-5">
-                                                <span
-                                                    class="text-110 text-secondary-d1">${{ $order->order_shipping }}</span>
+                                                <span class="text-110 text-secondary-d1">${{ $order->order_shipping }}</span>
                                             </div>
                                         </div>
                                     @endif
@@ -208,11 +211,9 @@
                                             Total Amount
                                         </div>
                                         <div class="col-5">
-                                            <?php
-                                            $shipping = $order->order_shipping;
-                                            ?>
+                                            <?php  $shipping = $order->order_shipping; ?>
                                             <span
-                                                class="text-150 text-success-d3 opacity-2">${{ $order->order_total + $shipping }}</span>
+                                                class="text-150 text-success-d3 opacity-2">${{ $order->order_total}}</span>
                                         </div>
                                     </div>
                                 </div>

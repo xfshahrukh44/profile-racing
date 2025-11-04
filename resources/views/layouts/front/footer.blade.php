@@ -20,7 +20,7 @@ $total_variation2 = 0;
                         $basePrice = $value['baseprice']; // price_with_increment session se
                         $qty = $value['qty'];
                         $variation_total = 0;
-                                                                                                                            ?>
+                                                                                                                                                                                                                                                                        ?>
                                         <div class="product-img">
                                             <figure>
                                                 <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
@@ -62,7 +62,7 @@ $total_variation2 = 0;
                                         <?php
                         $subtotal2 += $basePrice * $qty;
                         $total_variation2 += $value['variation_price'] ?? 0;
-                                                                                                                            ?>
+                                                                                                                                                                                                                                                                        ?>
                     @endforeach
                 </div>
 
@@ -298,7 +298,11 @@ $total_variation2 = 0;
                     <div class="last-text">
                         <a href="{{ route('about') }}">About Us |</a>
                         <!-- <a href="#"> FAQ’s  </a> -->
-                        <a href="{{ route('signin') }}">| Login</a>
+                        @if(Auth::check())
+                            <a href="{{ route('account') }}">| Login</a>
+                        @else
+                            <a href="{{ route('signin') }}">| Login</a>
+                        @endif
                     </div>
                 </div>
             </div>

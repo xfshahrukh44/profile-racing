@@ -12,57 +12,68 @@
 
               <div class="col-lg-8">
                 <div class="order-status">
-                    @if($order->order_status == "Pending")
-                  <ul>
-                    <li class="active-link">
-                      <div class="white-bg">
-                        <div class="circle-top"><div class="circle-1"></div>
+                  @if($order->order_status == "Pending")
+                    <ul>
+                      <li class="active-link">
+                        <div class="white-bg">
+                          <div class="circle-top">
+                            <div class="circle-1"></div>
+                          </div>
                         </div>
-                      </div>
-                      <button class="btn btn-primary disabled"><span>Pending</span></button>
-                    </li>
+                        <button class="btn btn-primary disabled"><span>Pending</span></button>
+                      </li>
 
-                    <li class="non-active">
-                      <div class="white-bg">
-                        <div class="circle-top"><div class="circle-1"></div>
+                      <li class="non-active">
+                        <div class="white-bg">
+                          <div class="circle-top">
+                            <div class="circle-1"></div>
+                          </div>
                         </div>
-                      </div>
-                      <button class="btn btn-primary"><span>Completed</span></li>
-                  </ul>
-				  @else
-					  <ul>
-                    <li class="non-active">
-                      <div class="white-bg">
-                        <div class="circle-top"><div class="circle-1"></div>
+                        <button class="btn btn-primary"><span>Completed</span>
+                      </li>
+                    </ul>
+                  @else
+                    <ul>
+                      <li class="non-active">
+                        <div class="white-bg">
+                          <div class="circle-top">
+                            <div class="circle-1"></div>
+                          </div>
                         </div>
-                      </div>
-                      <button class="btn btn-primary"><span>Pending</span></button></li>
+                        <button class="btn btn-primary"><span>Pending</span></button>
+                      </li>
 
-                    <li class="active-link">
-                      <div class="white-bg">
-                        <div class="circle-top"><div class="circle-1"></div>
+                      <li class="active-link">
+                        <div class="white-bg">
+                          <div class="circle-top">
+                            <div class="circle-1"></div>
+                          </div>
                         </div>
-                      </div>
-                      <button class="btn btn-primary disabled"><span>Completed</span></button>
-                    </li>
-                  </ul>
-				  @endif
+                        <button class="btn btn-primary disabled"><span>Completed</span></button>
+                      </li>
+                    </ul>
+                  @endif
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="btn-group float-md-right d-block">
                   <p class="alert alert-primary text-center">{{$order->order_status}}</p>
-                  <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Change Order Status</button>
+                  <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Change Order Status</button>
                   <div class="dropdown-menu arrow">
-                    <a href="javascript:void()"  onclick="window.location.href='{{ route('status.pending',[$order->id ]) }}'" class="dropdown-item">Pending
+                    <a href="javascript:void()"
+                      onclick="window.location.href='{{ route('status.pending', [$order->id]) }}'"
+                      class="dropdown-item">Pending
                     </a>
-                    <a href="javascript:void()"  onclick="window.location.href='{{ route('status.completed',[$order->id ]) }}'" class="dropdown-item">Completed
+                    <a href="javascript:void()"
+                      onclick="window.location.href='{{ route('status.completed', [$order->id]) }}'"
+                      class="dropdown-item">Completed
                     </a>
                     <!-- <a href="javascript:void()"  onclick="window.location.href='{{ route('status.delivered',[$order->id ]) }}'" class="dropdown-item">Delivered
-                    </a>
-                    <a href="javascript:void()"  onclick="window.location.href='{{ route('status.cancelled',[$order->id ]) }}'" class="dropdown-item">Cancelled
-                    </a> -->
+                                                                          </a>
+                                                                          <a href="javascript:void()"  onclick="window.location.href='{{ route('status.cancelled',[$order->id ]) }}'" class="dropdown-item">Cancelled
+                                                                          </a> -->
                   </div>
                 </div>
               </div>
@@ -85,10 +96,10 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex m-b-10 no-block">
-              <h5 class="card-title m-b-0 align-self-center text-uppercase">Order id  {{$order->id}}</h5>
+              <h5 class="card-title m-b-0 align-self-center text-uppercase">Order id {{$order->id}}</h5>
               <div class="ml-auto">
                 <ul class="list-inline m-t-5 text-muted text-uppercase lp-5 font-medium font-12">
-                  <li> {{date('F d, Y',strtotime($order->created_at))}}</li>
+                  <li> {{date('F d, Y', strtotime($order->created_at))}}</li>
 
                 </ul>
               </div>
@@ -97,105 +108,92 @@
             <div class="table-responsive">
               <table class="table product-table color-table primary-table">
                 <thead>
-                <tr>
+                  <tr>
 
-                  <th>ID </th>
-                  <th>Product</th>
-                  <th>&nbsp;</th>
-                  <th>Price</th>
-                  <th>QTY</th>
-                  <th>Total</th>
+                    <th>ID </th>
+                    <th>Product</th>
+                    <th>Variations</th>
+                    <th>Price</th>
+                    <th>QTY</th>
+                    <th>Total</th>
 
-                </tr>
+                  </tr>
                 </thead>
                 <tbody>
-			<?php $subtotal  = 0;
-      $total_variation = 0
-      ?>
+                  <?php $subtotal = 0;
+  $total_variation = 0 ?>
 
-				@foreach($order_products as $order_product)
-						<?php $product = App\Product::where('id',$order_product->order_products_product_id)->first(); // Helper::returnRow("products_header","id = ".$order_product->order_products_product_id); ?>
-					<tr>
+                  @foreach($order_products as $order_product)
+                    <?php  $product = App\Product::where('id', $order_product->order_products_product_id)->first();  ?>
+                    <tr>
 
-            <td>{{ $order_product->order_products_id }}</td>
-            <td> <img src="{{asset($product->image)}}" style="height:100px; width:100px;" alt="" title=""> </td>
-              <td class="text-dark weight-600">
-              {{$order_product->order_products_name}}
-              @php
-                  $variants = json_decode($order_product->variants);
-                  //dump($order_product->order_products_qty);
-              @endphp
-              <?php  $toppingtotal += $value->price?>
-              @foreach($variants as $key => $value)
+                      <td>{{ $order_product->order_products_id }}</td>
+                      <td class="text-dark weight-600">
+                        {{$order_product->order_products_name}}
 
-              <?php  $toppingtotal += $value->price?>
-              <p class="mb-0"> {{ $value->attribute }} - {{ $value->attribute_val }} - ${{$value->attribute_price}}</p>
-              @php
-              $total_variation += $value->attribute_price;
-              @endphp
-              @endforeach
-              @php
-              $total_variation *= $order_product->order_products_qty;
-              @endphp
+                      </td>
+                      <td>
+                        @php
+                          $variants = json_decode($order_product->variants);
+                        @endphp
+                        <?php  $toppingtotal += $value->price?>
+                        @foreach($variants as $key => $value)
 
-              </td>
-              <td>${{$order_product->order_products_price}}</td>
-              <td>{{$order_product->order_products_qty}}</td>
-              <td>${{$order_product->order_products_subtotal}}</td>
+                          <?php    $toppingtotal += $value->price?>
+                          <p class="mb-0"> {{ $value->attribute }} - {{ $value->attribute_val }} -
+                            ${{$value->attribute_price}}</p>
+                          @php
+                            $total_variation += $value->attribute_price;
+                          @endphp
+                        @endforeach
+                        @php
+                          $total_variation *= $order_product->order_products_qty;
+                        @endphp
+                      </td>
+                      <td>${{$order_product->order_products_price}}</td>
+                      <td>{{$order_product->order_products_qty}}</td>
+                      <td>${{$order_product->order_products_subtotal}}</td>
 
-					</tr>
+                    </tr>
+                    <?php  $subtotal += $order_product->order_products_qty * $order_product->order_products_price; ?>
+                  @endforeach
+                  <tr>
+                    <td colspan="5" class="text-muted custom-product"><strong>Subtotal Price</strong>:
+                    </td>
+                    <td class="custom-product">${{ $subtotal }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="5" class="text-muted custom-product"><strong>Shipping</strong>:
+                    </td>
+                    <td class="custom-product">${{ $order->order_shipping }}</td>
+                  </tr>
+                  @if($order->discount != 0)
+                    <tr>
+                      <td colspan="5" class="text-muted no-border"><strong>Discount</strong>:
+                      </td>
+                      <td class="no-border">{{$order->discount}}%</td>
+                    </tr>
+                  @endif
+                  @if($order->gift != 0)
+                    <tr>
+                      <td colspan="5" class="text-muted no-border"><strong>Gift Card</strong>:
+                      </td>
+                      <td class="no-border">- $ {{$order->gift}}</td>
+                    </tr>
+                  @endif
 
+                  <tr>
+                    <td colspan="5" class="text-muted no-border"><strong>Variation Price</strong>:
+                    </td>
+                    <td class="no-border">$ {{$order_product->t_variation_price}}</td>
+                  </tr>
 
+                  <tr>
+                    <td colspan="5" class="text-dark no-border weight-600"><strong>Total Price</strong>:
+                    </td>
+                    <td class="no-border">${{$order->order_total + $t_variation_price}}</td>
 
-			<?php $subtotal+= $order_product->order_products_qty * $order_product->order_products_price;
-
-
-
-      ?>
-				@endforeach
-
-
-                <tr>
-                  <td colspan="2" class="custom-product">&nbsp;</td>
-                  <td colspan="3" class="text-muted custom-product">Subtotal Price:
-                  </td>
-                  <td class="custom-product">${{ $subtotal }}</td>
-                </tr>
-                @if($order->discount != 0)
-                <tr>
-                  <td class="no-border" colspan="2">&nbsp;</td>
-                  <td colspan="3" class="text-muted no-border">Discount:
-                  </td>
-                  <td class="no-border">{{$order->discount}}%</td>
-                </tr>
-                @endif
-                @if($order->gift != 0)
-                <tr>
-                  <td class="no-border" colspan="2">&nbsp;</td>
-                  <td colspan="3" class="text-muted no-border">Gift Card:
-                  </td>
-                  <td class="no-border">- $ {{$order->gift}}</td>
-                </tr>
-                @endif
-
-                <tr>
-                  <td class="no-border" colspan="2">&nbsp;</td>
-                  <td colspan="3" class="text-muted no-border">Variation Price:
-                  </td>
-                  <td class="no-border">$ {{$order_product->t_variation_price}}</td>
-                </tr>
-
-                <tr>
-                  <td class="no-border" colspan="2">&nbsp;</td>
-                  <td colspan="3" class="text-dark no-border weight-600">Total Price:
-                  </td>
-                  <td class="no-border">${{$order->order_total + $t_variation_price}}</td>
-
-                </tr>
-
-
-
-
+                  </tr>
 
                 </tbody>
               </table>
@@ -215,8 +213,8 @@
               <table class="table m-b-5 m-t-20 ">
                 <tbody>
                   <tr>
-                    <td  class="text-muted">Recipient: </td>
-                    <td  class="text-color">{{$order->delivery_first_name}} {{$order->delivery_last_name}}</td>
+                    <td class="text-muted">Recipient: </td>
+                    <td class="text-color">{{$order->delivery_first_name}} {{$order->delivery_last_name}}</td>
                   </tr>
                   <tr>
                     <td class="text-muted">Phone: </td>
@@ -228,7 +226,19 @@
                   </tr>
                   <tr>
                     <td class="text-muted">Address: </td>
-                    <td class="text-color">{{$order->delivery_address_1}},{{$order->delivery_country}} {{$order->delivery_city}}, {{$order->delivery_state}}</td>
+                    <td class="text-color">{{$order->delivery_address_1}} </td>
+                  </tr>
+                  <tr>
+                    <td class="text-muted">Country: </td>
+                    <td class="text-color">{{$order->delivery_country}} </td>
+                  </tr>
+                  <tr>
+                    <td class="text-muted">City: </td>
+                    <td class="text-color"> {{$order->delivery_city}} </td>
+                  </tr>
+                  <tr>
+                    <td class="text-muted">State: </td>
+                    <td class="text-color">{{$order->delivery_state}} </td>
                   </tr>
                 </tbody>
               </table>
@@ -247,8 +257,8 @@
               <table class="table m-b-5 m-t-20 ">
                 <tbody>
                   <tr>
-                    <td  class="text-muted">Payment Method: </td>
-                    <td  class="text-color">{{ ucfirst($order->payment_method)}}</td>
+                    <td class="text-muted">Payment Method: </td>
+                    <td class="text-color">{{ ucfirst($order->payment_method)}}</td>
                   </tr>
                   <tr>
                     <td class="text-muted">Transaction Id: </td>
@@ -291,69 +301,69 @@
   <script src="{{asset('plugins/vendors/toast-master/js/jquery.toast.js')}}"></script>
   <script src="{{asset('plugins/vendors/datatables/jquery.dataTables.min.js')}}"></script>
   <script>
-      $(function() {
-          $('#myTable').DataTable();
-          var table = $('#example').DataTable({
-              "columnDefs": [{
-                  "visible": false,
-                  "targets": 2
-              }],
-              "order": [
-                  [2, 'asc']
-              ],
-              "displayLength": 18,
-              "drawCallback": function(settings) {
-                  var api = this.api();
-                  var rows = api.rows({
-                      page: 'current'
-                  }).nodes();
-                  var last = null;
-                  api.column(2, {
-                      page: 'current'
-                  }).data().each(function(group, i) {
-                      if (last !== group) {
-                          $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                          last = group;
-                      }
-                  });
-              }
+    $(function () {
+      $('#myTable').DataTable();
+      var table = $('#example').DataTable({
+        "columnDefs": [{
+          "visible": false,
+          "targets": 2
+        }],
+        "order": [
+          [2, 'asc']
+        ],
+        "displayLength": 18,
+        "drawCallback": function (settings) {
+          var api = this.api();
+          var rows = api.rows({
+            page: 'current'
+          }).nodes();
+          var last = null;
+          api.column(2, {
+            page: 'current'
+          }).data().each(function (group, i) {
+            if (last !== group) {
+              $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
+              last = group;
+            }
           });
-          // Order by the grouping
-          $('#example tbody').on('click', 'tr.group', function() {
-              var currentOrder = table.order()[0];
-              if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-                  table.order([2, 'desc']).draw();
-              } else {
-                  table.order([2, 'asc']).draw();
-              }
-          });
+        }
+      });
+      // Order by the grouping
+      $('#example tbody').on('click', 'tr.group', function () {
+        var currentOrder = table.order()[0];
+        if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
+          table.order([2, 'desc']).draw();
+        } else {
+          table.order([2, 'asc']).draw();
+        }
+      });
 
-      });
-      $('#example23').DataTable({
-          dom: 'Bfrtip',
-          buttons: [
-              'copy', 'csv', 'excel', 'pdf', 'print'
-          ]
-      });
+    });
+    $('#example23').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    });
   </script>
   <script>
-      function checkAll(ele) {
-          var checkboxes = document.getElementsByTagName('input');
-          if (ele.checked) {
-              for (var i = 0; i < checkboxes.length; i++) {
-                  if (checkboxes[i].type == 'checkbox') {
-                      checkboxes[i].checked = true;
-                  }
-              }
-          } else {
-              for (var i = 0; i < checkboxes.length; i++) {
-                  console.log(i)
-                  if (checkboxes[i].type == 'checkbox') {
-                      checkboxes[i].checked = false;
-                  }
-              }
+    function checkAll(ele) {
+      var checkboxes = document.getElementsByTagName('input');
+      if (ele.checked) {
+        for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].type == 'checkbox') {
+            checkboxes[i].checked = true;
           }
+        }
+      } else {
+        for (var i = 0; i < checkboxes.length; i++) {
+          console.log(i)
+          if (checkboxes[i].type == 'checkbox') {
+            checkboxes[i].checked = false;
+          }
+        }
       }
+    }
   </script>
 
   <!-- ============================================================== -->
