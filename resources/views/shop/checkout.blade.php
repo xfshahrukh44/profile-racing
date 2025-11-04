@@ -309,23 +309,28 @@
             font-weight: bold;
             font-size: 1.1em;
         }
+
+        .fixed-slides {
+            position: sticky;
+            top: 50px;
+        }
     </style>
 @endsection
 @section('content')
 
 
 
-    <section class="heading-sec">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="inner-headings">
-                        <h2> CHECKOUT </h2>
+    <!-- <section class="heading-sec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="inner-headings">
+                            <h2> CHECKOUT </h2>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section> -->
 
 
     <section class="form-body checkoutPage" style="background-color:#000;">
@@ -430,9 +435,9 @@
                                         <input type="hidden" name="state" id="state">
 
                                         <!-- <div class="form-group">
-                                                                                                                                                                                                                                        <button type="button" id="continue-to-shipping" class="btn btn-primary">Continue
-                                                                                                                                                                                                                                            to Shipping</button>
-                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                            <button type="button" id="continue-to-shipping" class="btn btn-primary">Continue
+                                                                                                                                                                                                                                                to Shipping</button>
+                                                                                                                                                                                                                                        </div> -->
                                     </div>
                                 </div>
 
@@ -594,9 +599,9 @@
 
                                     <!-- Variations -->
                                     <!-- <div class="summary-item">
-                                                                                                                                     <span>Variations:</span>
-                                                                                                                                      <span>${{ number_format($variation, 2) }}</span>
-                                                                                                                                     </div> -->
+                                                                                                                                         <span>Variations:</span>
+                                                                                                                                          <span>${{ number_format($variation, 2) }}</span>
+                                                                                                                                         </div> -->
 
                                     <!-- Shipping (will be updated dynamically) -->
                                     <div class="summary-item" id="shipping-cost" style="display:none;">
@@ -768,9 +773,9 @@
                     // If discount already applied, don't show input
                     if (!"{{ session()->get('discount') }}") {
                         $('#discount-content').html(`
-                                                                                                                                                                                                                                                                    <input type="text" id="discount-input" placeholder="Enter discount code">
-                                                                                                                                                                                                                                                                    <button id="apply-discount" class="btn btn-primary">Apply</button>
-                                                                                                                                                                                                                                                                `);
+                                                                                                                                                                                                                                                                        <input type="text" id="discount-input" placeholder="Enter discount code">
+                                                                                                                                                                                                                                                                        <button id="apply-discount" class="btn btn-primary">Apply</button>
+                                                                                                                                                                                                                                                                    `);
                     }
                 } else {
                     // Remove discount
@@ -830,13 +835,13 @@
                     $('#gift-card-content').show();
 
                     var giftCardAmount =
-                                                                                                                                                                                                                                                                {{ session()->has('gift_card') ? session('gift_card.amount') : 'null' }};
+                                                                                                                                                                                                                                                                    {{ session()->has('gift_card') ? session('gift_card.amount') : 'null' }};
                     if (giftCardAmount !== null) {
 
                         $('#gift-card-content').html(`
-                                                                                                                                                                                                                                                                    <input type="text" id="gift-card-input" placeholder="Enter gift card code">
-                                                                                                                                                                                                                                                                    <button id="apply-gift-card" class="btn btn-primary">Apply</button>
-                                                                                                                                                                                                                                                                `);
+                                                                                                                                                                                                                                                                        <input type="text" id="gift-card-input" placeholder="Enter gift card code">
+                                                                                                                                                                                                                                                                        <button id="apply-gift-card" class="btn btn-primary">Apply</button>
+                                                                                                                                                                                                                                                                    `);
                     }
                 } else {
                     // Remove gift card
@@ -912,7 +917,7 @@
                 $('#discount-amount').text('-${{ session()->get('discount')->amount }}');
             @endif
 
-                                                                                                                                                                                                                                                });
+                                                                                                                                                                                                                                                    });
     </script>
 
     <script>
@@ -1227,10 +1232,10 @@
                                 hasResult = true;
                                 const radioId = `shipping-method-${method.code}`;
                                 const radioHtml = ` <div class="shipping-method-option">
-                                                                    <input type="radio" id="${radioId}" name="shipping_method" value="${method.code}" data-rate="${response.upsamount}"
-                                                                        data-tax="${response.tax || 0}" data-method-name="${method.text}" class="shipping-method-radio">
-                                                                        <label for="${radioId}"> <span class="method-name">${method.text}</span>
-                                                                            <span class="method-price">$${response.upsamount}</span> ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''} </label> </div>`;
+                                                                        <input type="radio" id="${radioId}" name="shipping_method" value="${method.code}" data-rate="${response.upsamount}"
+                                                                            data-tax="${response.tax || 0}" data-method-name="${method.text}" class="shipping-method-radio">
+                                                                            <label for="${radioId}"> <span class="method-name">${method.text}</span>
+                                                                                <span class="method-price">$${response.upsamount}</span> ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''} </label> </div>`;
                                 $('#shipping-methods-container').append(radioHtml);
                             }
                         },
@@ -1384,7 +1389,7 @@
                 $('.gift-card-section').show();
 
                 $('#stripe-submit').prop('disabled', false);
-                $('#paypal-button-container-popup').css('opacity', '1').css('pointer-events','unset');
+                $('#paypal-button-container-popup').css('opacity', '1').css('pointer-events', 'unset');
 
                 // ✅ Show payment once shipping selected
                 $('#payment-form').show();

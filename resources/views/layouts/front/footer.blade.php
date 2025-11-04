@@ -20,7 +20,7 @@ $total_variation2 = 0;
                         $basePrice = $value['baseprice']; // price_with_increment session se
                         $qty = $value['qty'];
                         $variation_total = 0;
-                                                                                                                                                                                                                                                                        ?>
+                                                                                                                                                                                                                                                                                            ?>
                                         <div class="product-img">
                                             <figure>
                                                 <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
@@ -62,7 +62,7 @@ $total_variation2 = 0;
                                         <?php
                         $subtotal2 += $basePrice * $qty;
                         $total_variation2 += $value['variation_price'] ?? 0;
-                                                                                                                                                                                                                                                                        ?>
+                                                                                                                                                                                                                                                                                            ?>
                     @endforeach
                 </div>
 
@@ -162,154 +162,155 @@ $total_variation2 = 0;
     </div>
 </div>
 
-
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-12">
-                <div class="endl1">
-                    <div class="endl-img">
-                        <figure>
-                            <img src="{{ asset($logo->img_path) }}" class="img-fluid" alt="">
-                        </figure>
-                    </div>
-                    <p>Promotions, new products and sales. Directly to your inbox.</p>
-                    <div class="input-endl">
-
-                        <form method="post" id="newForm">
-
-                            @csrf
-
-                            <input type="email" name="newemail" id="newemail" class="form-control"
-                                placeholder="Enter Your Email" required>
-                            <button type="submit"
-                                style="background: #cb1e20;color:#fff;height: 50px;width: 50px; margin-top: 2px;"> >
-                            </button>
-
-                        </form>
-
-                    </div>
-                    <div id="newsresult"></div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-12">
-                <div class="endl-2">
-                    <p>Quick Links</p>
-                    <ul>
-                        <li>
-                            <a href="{{ route('home') }}">HOME</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('about') }}">ABOUT</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('product') }}">PRODUCT</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-12">
-                <div class="endl-2">
-                    <p>Information</p>
-                    <ul>
-                        <li>
-                            <a href="{{ route('blog') }}"> BLOG </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('contact') }}"> CONTACT US </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('front.privacy') }}"> PRIVACY POLICY </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-12">
-                <div class="endl-3">
-                    <p class="for-size">Our Address</p>
-                    <div class="location">
-                        <div class="locate-icon">
-                            <i class="fa-solid fa-location-dot"></i>
+@if (!Route::is('checkout'))
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="endl1">
+                        <div class="endl-img">
+                            <figure>
+                                <img src="{{ asset($logo->img_path) }}" class="img-fluid" alt="">
+                            </figure>
                         </div>
-                        <div class="locate-text">
-                            <a style="text-decoration:none; color:#fff;" href="">
-                                {!! App\Http\Traits\HelperTrait::returnFlag(519) !!} </a>
-                        </div>
-                    </div>
-                    <div class="location">
-                        <div class="locate-icon">
-                            <i class="fa-regular fa-envelope"></i>
-                        </div>
-                        <div class="locate-text">
-                            <a style="text-decoration:none; color:#fff;"
-                                href="mailto:{!! App\Http\Traits\HelperTrait::returnFlag(218) !!}">
-                                {!! App\Http\Traits\HelperTrait::returnFlag(218) !!} </a>
-                        </div>
-                    </div>
-                    <div class="location">
-                        <div class="locate-icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </div>
-                        <div class="locate-text">
-                            <a style="text-decoration:none; color:#fff;"
-                                href="tel:{!! App\Http\Traits\HelperTrait::returnFlag(59) !!}">
-                                {!! App\Http\Traits\HelperTrait::returnFlag(59) !!} </a>
-                        </div>
-                    </div>
-                    <div class="location">
-                        <div class="locate-icon">
-                            <i class="fa-solid fa-clock"></i>
-                        </div>
-                        <div class="locate-text">
-                            <a style="text-decoration:none; color:#fff;" href="javasscript:void()">
-                                {!! App\Http\Traits\HelperTrait::returnFlag(1974) !!} </a>
-                        </div>
-                    </div>
+                        <p>Promotions, new products and sales. Directly to your inbox.</p>
+                        <div class="input-endl">
 
-                    <div class="last-icon">
-                        <a target="_blank" style="text-decoration:none;"
-                            href="{!! App\Http\Traits\HelperTrait::returnFlag(1960) !!}"> <i
-                                class="fa-brands fa-twitter"> </i> </a>
-                        <a target="_blank" style="text-decoration:none;"
-                            href="{!! App\Http\Traits\HelperTrait::returnFlag(682) !!}"><i
-                                class="fa-brands fa-square-facebook"></i> </a>
-                        <a target="_blank" style="text-decoration:none;"
-                            href="{!! App\Http\Traits\HelperTrait::returnFlag(1973) !!}"><i
-                                class="fa-brands fa-youtube"></i> </a>
-                        <a target="_blank" style="text-decoration:none;"
-                            href="{!! App\Http\Traits\HelperTrait::returnFlag(1962) !!}"><i
-                                class="fa-solid fab fa-instagram"></i> </a>
-                        <a target="_blank" style="text-decoration:none;" href="javascript:;">
-                            <i class="fa-brands fa-tiktok"></i> </a>
-                    </div>
+                            <form method="post" id="newForm">
 
-                </div>
-            </div>
+                                @csrf
 
-            <div class="col-lg-12">
-                <div class="last-main">
-                    <div class="last-text">
-                        <p> {!! App\Http\Traits\HelperTrait::returnFlag(499) !!} </p>
-                    </div>
+                                <input type="email" name="newemail" id="newemail" class="form-control"
+                                    placeholder="Enter Your Email" required>
+                                <button type="submit"
+                                    style="background: #cb1e20;color:#fff;height: 50px;width: 50px; margin-top: 2px;"> >
+                                </button>
 
-                    <div class="last-text">
-                        <a href="{{ route('about') }}">About Us |</a>
-                        <!-- <a href="#"> FAQ’s  </a> -->
-                        @if(Auth::check())
-                            <a href="{{ route('account') }}">| Login</a>
-                        @else
-                            <a href="{{ route('signin') }}">| Login</a>
-                        @endif
+                            </form>
+
+                        </div>
+                        <div id="newsresult"></div>
                     </div>
                 </div>
-            </div>
 
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="endl-2">
+                        <p>Quick Links</p>
+                        <ul>
+                            <li>
+                                <a href="{{ route('home') }}">HOME</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('about') }}">ABOUT</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('product') }}">PRODUCT</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="endl-2">
+                        <p>Information</p>
+                        <ul>
+                            <li>
+                                <a href="{{ route('blog') }}"> BLOG </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('contact') }}"> CONTACT US </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('front.privacy') }}"> PRIVACY POLICY </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-12">
+                    <div class="endl-3">
+                        <p class="for-size">Our Address</p>
+                        <div class="location">
+                            <div class="locate-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="locate-text">
+                                <a style="text-decoration:none; color:#fff;" href="">
+                                    {!! App\Http\Traits\HelperTrait::returnFlag(519) !!} </a>
+                            </div>
+                        </div>
+                        <div class="location">
+                            <div class="locate-icon">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+                            <div class="locate-text">
+                                <a style="text-decoration:none; color:#fff;"
+                                    href="mailto:{!! App\Http\Traits\HelperTrait::returnFlag(218) !!}">
+                                    {!! App\Http\Traits\HelperTrait::returnFlag(218) !!} </a>
+                            </div>
+                        </div>
+                        <div class="location">
+                            <div class="locate-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="locate-text">
+                                <a style="text-decoration:none; color:#fff;"
+                                    href="tel:{!! App\Http\Traits\HelperTrait::returnFlag(59) !!}">
+                                    {!! App\Http\Traits\HelperTrait::returnFlag(59) !!} </a>
+                            </div>
+                        </div>
+                        <div class="location">
+                            <div class="locate-icon">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="locate-text">
+                                <a style="text-decoration:none; color:#fff;" href="javasscript:void()">
+                                    {!! App\Http\Traits\HelperTrait::returnFlag(1974) !!} </a>
+                            </div>
+                        </div>
+
+                        <div class="last-icon">
+                            <a target="_blank" style="text-decoration:none;"
+                                href="{!! App\Http\Traits\HelperTrait::returnFlag(1960) !!}"> <i
+                                    class="fa-brands fa-twitter"> </i> </a>
+                            <a target="_blank" style="text-decoration:none;"
+                                href="{!! App\Http\Traits\HelperTrait::returnFlag(682) !!}"><i
+                                    class="fa-brands fa-square-facebook"></i> </a>
+                            <a target="_blank" style="text-decoration:none;"
+                                href="{!! App\Http\Traits\HelperTrait::returnFlag(1973) !!}"><i
+                                    class="fa-brands fa-youtube"></i> </a>
+                            <a target="_blank" style="text-decoration:none;"
+                                href="{!! App\Http\Traits\HelperTrait::returnFlag(1962) !!}"><i
+                                    class="fa-solid fab fa-instagram"></i> </a>
+                            <a target="_blank" style="text-decoration:none;" href="javascript:;">
+                                <i class="fa-brands fa-tiktok"></i> </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="last-main">
+                        <div class="last-text">
+                            <p> {!! App\Http\Traits\HelperTrait::returnFlag(499) !!} </p>
+                        </div>
+
+                        <div class="last-text">
+                            <a href="{{ route('about') }}">About Us |</a>
+                            <!-- <a href="#"> FAQ’s  </a> -->
+                            @if(Auth::check())
+                                <a href="{{ route('account') }}">| Login</a>
+                            @else
+                                <a href="{{ route('signin') }}">| Login</a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
+@endif
 <div class="modal fade" id="newsletterModal" tabindex="-1" aria-labelledby="newsletterModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

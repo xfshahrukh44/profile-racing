@@ -429,13 +429,16 @@
         <img src="{{ asset('images/body_bl.svg') }}" class="img-fluid" alt="">
     </div>
 
-    @include('layouts/front.header')
+    
+        @include('layouts/front.header')
+ 
 
 
     @yield('content')
 
-
-    @include('layouts/front.footer')
+    
+        @include('layouts/front.footer')
+   
     <!-- ============================================================== -->
     <!-- All SCRIPTS ANS JS LINKS IN BELOW FILE -->
     <!-- ============================================================== -->
