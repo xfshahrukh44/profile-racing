@@ -41,7 +41,7 @@
                             </figure>
                         </a>
                         <div class="discription_cylce" style="color: white;">
-                            {!! str_replace('img src="') !!}
+                           {{--   {!! str_replace('img src=""') !!} --}}
                             {!! $how_to->description !!}
                         </div>
                     </div>
