@@ -108,6 +108,7 @@
                                 <div class="opt-sec2-text">
                                     <p> {{ $val_product->product_title }} </p>
                                     <h6>${{ $val_product->price_with_increment }}</h6>
+
                                     <!-- <a href="#" class="btn btn-bustom">Add to cart</a> -->
                                 </div>
                             </a>

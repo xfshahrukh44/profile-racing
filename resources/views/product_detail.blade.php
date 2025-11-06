@@ -274,16 +274,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                                                                                    <div class="container">
-                                                                                                                        <div class="row">
-                                                                                                                            <div class="col-lg-12">
-                                                                                                                                <div class="inner-headings">
-                                                                                                                                    <h2>PRODUCTS</h2>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </section> -->
+                                                                                                                                                                            <div class="container">
+                                                                                                                                                                                <div class="row">
+                                                                                                                                                                                    <div class="col-lg-12">
+                                                                                                                                                                                        <div class="inner-headings">
+                                                                                                                                                                                            <h2>PRODUCTS</h2>
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                </div>
+                                                                                                                                                                            </div>
+                                                                                                                                                                        </section> -->
 
 
 
@@ -301,7 +301,7 @@
     $route_subcategory = Request::segment(4);
     $route_child_subcategory = Request::segment(5);
 
-                                                                                    ?>
+                                                                                                                                            ?>
 
                 <div class="col-md-3">
 
@@ -598,7 +598,7 @@
             })
             ->get();
     }
-                                                                                                                                        ?>
+                                                                                                                                                                                                ?>
 
 
 
@@ -643,12 +643,18 @@
                             @php
                                 $minPrice = $get_product_detail->price;
                                 $maxPrice = $get_product_detail->maximum_price;
+
                             @endphp
                             @if ($get_product_detail->id === 332)
-                                                    <?php
-                                $product = Product::find(335);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?>
-                                                    <h3 id="h3_original">${{ $get_product_detail->price_with_increment }} <?php    if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                                                    <?php    $product = Product::find(335);  ?>
+                                                    <h3 id="h3_original">${{ $get_product_detail->price_with_increment }}
+                                                        <?php    if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                                    echo ' - $' . $get_product_detail->maximum_price_with_increment;
+                                } ?>
+                                                    </h3>
+                            @elseif($get_product_detail)
+                                                    <h3 id="h3_original">${{ $get_product_detail->price_with_increment }}
+                                                        <?php    if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
                                     echo ' - $' . $get_product_detail->maximum_price_with_increment;
                                 } ?>
                                                     </h3>
@@ -657,109 +663,107 @@
                                     echo ' - $' . $maxPrice;
                                 } ?></h3>
                             @endif
-                            <h3 id="h3_additional" hidden>${{ $get_product_detail->price_with_increment }} <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                            <h3 id="h3_additional" hidden>${{ $get_product_detail->price_with_increment }}
+                                <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
         echo ' - $' . $get_product_detail->maximum_price_with_increment;
-    } ?></h3>
+    } ?>
+                            </h3>
                             <input type="hidden" name="exist_price" id="exist_price" value=0>
 
 
                             @foreach ($productAttributes_id as $key => $val_product_attribute)
-                                                    <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }} </h6>
+                                <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }} </h6>
 
-                                                    <?php
+                                <?php    $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get();  ?>
 
-                                $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get();
+                                <input type="hidden" name="select_price"
+                                    class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}"
+                                    value=0>
+                                <input type="hidden" name="variation[{{ $val_product_attribute->attribute_id }}][qty]"
+                                    value="{{ $get_product_detail->qty ?? 1 }}">
+                                <select
+                                    class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option"
+                                    name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]">
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?>
+                                    <option value="">Choose an option</option>
+                                    @foreach ($get_attribute_values as $key => $val_attr_value)
+                                        <option data-price="{{ $val_attr_value->price }}" data-qty="{{ $val_attr_value->qty ?? 0 }}"
+                                            value="{{ $val_attr_value->value }}">
+                                            {{ App\AttributeValue::find($val_attr_value->value)->value }}
+                                        </option>
+                                    @endforeach
 
-                                                    <input type="hidden" name="select_price"
-                                                        class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}"
-                                                        value=0>
-                                                    <input type="hidden" name="variation[{{ $val_product_attribute->attribute_id }}][qty]"
-                                                        value="{{ $get_product_detail->qty ?? 1 }}">
-                                                    <select
-                                                        class="form-control select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }} get_option"
-                                                        name="variation[{{ App\Attributes::find($val_product_attribute->attribute_id)->name }}]">
-
-                                                        <option value="">Choose an option</option>
-                                                        @foreach ($get_attribute_values as $key => $val_attr_value)
-                                                            <option data-price="{{ $val_attr_value->price }}" data-qty="{{ $val_attr_value->qty ?? 0 }}"
-                                                                value="{{ $val_attr_value->value }}">
-                                                                {{ App\AttributeValue::find($val_attr_value->value)->value }}
-                                                            </option>
-                                                        @endforeach
-
-                                                    </select>
+                                </select>
 
 
 
-                                                    @if ($get_product_detail->id === 332)
-                                                        <div class="bundled_product bundled_product_summary product bundled_item_optional">
-                                                            <div class="bundled_product_images images" style="opacity: 1;">
-                                                                <figure class="bundled_product_image woocommerce-product-gallery__image"><a
-                                                                        href="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677.jpg"
-                                                                        class="image zoom" title="Elite Freewheel Tool Gallery Photo copy(1)"
-                                                                        data-rel="photoSwipe"><img width="100" height="100" style="margin-top: 15px;"
-                                                                            src="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-300x300.jpg"
-                                                                            class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image"
-                                                                            alt="" title="Elite Freewheel Tool Gallery Photo copy(1)" data-caption=""
-                                                                            data-large_image="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677.jpg"
-                                                                            data-large_image_width="487" data-large_image_height="380" decoding="async"
-                                                                            loading="lazy"
-                                                                            srcset="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-300x300.jpg 300w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-100x100.jpg 100w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-150x150.jpg 150w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-45x45.jpg 45w"
-                                                                            sizes="auto, (max-width: 300px) 100vw, 300px"></a></figure>
-                                                            </div>
-                                                            <div class="details">
-                                                                <h4 class="bundled_product_title product_title"><span
-                                                                        class="bundled_product_title_inner"><span class="item_title">ELITE
-                                                                            FREEWHEEL TOOL</span><span class="item_qty"></span><span
-                                                                            class="item_suffix"></span></span> <span
-                                                                        class="bundled_product_title_link"><a class="bundled_product_permalink"
-                                                                            href="https://www.profileracing.com/product/elite-freewheel-tool/"
-                                                                            target="_blank" aria-label="View product"></a></span></h4>
-                                                                <label class="bundled_product_optional_checkbox">
+                                @if ($get_product_detail->id === 332)
+                                    <div class="bundled_product bundled_product_summary product bundled_item_optional">
+                                        <div class="bundled_product_images images" style="opacity: 1;">
+                                            <figure class="bundled_product_image woocommerce-product-gallery__image"><a
+                                                    href="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677.jpg"
+                                                    class="image zoom" title="Elite Freewheel Tool Gallery Photo copy(1)"
+                                                    data-rel="photoSwipe"><img width="100" height="100" style="margin-top: 15px;"
+                                                        src="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-300x300.jpg"
+                                                        class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image"
+                                                        alt="" title="Elite Freewheel Tool Gallery Photo copy(1)" data-caption=""
+                                                        data-large_image="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677.jpg"
+                                                        data-large_image_width="487" data-large_image_height="380" decoding="async"
+                                                        loading="lazy"
+                                                        srcset="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-300x300.jpg 300w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-100x100.jpg 100w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-150x150.jpg 150w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-45x45.jpg 45w"
+                                                        sizes="auto, (max-width: 300px) 100vw, 300px"></a></figure>
+                                        </div>
+                                        <div class="details">
+                                            <h4 class="bundled_product_title product_title"><span
+                                                    class="bundled_product_title_inner"><span class="item_title">ELITE
+                                                        FREEWHEEL TOOL</span><span class="item_qty"></span><span
+                                                        class="item_suffix"></span></span> <span
+                                                    class="bundled_product_title_link"><a class="bundled_product_permalink"
+                                                        href="https://www.profileracing.com/product/elite-freewheel-tool/"
+                                                        target="_blank" aria-label="View product"></a></span></h4>
+                                            <label class="bundled_product_optional_checkbox">
 
-                                                                    <input class="bundled_product_checkbox" type="checkbox" id="add_price_checkbox"
-                                                                        name="bundle_selected_optional_1" value="{{ $product->price }}">
-                                                                    <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span
-                                                                                    class="woocommerce-Price-currencySymbol" style="color: #fff;">Add
-                                                                                    For $
-                                                                                    {{ $product->price }}</span></bdi></span></span></label>
-                                                                <div class="cart" data-title="ELITE FREEWHEEL TOOL"
-                                                                    data-product_title="ELITE FREEWHEEL TOOL" data-visible="yes" data-optional_suffix=""
-                                                                    data-optional="yes" data-type="simple" data-bundled_item_id="1"
-                                                                    data-custom_data="[]" data-product_id="62592" data-bundle_id="8693">
-                                                                    <div class="bundled_item_wrap">
-                                                                        <div class="bundled_item_cart_content" style="">
-                                                                            <div class="bundled_item_cart_details"></div>
-                                                                            <div class="bundled_item_after_cart_details bundled_item_button">
-                                                                                <input class="bundled_qty" type="hidden" name="bundle_quantity_1"
-                                                                                    value="1">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                <input class="bundled_product_checkbox" type="checkbox" id="add_price_checkbox"
+                                                    name="bundle_selected_optional_1" value="{{ $product->price }}">
+                                                <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span
+                                                                class="woocommerce-Price-currencySymbol" style="color: #fff;">Add
+                                                                For $
+                                                                {{ $product->price }}</span></bdi></span></span></label>
+                                            <div class="cart" data-title="ELITE FREEWHEEL TOOL"
+                                                data-product_title="ELITE FREEWHEEL TOOL" data-visible="yes" data-optional_suffix=""
+                                                data-optional="yes" data-type="simple" data-bundled_item_id="1"
+                                                data-custom_data="[]" data-product_id="62592" data-bundle_id="8693">
+                                                <div class="bundled_item_wrap">
+                                                    <div class="bundled_item_cart_content" style="">
+                                                        <div class="bundled_item_cart_details"></div>
+                                                        <div class="bundled_item_after_cart_details bundled_item_button">
+                                                            <input class="bundled_qty" type="hidden" name="bundle_quantity_1"
+                                                                value="1">
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
-                                                        {{--
-                                                        <script>
-                                                            document.getElementById('add_price_checkbox').addEventListener('change', function () {
-                                                                let priceElement = document.getElementById('h3_original');
-                                                                let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); // Laravel se price lena
-                                                                let additionalPrice = parseFloat(this.value);
+                                    {{--
+                                    <script>
+                                        document.getElementById('add_price_checkbox').addEventListener('change', function () {
+                                            let priceElement = document.getElementById('h3_original');
+                                            let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); // Laravel se price lena
+                                            let additionalPrice = parseFloat(this.value);
 
-                                                                if (this.checked) {
-                                                                    priceElement.innerText = `$${(basePrice + additionalPrice).toFixed(2)}`;
-                                                                } else {
-                                                                    priceElement.innerText = `$${basePrice.toFixed(2)}`;
-                                                                }
-                                                            });
-                                                        </script> --}}
-                                                    @endif
+                                            if (this.checked) {
+                                                priceElement.innerText = `$${(basePrice + additionalPrice).toFixed(2)}`;
+                                            } else {
+                                                priceElement.innerText = `$${basePrice.toFixed(2)}`;
+                                            }
+                                        });
+                                    </script> --}}
+                                @endif
 
-                                                    <h3 class="span_selected_option_price text-white"></h3>
+                                <h3 class="span_selected_option_price text-white"></h3>
                             @endforeach
 
 
@@ -931,7 +935,7 @@
                         totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
                     });
 
-                    $('#h3_original').prop('hidden', true);
+                    $('#h3_original').prop('hidden', false);
                     $('#h3_additional').prop('hidden', false);
                 } else {
                     selector.next('.span_selected_option_price').html('$0.00').show();
@@ -957,7 +961,7 @@
 
 
     <script type="text/javascript">
-                                                                            var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                                                                                                                    var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;
@@ -980,7 +984,11 @@
             // Iterate through each span and calculate the total additional price
             $('.span_selected_option_price').each(function () {
                 if ($(this).text() != '') {
-                    var stringWithoutDollarSign = $(this).text().replace("$", "");
+                    // var stringWithoutDollarSign = $(this).text().replace("$", "");
+                    var stringWithoutDollarSign = $(this).text()
+                        .replace(/\$/g, '')
+                        .replace(/,/g, '')
+                        .replace(/\s/g, '');
                     temp_p += parseFloat(stringWithoutDollarSign);
                 } else if ($(this).text() == '') {
                     temp_p += 0; // Default to 0 if the text is empty
@@ -988,7 +996,9 @@
             });
 
             // Update total price
-            var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}') + temp_p;
+            // var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}') + temp_p;
+            var base = '{{ $get_product_detail->price_with_increment }}'.replace(/,/g, '').replace(/\s/g, '');
+            var t_price = parseFloat(base) + temp_p;
             $('#exist_price').val(t_price);
             $('#h3_additional').html('$' + t_price.toFixed(2));
         }

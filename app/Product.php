@@ -83,6 +83,5 @@ class Product extends Model
         $increment = $category->price_increment ?? 0;
         $finalPrice = $this->price + ($this->price * $increment / 100);
         return round($finalPrice, 2);
-
     }
 }

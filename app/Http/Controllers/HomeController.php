@@ -71,6 +71,7 @@ class HomeController extends Controller
             $finalprice = $product->price + ($product->price * $price_increment / 100);
             $product->price_with_increment = number_format($finalprice, 2);
         }
+        // dd($get_product);
 
 
         return view('welcome', compact('page', 'section', 'banner', 'blog', 'instagram', 'get_product', 'news'));
