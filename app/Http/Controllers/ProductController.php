@@ -271,6 +271,13 @@ class ProductController extends Controller
     {
 
         $cart = Session::get('cart');
+
+        if (empty($cart)) {
+            Session::flash('message', 'Please add a product in the cart');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect()->back();
+        }
+
         $pro_id = $_POST['product_id'];
         $qty = $_POST['qty'];
         $count = 0;

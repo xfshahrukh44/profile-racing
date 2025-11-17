@@ -68,13 +68,21 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $validator = $this->validator($request->all());
+
+
+
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator, 'registerForm');
         }
 
         event(new Registered($user = $this->create($request->all())));
 
+
         $this->guard()->login($user);
+
+        if ($request->has('redirect') && $request->redirect === 'checkout') {
+            return redirect()->route('checkout');
+        }
 
         Session::flash('message', 'New Account Created Successfully');
         Session::flash('alert-class', 'alert-success');

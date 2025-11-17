@@ -15,12 +15,10 @@ $total_variation2 = 0;
                 <div class="main-modal">
                     @foreach (session()->get('cart') as $key => $value)
                                         <?php
-                        // Incremented price ke saath product fetch karen
                         $prod_image = App\Product::find($value['id']);
-                        $basePrice = $value['baseprice']; // price_with_increment session se
+                        $basePrice = $value['baseprice'];
                         $qty = $value['qty'];
-                        $variation_total = 0;
-                                                                                                                                                                                                                                                                                            ?>
+                        $variation_total = 0; ?>
                                         <div class="product-img">
                                             <figure>
                                                 <img src="{{ asset($prod_image->image) }}" class="img-fluid" alt="">
@@ -61,8 +59,7 @@ $total_variation2 = 0;
 
                                         <?php
                         $subtotal2 += $basePrice * $qty;
-                        $total_variation2 += $value['variation_price'] ?? 0;
-                                                                                                                                                                                                                                                                                            ?>
+                        $total_variation2 += $value['variation_price'] ?? 0;  ?>
                     @endforeach
                 </div>
 
@@ -296,12 +293,16 @@ $total_variation2 = 0;
                         </div>
 
                         <div class="last-text">
-                            <a href="{{ route('about') }}">About Us |</a>
-                            <!-- <a href="#"> FAQ’s  </a> -->
+                            <a href="{{ route('about') }}">About Us</a>
+                            <span>|</span>
                             @if(Auth::check())
-                                <a href="{{ route('account') }}">| Login</a>
+                                @if(auth()->user()->role == "1")
+                                    <a href="{{ route('admin.dashboard') }}">Login</a>
+                                @elseif(auth()->user()->role == "2")
+                                    <a href="{{ route('account') }}">Login</a>
+                                @endif
                             @else
-                                <a href="{{ route('signin') }}">| Login</a>
+                                <a href="{{ route('signin') }}">Login</a>
                             @endif
                         </div>
                     </div>

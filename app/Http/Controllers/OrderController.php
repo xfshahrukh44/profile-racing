@@ -16,12 +16,12 @@ use App\Program;
 use Stripe\Charge;
 use App\Attributes;
 use App\imagetable;
-use App\newsletter;
 use Stripe\Customer;
 use App\AttributeValue;
 use App\Models\Discount;
 use App\Models\Giftcard;
 use App\orders_products;
+use App\newsletter;
 use Illuminate\Http\Request;
 use App\Http\Traits\HelperTrait;
 use App\Models\ProductAttribute;
@@ -522,6 +522,17 @@ class OrderController extends Controller
                                 ->decrement('qty', $value['qty']);
                         }
                     }
+                }
+            }
+
+            if ($request->has('newsletter_check') && $request->newsletter_check == 1) {
+                // check if already subscribed
+                $exists = newsletter::where('newsletter_email', $request->email)->exists();
+
+                if (!$exists) {
+                    \App\newsletter::create([
+                        'newsletter_email' => $request->email,
+                    ]);
                 }
             }
 

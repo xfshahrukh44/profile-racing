@@ -38,43 +38,45 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-          $logo = imagetable::
-               select('img_path')
-               ->where('table_name','=','logo')
-               ->first();
+        $logo = imagetable::
+            select('img_path')
+            ->where('table_name', '=', 'logo')
+            ->first();
 
-          $favicon = imagetable::
-                           select('img_path')
-                           ->where('table_name','=','favicon')
-                           ->first();
+        $favicon = imagetable::
+            select('img_path')
+            ->where('table_name', '=', 'favicon')
+            ->first();
 
-        View()->share('logo',$logo);
-        View()->share('favicon',$favicon);
+        View()->share('logo', $logo);
+        View()->share('favicon', $favicon);
     }
 
     public function authenticated(Request $request, $user)
     {
-//        activity($user->name)
+        //        activity($user->name)
 //            ->performedOn($user)
 //            ->causedBy($user)
 //            ->log('LoggedIn');
 
-          if(auth()->user()->isAdmin() == true) {
-               return redirect('admin/dashboard');
-          } else {
+        if (auth()->user()->isAdmin() == true) {
+            return redirect('admin/dashboard');
+        }
 
-                Session::flash('message', 'You have logged In  Successfully');
-                Session::flash('alert-class', 'alert-success');
-               return redirect('account');
-          }
-
+        if ($request->has('redirect') && $request->redirect === 'checkout') {
+            return redirect()->route('checkout');
+        }
+        
+        Session::flash('message', 'You have logged In  Successfully');
+        Session::flash('alert-class', 'alert-success');
+        return redirect('account');
 
     }
 
     public function logout(Request $request)
     {
         $user = auth()->user();
-//        activity($user->name)
+        //        activity($user->name)
 //            ->performedOn($user)
 //            ->causedBy($user)
 //            ->log('LoggedOut');
