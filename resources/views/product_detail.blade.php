@@ -274,16 +274,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                                                                                                                                            <div class="container">
-                                                                                                                                                                                <div class="row">
-                                                                                                                                                                                    <div class="col-lg-12">
-                                                                                                                                                                                        <div class="inner-headings">
-                                                                                                                                                                                            <h2>PRODUCTS</h2>
+                                                                                                                                                                                <div class="container">
+                                                                                                                                                                                    <div class="row">
+                                                                                                                                                                                        <div class="col-lg-12">
+                                                                                                                                                                                            <div class="inner-headings">
+                                                                                                                                                                                                <h2>PRODUCTS</h2>
+                                                                                                                                                                                            </div>
                                                                                                                                                                                         </div>
                                                                                                                                                                                     </div>
                                                                                                                                                                                 </div>
-                                                                                                                                                                            </div>
-                                                                                                                                                                        </section> -->
+                                                                                                                                                                            </section> -->
 
 
 
@@ -301,7 +301,7 @@
     $route_subcategory = Request::segment(4);
     $route_child_subcategory = Request::segment(5);
 
-                                                                                                                                            ?>
+                                                                                                                                                ?>
 
                 <div class="col-md-3">
 
@@ -376,13 +376,13 @@
                                 {{-- Bundle ki main image --}}
                                 <div class="swiper-slide">
                                     <img src="{{ asset($get_product_detail->image) }}"
-                                        style="height: 430px;width: 430px;" />
+                                        style="height: 430px;" />
                                 </div>
 
                                 {{-- Gallery images --}}
                                 @foreach ($get_multiple_images as $key => $val_images)
                                     <div class="swiper-slide">
-                                        <img src="{{ asset($val_images->image) }}" style="height: 430px;width: 430px;" />
+                                        <img src="{{ asset($val_images->image) }}" style="height: 430px;" />
                                     </div>
                                 @endforeach
 
@@ -399,7 +399,7 @@
 
                                     @foreach($bundleItems as $bundleItem)
                                         <div class="swiper-slide">
-                                            <img src="{{ asset($bundleItem->image) }}" style="height: 430px;width: 430px;" />
+                                            <img src="{{ asset($bundleItem->image) }}" style="height: 430px;" />
                                             <div class="bundle-item-overlay">
                                                 <div class="bundle-item-info">
                                                     <h6>{{ $bundleItem->product_title }}</h6>
@@ -418,13 +418,13 @@
                                 {{-- Thumbnail for main image --}}
                                 <div class="swiper-slide">
                                     <img src="{{ asset($get_product_detail->image) }}"
-                                        style="height: 100px; width: 100px;" />
+                                        style="height: 100px;" />
                                 </div>
 
                                 {{-- Thumbnails for gallery images --}}
                                 @foreach ($get_multiple_images as $key => $val_images)
                                     <div class="swiper-slide">
-                                        <img src="{{ asset($val_images->image) }}" style="height: 100px; width: 100px;" />
+                                        <img src="{{ asset($val_images->image) }}" style="height: 100px;" />
                                     </div>
                                 @endforeach
 
@@ -432,7 +432,7 @@
                                 @if($get_product_detail->type == 'bundle')
                                     @foreach($bundleItems as $bundleItem)
                                         <div class="swiper-slide bundle-thumbnail">
-                                            <img src="{{ asset($bundleItem->image) }}" style="height: 100px; width: 100px;" />
+                                            <img src="{{ asset($bundleItem->image) }}" style="height: 100px;" />
                                             <div class="bundle-badge">x{{ $bundleItem->quantity }}</div>
                                         </div>
                                     @endforeach
@@ -598,7 +598,7 @@
             })
             ->get();
     }
-                                                                                                                                                                                                ?>
+                                                                                                                                                                                                    ?>
 
 
 
@@ -647,6 +647,7 @@
                             @endphp
                             @if ($get_product_detail->id === 332)
                                                     <?php    $product = Product::find(335);  ?>
+
                                                     <h3 id="h3_original">${{ $get_product_detail->price_with_increment }}
                                                         <?php    if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
                                     echo ' - $' . $get_product_detail->maximum_price_with_increment;
@@ -658,6 +659,7 @@
                                     echo ' - $' . $get_product_detail->maximum_price_with_increment;
                                 } ?>
                                                     </h3>
+                                                   
                             @else
                                                     <h3 id="originproductprice">${{ $minPrice }} <?php    if ($maxPrice != '' && $maxPrice != '0') {
                                     echo ' - $' . $maxPrice;
@@ -961,7 +963,7 @@
 
 
     <script type="text/javascript">
-                                                                                                                                    var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                                                                                                                        var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;

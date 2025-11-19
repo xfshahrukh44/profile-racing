@@ -50,7 +50,7 @@
     $route_subcategory = Request::segment(3);
     $route_child_subcategory = Request::segment(4);
 
-        ?>
+                    ?>
 
 
 
@@ -181,9 +181,10 @@
 
                                                         {{-- ✅ Show price with increment + max price with increment --}}
                                                         <h6>
-                                                            ${{ $val_product->price_with_increment }}
+
+                                                            ${{number_format($val_product->price_with_increment, 2)  }}
                                                             @if (!empty($val_product->maximum_price_with_increment))
-                                                                - ${{ $val_product->maximum_price_with_increment }}
+                                                                - ${{ number_format($val_product->maximum_price_with_increment, 2) }}
                                                             @endif
                                                         </h6>
                                                     </div>
