@@ -24,7 +24,7 @@ use App\orders_products;
 use App\newsletter;
 use Illuminate\Http\Request;
 use App\Http\Traits\HelperTrait;
-use App\Models\ProductAttribute;
+use App\ProductAttribute;
 use App\Models\Discount as enter;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Redirect;
@@ -515,13 +515,22 @@ class OrderController extends Controller
 
                     $orderProduct->save();
 
+                    // foreach ($value['variation'] as $variation_id => $variation_data) {
+                    //     if (isset($variation_data['attribute_value_id'])) {
+                    //         ProductAttribute::where('id', $variation_data['attribute_value_id'])
+                    //             ->where('qty', '>=', $value['qty'])
+                    //             ->decrement('qty', $value['qty']);
+                    //     }
+                    // }
+
                     foreach ($value['variation'] as $variation_id => $variation_data) {
-                        if (isset($variation_data['attribute_value_id'])) {
-                            ProductAttribute::where('id', $variation_data['attribute_value_id'])
+                        if (isset($variation_id)) {
+                            ProductAttribute::where('id', $variation_id)
                                 ->where('qty', '>=', $value['qty'])
                                 ->decrement('qty', $value['qty']);
                         }
                     }
+
                 }
             }
 

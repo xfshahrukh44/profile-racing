@@ -274,16 +274,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                                                                                                                                                <div class="container">
-                                                                                                                                                                                    <div class="row">
-                                                                                                                                                                                        <div class="col-lg-12">
-                                                                                                                                                                                            <div class="inner-headings">
-                                                                                                                                                                                                <h2>PRODUCTS</h2>
-                                                                                                                                                                                            </div>
-                                                                                                                                                                                        </div>
-                                                                                                                                                                                    </div>
-                                                                                                                                                                                </div>
-                                                                                                                                                                            </section> -->
+                                                                                                                                                                                                <div class="container">
+                                                                                                                                                                                                    <div class="row">
+                                                                                                                                                                                                        <div class="col-lg-12">
+                                                                                                                                                                                                            <div class="inner-headings">
+                                                                                                                                                                                                                <h2>PRODUCTS</h2>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                            </section> -->
 
 
 
@@ -301,7 +301,7 @@
     $route_subcategory = Request::segment(4);
     $route_child_subcategory = Request::segment(5);
 
-                                                                                                                                                ?>
+                                                                                                                                                                ?>
 
                 <div class="col-md-3">
 
@@ -375,8 +375,7 @@
                             <div class="swiper-wrapper">
                                 {{-- Bundle ki main image --}}
                                 <div class="swiper-slide">
-                                    <img src="{{ asset($get_product_detail->image) }}"
-                                        style="height: 430px;" />
+                                    <img src="{{ asset($get_product_detail->image) }}" style="height: 430px;" />
                                 </div>
 
                                 {{-- Gallery images --}}
@@ -417,8 +416,7 @@
                             <div class="swiper-wrapper">
                                 {{-- Thumbnail for main image --}}
                                 <div class="swiper-slide">
-                                    <img src="{{ asset($get_product_detail->image) }}"
-                                        style="height: 100px;" />
+                                    <img src="{{ asset($get_product_detail->image) }}" style="height: 100px;" />
                                 </div>
 
                                 {{-- Thumbnails for gallery images --}}
@@ -598,7 +596,7 @@
             })
             ->get();
     }
-                                                                                                                                                                                                    ?>
+                                                                                                                                                                                                                    ?>
 
 
 
@@ -659,7 +657,7 @@
                                     echo ' - $' . $get_product_detail->maximum_price_with_increment;
                                 } ?>
                                                     </h3>
-                                                   
+
                             @else
                                                     <h3 id="originproductprice">${{ $minPrice }} <?php    if ($maxPrice != '' && $maxPrice != '0') {
                                     echo ' - $' . $maxPrice;
@@ -906,9 +904,10 @@
 
                     if (optionQty !== undefined) {
                         if (parseInt(optionQty) > 0) {
-                            displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
+                            // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
+                            displayText = displayText;
 
-                            // ✅ Enable Add to Cart
+
                             addToCartBtn.prop('disabled', false)
                                 .css({
                                     'opacity': '1',
@@ -963,7 +962,7 @@
 
 
     <script type="text/javascript">
-                                                                                                                                        var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                                                                                                                                        var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;
