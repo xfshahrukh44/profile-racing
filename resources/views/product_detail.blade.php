@@ -251,6 +251,45 @@
             display: none;
         }
 
+        a.minus-11 {
+            display: flex;
+            width: 100%;
+            height: 25px;
+            font-size: 40px;
+            align-items: center;
+            text-decoration: none;
+            color: #c0c0c0;
+        }
+
+        a.plus-11 {
+            display: flex;
+            width: 100%;
+            height: 25px;
+            font-size: 35px;
+            align-items: center;
+            text-decoration: none;
+            justify-content: center;
+            color: #c0c0c0;
+        }
+
+        a.minus-11 span {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        a.plus-11 span {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
         @media(max-width:991px) {
             .category {
                 display: none;
@@ -274,16 +313,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                                                                                                                                                                            <div class="container">
-                                                                                                                                                                                                                <div class="row">
-                                                                                                                                                                                                                    <div class="col-lg-12">
-                                                                                                                                                                                                                        <div class="inner-headings">
-                                                                                                                                                                                                                            <h2>PRODUCTS</h2>
-                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                        </section> -->
+                                                                                                                                                                                                                                        <div class="container">
+                                                                                                                                                                                                                                            <div class="row">
+                                                                                                                                                                                                                                                <div class="col-lg-12">
+                                                                                                                                                                                                                                                    <div class="inner-headings">
+                                                                                                                                                                                                                                                        <h2>PRODUCTS</h2>
+                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                    </section> -->
 
 
 
@@ -301,7 +340,7 @@
     $route_subcategory = Request::segment(4);
     $route_child_subcategory = Request::segment(5);
 
-                                                                                                                                                                            ?>
+                                                                                                                                                                                                        ?>
 
                 <div class="col-md-3">
 
@@ -596,7 +635,7 @@
             })
             ->get();
     }
-                                                                                                                                                                                                                                ?>
+                                                                                                                                                                                                                                                            ?>
 
 
 
@@ -770,10 +809,10 @@
 
                             <h6>Quantity</h6>
                             <div class="quantity">
-                                <a href="#" class=" minus-1"><span>-</span></a>
+                                <a href="#" class=" minus-11"><span>-</span></a>
                                 <input name="qty" id="qty" type="text" class="quantity__input input-1" readonly=""
                                     value="1">
-                                <a href="#" class=" plus-1"><span>+</span></a>
+                                <a href="#" class=" plus-11"><span>+</span></a>
                             </div>
 
                             <br>
@@ -817,115 +856,115 @@
     </script>
 
     <!-- <script>
-                    let productId = {!! $get_product_detail->id !!}; 
+                                                let productId = {!! $get_product_detail->id !!}; 
 
-                    if (productId === 332) {
-                        document.addEventListener("DOMContentLoaded", function () {
-                            let checkbox = document.getElementById('add_price_checkbox');
-                            let priceElement = document.getElementById('h3_original');
-                            let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); 
+                                                if (productId === 332) {
+                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                        let checkbox = document.getElementById('add_price_checkbox');
+                                                        let priceElement = document.getElementById('h3_original');
+                                                        let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); 
 
-                            if (checkbox) {
-                                checkbox.addEventListener('change', function () {
-                                    let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
+                                                        if (checkbox) {
+                                                            checkbox.addEventListener('change', function () {
+                                                                let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
 
-                                    let additionalPrice = parseFloat(selectvalue) || 0;
+                                                                let additionalPrice = parseFloat(selectvalue) || 0;
 
-                                    if (this.checked) {
-                                        console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
+                                                                if (this.checked) {
+                                                                    console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
 
-                                        priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
-                                    } else {
-                                        priceElement.innerText = `$${basePrice.toFixed(2)}`;
-                                    }
-                                });
-                            }
-                        });
-                    } else {
+                                                                    priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
+                                                                } else {
+                                                                    priceElement.innerText = `$${basePrice.toFixed(2)}`;
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                } else {
 
-                        function updateOptionPrice(selector) {
-                            var text = selector.attr('class');
-                            var regex = /\d+/;
-                            var number = text.match(regex)[0];
+                                                    function updateOptionPrice(selector) {
+                                                        var text = selector.attr('class');
+                                                        var regex = /\d+/;
+                                                        var number = text.match(regex)[0];
 
-                            var selectedOption = selector.find('option:selected');
-                            var optionPrice = selectedOption.data('price');
-                            var optionQty = selectedOption.data('qty');
-                            var attributeValueId = selectedOption.data('attribute-value-id');
-                            var addToCartBtn = $('#addCart');
+                                                        var selectedOption = selector.find('option:selected');
+                                                        var optionPrice = selectedOption.data('price');
+                                                        var optionQty = selectedOption.data('qty');
+                                                        var attributeValueId = selectedOption.data('attribute-value-id');
+                                                        var addToCartBtn = $('#addCart');
 
-                            if (selectedOption.index() === 0) {
-                                selector.next('.span_selected_option_price').html('').hide();
-                                addToCartBtn.prop('disabled', false)  // default enable
-                                    .css({
-                                        'opacity': '1',
-                                        'cursor': 'pointer'
-                                    });
-                                return;
-                            }
+                                                        if (selectedOption.index() === 0) {
+                                                            selector.next('.span_selected_option_price').html('').hide();
+                                                            addToCartBtn.prop('disabled', false)  // default enable
+                                                                .css({
+                                                                    'opacity': '1',
+                                                                    'cursor': 'pointer'
+                                                                });
+                                                            return;
+                                                        }
 
-                            if (optionPrice !== undefined) {
-                                var amount = parseFloat(optionPrice).toFixed(2);
+                                                        if (optionPrice !== undefined) {
+                                                            var amount = parseFloat(optionPrice).toFixed(2);
 
-                                let displayText = '$' + amount;
+                                                            let displayText = '$' + amount;
 
-                                if (optionQty !== undefined) {
-                                    if (parseInt(optionQty) > 0) {
-                                        // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
-                                        displayText = displayText;
-
-
-                                        addToCartBtn.prop('disabled', false)
-                                            .css({
-                                                'opacity': '1',
-                                                'cursor': 'pointer',
-                                                'background': 'red'
-                                            });
-                                    } else {
-                                        displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
-
-                                        // ❌ Disable Add to Cart
-                                        addToCartBtn.prop('disabled', true)
-                                            .css({
-                                                'opacity': '0.5',
-                                                'cursor': 'not-allowed',
-                                                'background': '#888'
-                                            });
-                                    }
-                                }
-
-                                selector.next('.span_selected_option_price').html(displayText).show();
-
-                                $('.select_price' + number).val(amount);
-
-                                var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
-                                $('.select_price' + number).each(function () {
-                                    totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
-                                });
-
-                                $('#h3_original').prop('hidden', false);
-                                $('#h3_additional').prop('hidden', false);
-                            } else {
-                                selector.next('.span_selected_option_price').html('$0.00').show();
-                            }
-                        }
+                                                            if (optionQty !== undefined) {
+                                                                if (parseInt(optionQty) > 0) {
+                                                                    // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
+                                                                    displayText = displayText;
 
 
-                    }
+                                                                    addToCartBtn.prop('disabled', false)
+                                                                        .css({
+                                                                            'opacity': '1',
+                                                                            'cursor': 'pointer',
+                                                                            'background': 'red'
+                                                                        });
+                                                                } else {
+                                                                    displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
+
+                                                                    // ❌ Disable Add to Cart
+                                                                    addToCartBtn.prop('disabled', true)
+                                                                        .css({
+                                                                            'opacity': '0.5',
+                                                                            'cursor': 'not-allowed',
+                                                                            'background': '#888'
+                                                                        });
+                                                                }
+                                                            }
+
+                                                            selector.next('.span_selected_option_price').html(displayText).show();
+
+                                                            $('.select_price' + number).val(amount);
+
+                                                            var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                                            $('.select_price' + number).each(function () {
+                                                                totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
+                                                            });
+
+                                                            $('#h3_original').prop('hidden', false);
+                                                            $('#h3_additional').prop('hidden', false);
+                                                        } else {
+                                                            selector.next('.span_selected_option_price').html('$0.00').show();
+                                                        }
+                                                    }
 
 
-                    @foreach ($productAttributes_id as $key => $val_product_attribute)
-                        var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
+                                                }
 
-                        // Initialize on page load
-                        updateOptionPrice(dropdown);
 
-                        // Add event listener for changes
-                        dropdown.on('change', function () {
-                            updateOptionPrice($(this));
-                        });
-                    @endforeach
-                </script> -->
+                                                @foreach ($productAttributes_id as $key => $val_product_attribute)
+                                                    var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
+
+                                                    // Initialize on page load
+                                                    updateOptionPrice(dropdown);
+
+                                                    // Add event listener for changes
+                                                    dropdown.on('change', function () {
+                                                        updateOptionPrice($(this));
+                                                    });
+                                                @endforeach
+                                            </script> -->
 
 
     <script>
@@ -1037,20 +1076,21 @@
 
             $(document).ready(function () {
                 // Plus button
-                $('.plus-1').on('click', function (e) {
+                $('.plus-11').on('click', function (e) {
                     e.preventDefault();
                     var qtyInput = $('input[name="qty"]');
                     var currentQty = parseInt(qtyInput.val()) || 1;
                     var newQty = currentQty + 1;
 
-                    // Pehle check karein ke new quantity stock ke andar hai
-                    if (checkStockForQuantity(newQty)) {
+                    // ✅ FIX: Pehle check karo, phir increase karo
+                    if (canIncreaseQuantity(newQty)) {
                         qtyInput.val(newQty);
                     }
+                    // Agar false return kare, toh kuch nahi karo - quantity same rahegi
                 });
 
                 // Minus button
-                $('.minus-1').on('click', function (e) {
+                $('.minus-11').on('click', function (e) {
                     e.preventDefault();
                     var qtyInput = $('input[name="qty"]');
                     var currentQty = parseInt(qtyInput.val()) || 1;
@@ -1060,11 +1100,10 @@
                 });
             });
 
-            // ✅ NEW: Function to check if specific quantity is allowed
-            function checkStockForQuantity(newQty) {
-                var allowed = true;
-                var lowestStock = null;
-                var lowestStockAttribute = '';
+            function canIncreaseQuantity(newQty) {
+                var canIncrease = true;
+                var maxAvailable = null;
+                var limitingAttribute = '';
 
                 $('select[class*="select_option"]').each(function () {
                     var selectedOption = $(this).find('option:selected');
@@ -1073,27 +1112,35 @@
                     var optionName = selectedOption.text().trim();
 
                     if (optionQty !== undefined && parseInt(optionQty) > 0) {
-                        // Find the attribute with lowest stock
-                        if (lowestStock === null || parseInt(optionQty) < lowestStock) {
-                            lowestStock = parseInt(optionQty);
-                            lowestStockAttribute = attributeName + ' - ' + optionName;
+                        // Find the limiting attribute (lowest stock)
+                        if (maxAvailable === null || parseInt(optionQty) < maxAvailable) {
+                            maxAvailable = parseInt(optionQty);
+                            limitingAttribute = attributeName + ' - ' + optionName;
                         }
 
+                        // ✅ FIX: Directly check and return false
                         if (newQty > parseInt(optionQty)) {
-                            alert('⚠️ Only ' + optionQty + ' items available for ' + attributeName + ' - ' + optionName + '! Maximum quantity is ' + optionQty + '.');
-                            allowed = false;
+                            canIncrease = false;
+                            // ✅ Break the loop immediately
                             return false;
                         }
                     }
                 });
 
-                return allowed;
+                // ✅ FIX: Agar increase nahi kar sakte, toh alert show karo aur false return karo
+                if (!canIncrease && maxAvailable !== null) {
+                    alert('❌ Only ' + maxAvailable + ' items available for ' + limitingAttribute + '! You cannot add more than ' + maxAvailable + ' items.');
+                    return false;
+                }
+
+                return canIncrease;
             }
 
-            // ✅ Update existing function to use new logic
+            // ✅ FIX: Ye function bhi update karo
             function checkStockForAllOptions() {
                 var selectedQty = parseInt($('input[name="qty"]').val()) || 1;
-                checkStockForQuantity(selectedQty);
+                // Bas check karo, koi automatic setting nahi
+                canIncreaseQuantity(selectedQty);
             }
         }
 
@@ -1106,13 +1153,13 @@
             // Add event listener for changes
             dropdown.on('change', function () {
                 updateOptionPrice($(this));
-                checkStockForAllOptions(); // ✅ Additional stock check
+                checkStockForAllOptions();
             });
         @endforeach
     </script>
 
     <script type="text/javascript">
-                                                                                                                                                                    var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                                                                                                                                                                                var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;
