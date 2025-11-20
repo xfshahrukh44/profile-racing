@@ -274,16 +274,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                                                                                                                                                                        <div class="container">
-                                                                                                                                                                                                            <div class="row">
-                                                                                                                                                                                                                <div class="col-lg-12">
-                                                                                                                                                                                                                    <div class="inner-headings">
-                                                                                                                                                                                                                        <h2>PRODUCTS</h2>
+                                                                                                                                                                                                            <div class="container">
+                                                                                                                                                                                                                <div class="row">
+                                                                                                                                                                                                                    <div class="col-lg-12">
+                                                                                                                                                                                                                        <div class="inner-headings">
+                                                                                                                                                                                                                            <h2>PRODUCTS</h2>
+                                                                                                                                                                                                                        </div>
                                                                                                                                                                                                                     </div>
                                                                                                                                                                                                                 </div>
                                                                                                                                                                                                             </div>
-                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                    </section> -->
+                                                                                                                                                                                                        </section> -->
 
 
 
@@ -301,7 +301,7 @@
     $route_subcategory = Request::segment(4);
     $route_child_subcategory = Request::segment(5);
 
-                                                                                                                                                                        ?>
+                                                                                                                                                                            ?>
 
                 <div class="col-md-3">
 
@@ -596,7 +596,7 @@
             })
             ->get();
     }
-                                                                                                                                                                                                                            ?>
+                                                                                                                                                                                                                                ?>
 
 
 
@@ -817,115 +817,115 @@
     </script>
 
     <!-- <script>
-                let productId = {!! $get_product_detail->id !!}; 
+                    let productId = {!! $get_product_detail->id !!}; 
 
-                if (productId === 332) {
-                    document.addEventListener("DOMContentLoaded", function () {
-                        let checkbox = document.getElementById('add_price_checkbox');
-                        let priceElement = document.getElementById('h3_original');
-                        let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); 
+                    if (productId === 332) {
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let checkbox = document.getElementById('add_price_checkbox');
+                            let priceElement = document.getElementById('h3_original');
+                            let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); 
 
-                        if (checkbox) {
-                            checkbox.addEventListener('change', function () {
-                                let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
+                            if (checkbox) {
+                                checkbox.addEventListener('change', function () {
+                                    let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
 
-                                let additionalPrice = parseFloat(selectvalue) || 0;
+                                    let additionalPrice = parseFloat(selectvalue) || 0;
 
-                                if (this.checked) {
-                                    console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
+                                    if (this.checked) {
+                                        console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
 
-                                    priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
-                                } else {
-                                    priceElement.innerText = `$${basePrice.toFixed(2)}`;
-                                }
-                            });
-                        }
-                    });
-                } else {
-
-                    function updateOptionPrice(selector) {
-                        var text = selector.attr('class');
-                        var regex = /\d+/;
-                        var number = text.match(regex)[0];
-
-                        var selectedOption = selector.find('option:selected');
-                        var optionPrice = selectedOption.data('price');
-                        var optionQty = selectedOption.data('qty');
-                        var attributeValueId = selectedOption.data('attribute-value-id');
-                        var addToCartBtn = $('#addCart');
-
-                        if (selectedOption.index() === 0) {
-                            selector.next('.span_selected_option_price').html('').hide();
-                            addToCartBtn.prop('disabled', false)  // default enable
-                                .css({
-                                    'opacity': '1',
-                                    'cursor': 'pointer'
+                                        priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
+                                    } else {
+                                        priceElement.innerText = `$${basePrice.toFixed(2)}`;
+                                    }
                                 });
-                            return;
-                        }
+                            }
+                        });
+                    } else {
 
-                        if (optionPrice !== undefined) {
-                            var amount = parseFloat(optionPrice).toFixed(2);
+                        function updateOptionPrice(selector) {
+                            var text = selector.attr('class');
+                            var regex = /\d+/;
+                            var number = text.match(regex)[0];
 
-                            let displayText = '$' + amount;
+                            var selectedOption = selector.find('option:selected');
+                            var optionPrice = selectedOption.data('price');
+                            var optionQty = selectedOption.data('qty');
+                            var attributeValueId = selectedOption.data('attribute-value-id');
+                            var addToCartBtn = $('#addCart');
 
-                            if (optionQty !== undefined) {
-                                if (parseInt(optionQty) > 0) {
-                                    // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
-                                    displayText = displayText;
-
-
-                                    addToCartBtn.prop('disabled', false)
-                                        .css({
-                                            'opacity': '1',
-                                            'cursor': 'pointer',
-                                            'background': 'red'
-                                        });
-                                } else {
-                                    displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
-
-                                    // ❌ Disable Add to Cart
-                                    addToCartBtn.prop('disabled', true)
-                                        .css({
-                                            'opacity': '0.5',
-                                            'cursor': 'not-allowed',
-                                            'background': '#888'
-                                        });
-                                }
+                            if (selectedOption.index() === 0) {
+                                selector.next('.span_selected_option_price').html('').hide();
+                                addToCartBtn.prop('disabled', false)  // default enable
+                                    .css({
+                                        'opacity': '1',
+                                        'cursor': 'pointer'
+                                    });
+                                return;
                             }
 
-                            selector.next('.span_selected_option_price').html(displayText).show();
+                            if (optionPrice !== undefined) {
+                                var amount = parseFloat(optionPrice).toFixed(2);
 
-                            $('.select_price' + number).val(amount);
+                                let displayText = '$' + amount;
 
-                            var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
-                            $('.select_price' + number).each(function () {
-                                totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
-                            });
+                                if (optionQty !== undefined) {
+                                    if (parseInt(optionQty) > 0) {
+                                        // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
+                                        displayText = displayText;
 
-                            $('#h3_original').prop('hidden', false);
-                            $('#h3_additional').prop('hidden', false);
-                        } else {
-                            selector.next('.span_selected_option_price').html('$0.00').show();
+
+                                        addToCartBtn.prop('disabled', false)
+                                            .css({
+                                                'opacity': '1',
+                                                'cursor': 'pointer',
+                                                'background': 'red'
+                                            });
+                                    } else {
+                                        displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
+
+                                        // ❌ Disable Add to Cart
+                                        addToCartBtn.prop('disabled', true)
+                                            .css({
+                                                'opacity': '0.5',
+                                                'cursor': 'not-allowed',
+                                                'background': '#888'
+                                            });
+                                    }
+                                }
+
+                                selector.next('.span_selected_option_price').html(displayText).show();
+
+                                $('.select_price' + number).val(amount);
+
+                                var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                $('.select_price' + number).each(function () {
+                                    totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
+                                });
+
+                                $('#h3_original').prop('hidden', false);
+                                $('#h3_additional').prop('hidden', false);
+                            } else {
+                                selector.next('.span_selected_option_price').html('$0.00').show();
+                            }
                         }
+
+
                     }
 
 
-                }
+                    @foreach ($productAttributes_id as $key => $val_product_attribute)
+                        var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
 
+                        // Initialize on page load
+                        updateOptionPrice(dropdown);
 
-                @foreach ($productAttributes_id as $key => $val_product_attribute)
-                    var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
-
-                    // Initialize on page load
-                    updateOptionPrice(dropdown);
-
-                    // Add event listener for changes
-                    dropdown.on('change', function () {
-                        updateOptionPrice($(this));
-                    });
-                @endforeach
-            </script> -->
+                        // Add event listener for changes
+                        dropdown.on('change', function () {
+                            updateOptionPrice($(this));
+                        });
+                    @endforeach
+                </script> -->
 
 
     <script>
@@ -1035,15 +1035,18 @@
                 }
             }
 
-            // ✅ Quantity change handlers
             $(document).ready(function () {
                 // Plus button
                 $('.plus-1').on('click', function (e) {
                     e.preventDefault();
                     var qtyInput = $('input[name="qty"]');
                     var currentQty = parseInt(qtyInput.val()) || 1;
-                    qtyInput.val(currentQty + 1);
-                    checkStockForAllOptions();
+                    var newQty = currentQty + 1;
+
+                    // Pehle check karein ke new quantity stock ke andar hai
+                    if (checkStockForQuantity(newQty)) {
+                        qtyInput.val(newQty);
+                    }
                 });
 
                 // Minus button
@@ -1053,15 +1056,13 @@
                     var currentQty = parseInt(qtyInput.val()) || 1;
                     if (currentQty > 1) {
                         qtyInput.val(currentQty - 1);
-                        checkStockForAllOptions();
                     }
                 });
             });
 
-            // ✅ Function to check stock for all selected options with attribute names
-            function checkStockForAllOptions() {
-                var selectedQty = parseInt($('input[name="qty"]').val()) || 1;
-                var hasStockIssue = false;
+            // ✅ NEW: Function to check if specific quantity is allowed
+            function checkStockForQuantity(newQty) {
+                var allowed = true;
                 var lowestStock = null;
                 var lowestStockAttribute = '';
 
@@ -1078,23 +1079,21 @@
                             lowestStockAttribute = attributeName + ' - ' + optionName;
                         }
 
-                        if (selectedQty > parseInt(optionQty)) {
-                            alert('⚠️ Only ' + optionQty + ' items available for ' + attributeName + ' - ' + optionName + '! Quantity reduced to ' + optionQty + '.');
-                            $('input[name="qty"]').val(optionQty);
-                            hasStockIssue = true;
+                        if (newQty > parseInt(optionQty)) {
+                            alert('⚠️ Only ' + optionQty + ' items available for ' + attributeName + ' - ' + optionName + '! Maximum quantity is ' + optionQty + '.');
+                            allowed = false;
                             return false;
                         }
                     }
                 });
 
-                // ✅ Show which attribute is limiting the quantity
-                if (!hasStockIssue && lowestStock !== null && selectedQty > lowestStock) {
-                    alert('⚠️ Maximum ' + lowestStock + ' items available for ' + lowestStockAttribute + '! Quantity reduced to ' + lowestStock + '.');
-                    $('input[name="qty"]').val(lowestStock);
-                    hasStockIssue = true;
-                }
+                return allowed;
+            }
 
-                return !hasStockIssue;
+            // ✅ Update existing function to use new logic
+            function checkStockForAllOptions() {
+                var selectedQty = parseInt($('input[name="qty"]').val()) || 1;
+                checkStockForQuantity(selectedQty);
             }
         }
 
@@ -1113,7 +1112,7 @@
     </script>
 
     <script type="text/javascript">
-                                                                                                                                                                var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                                                                                                                                                    var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;
