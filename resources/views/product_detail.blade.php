@@ -274,16 +274,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                                                                                                                                                                <div class="container">
-                                                                                                                                                                                                    <div class="row">
-                                                                                                                                                                                                        <div class="col-lg-12">
-                                                                                                                                                                                                            <div class="inner-headings">
-                                                                                                                                                                                                                <h2>PRODUCTS</h2>
+                                                                                                                                                                                                        <div class="container">
+                                                                                                                                                                                                            <div class="row">
+                                                                                                                                                                                                                <div class="col-lg-12">
+                                                                                                                                                                                                                    <div class="inner-headings">
+                                                                                                                                                                                                                        <h2>PRODUCTS</h2>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                </div>
                                                                                                                                                                                                             </div>
                                                                                                                                                                                                         </div>
-                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                </div>
-                                                                                                                                                                                            </section> -->
+                                                                                                                                                                                                    </section> -->
 
 
 
@@ -301,7 +301,7 @@
     $route_subcategory = Request::segment(4);
     $route_child_subcategory = Request::segment(5);
 
-                                                                                                                                                                ?>
+                                                                                                                                                                        ?>
 
                 <div class="col-md-3">
 
@@ -596,7 +596,7 @@
             })
             ->get();
     }
-                                                                                                                                                                                                                    ?>
+                                                                                                                                                                                                                            ?>
 
 
 
@@ -687,8 +687,9 @@
 
                                     <option value="">Choose an option</option>
                                     @foreach ($get_attribute_values as $key => $val_attr_value)
-                                        <option data-price="{{ $val_attr_value->price }}" data-qty="{{ $val_attr_value->qty ?? 0 }}"
-                                            value="{{ $val_attr_value->value }}">
+                                        <option data-price="{{ $val_attr_value->price }}"
+                                            data-attribute-value-id="{{ $val_attr_value->id }}"
+                                            data-qty="{{ $val_attr_value->qty ?? 0 }}" value="{{ $val_attr_value->value }}">
                                             {{ App\AttributeValue::find($val_attr_value->value)->value }}
                                         </option>
                                     @endforeach
@@ -770,7 +771,8 @@
                             <h6>Quantity</h6>
                             <div class="quantity">
                                 <a href="#" class=" minus-1"><span>-</span></a>
-                                <input name="qty" type="text" class="quantity__input input-1" readonly="" value="1">
+                                <input name="qty" id="qty" type="text" class="quantity__input input-1" readonly=""
+                                    value="1">
                                 <a href="#" class=" plus-1"><span>+</span></a>
                             </div>
 
@@ -813,24 +815,135 @@
         var f_select_price;
         var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
     </script>
+
+    <!-- <script>
+                let productId = {!! $get_product_detail->id !!}; 
+
+                if (productId === 332) {
+                    document.addEventListener("DOMContentLoaded", function () {
+                        let checkbox = document.getElementById('add_price_checkbox');
+                        let priceElement = document.getElementById('h3_original');
+                        let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); 
+
+                        if (checkbox) {
+                            checkbox.addEventListener('change', function () {
+                                let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
+
+                                let additionalPrice = parseFloat(selectvalue) || 0;
+
+                                if (this.checked) {
+                                    console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
+
+                                    priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
+                                } else {
+                                    priceElement.innerText = `$${basePrice.toFixed(2)}`;
+                                }
+                            });
+                        }
+                    });
+                } else {
+
+                    function updateOptionPrice(selector) {
+                        var text = selector.attr('class');
+                        var regex = /\d+/;
+                        var number = text.match(regex)[0];
+
+                        var selectedOption = selector.find('option:selected');
+                        var optionPrice = selectedOption.data('price');
+                        var optionQty = selectedOption.data('qty');
+                        var attributeValueId = selectedOption.data('attribute-value-id');
+                        var addToCartBtn = $('#addCart');
+
+                        if (selectedOption.index() === 0) {
+                            selector.next('.span_selected_option_price').html('').hide();
+                            addToCartBtn.prop('disabled', false)  // default enable
+                                .css({
+                                    'opacity': '1',
+                                    'cursor': 'pointer'
+                                });
+                            return;
+                        }
+
+                        if (optionPrice !== undefined) {
+                            var amount = parseFloat(optionPrice).toFixed(2);
+
+                            let displayText = '$' + amount;
+
+                            if (optionQty !== undefined) {
+                                if (parseInt(optionQty) > 0) {
+                                    // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
+                                    displayText = displayText;
+
+
+                                    addToCartBtn.prop('disabled', false)
+                                        .css({
+                                            'opacity': '1',
+                                            'cursor': 'pointer',
+                                            'background': 'red'
+                                        });
+                                } else {
+                                    displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
+
+                                    // ❌ Disable Add to Cart
+                                    addToCartBtn.prop('disabled', true)
+                                        .css({
+                                            'opacity': '0.5',
+                                            'cursor': 'not-allowed',
+                                            'background': '#888'
+                                        });
+                                }
+                            }
+
+                            selector.next('.span_selected_option_price').html(displayText).show();
+
+                            $('.select_price' + number).val(amount);
+
+                            var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                            $('.select_price' + number).each(function () {
+                                totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
+                            });
+
+                            $('#h3_original').prop('hidden', false);
+                            $('#h3_additional').prop('hidden', false);
+                        } else {
+                            selector.next('.span_selected_option_price').html('$0.00').show();
+                        }
+                    }
+
+
+                }
+
+
+                @foreach ($productAttributes_id as $key => $val_product_attribute)
+                    var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
+
+                    // Initialize on page load
+                    updateOptionPrice(dropdown);
+
+                    // Add event listener for changes
+                    dropdown.on('change', function () {
+                        updateOptionPrice($(this));
+                    });
+                @endforeach
+            </script> -->
+
+
     <script>
-        let productId = {!! $get_product_detail->id !!}; // Laravel se product ID le rahe hain
+        let productId = {!! $get_product_detail->id !!};
 
         if (productId === 332) {
             document.addEventListener("DOMContentLoaded", function () {
                 let checkbox = document.getElementById('add_price_checkbox');
                 let priceElement = document.getElementById('h3_original');
-                let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); // Laravel price
+                let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}");
 
                 if (checkbox) {
                     checkbox.addEventListener('change', function () {
                         let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
-
                         let additionalPrice = parseFloat(selectvalue) || 0;
 
                         if (this.checked) {
                             console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
-
                             priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
                         } else {
                             priceElement.innerText = `$${basePrice.toFixed(2)}`;
@@ -839,43 +952,6 @@
                 }
             });
         } else {
-
-            // function updateOptionPrice(selector) {
-            //     var text = selector.attr('class');
-            //     var regex = /\d+/;
-            //     var number = text.match(regex)[0];
-
-            //     var selectedOption = selector.find('option:selected');
-            //     var optionPrice = selectedOption.data('price');
-
-            //     // Check if the selected option is the first option (Choose an option)
-            //     if (selectedOption.index() === 0) {
-            //         selector.next('.span_selected_option_price').html('').hide();
-            //         return; // Stop execution if "Choose an option" is selected
-            //     }
-
-            //     // Check if a valid option is selected
-            //     if (optionPrice !== undefined) {
-            //         var amount = parseFloat(optionPrice).toFixed(2);
-
-            //         if (amount == '0.00') {
-            //             selector.next('.span_selected_option_price').html('$0.00').show();
-            //         } else {
-            //             $('.select_price' + number).val(amount);
-            //             selector.next('.span_selected_option_price').html('$' + amount).show();
-            //         }
-
-            //         var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
-            //         $('.select_price' + number).each(function () {
-            //             totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
-            //         });
-
-            //         $('#h3_original').prop('hidden', true);
-            //         $('#h3_additional').prop('hidden', false);
-            //     } else {
-            //         selector.next('.span_selected_option_price').html('$0.00').show();
-            //     }
-            // }
             function updateOptionPrice(selector) {
                 var text = selector.attr('class');
                 var regex = /\d+/;
@@ -889,7 +965,7 @@
 
                 if (selectedOption.index() === 0) {
                     selector.next('.span_selected_option_price').html('').hide();
-                    addToCartBtn.prop('disabled', false)  // default enable
+                    addToCartBtn.prop('disabled', false)
                         .css({
                             'opacity': '1',
                             'cursor': 'pointer'
@@ -899,25 +975,42 @@
 
                 if (optionPrice !== undefined) {
                     var amount = parseFloat(optionPrice).toFixed(2);
-
                     let displayText = '$' + amount;
 
                     if (optionQty !== undefined) {
+                        // Get current quantity from input
+                        var currentQty = parseInt($('input[name="qty"]').val()) || 1;
+
                         if (parseInt(optionQty) > 0) {
-                            // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
                             displayText = displayText;
 
+                            // ✅ Get attribute name for better alert message
+                            var attributeName = selector.prev('h6').text().trim() || 'Selected option';
+                            var optionName = selectedOption.text().trim();
 
-                            addToCartBtn.prop('disabled', false)
-                                .css({
-                                    'opacity': '1',
-                                    'cursor': 'pointer',
-                                    'background': 'red'
-                                });
+                            // ✅ Check if selected quantity exceeds available stock
+                            if (currentQty > parseInt(optionQty)) {
+                                alert('❌ Only ' + optionQty + ' items available for ' + attributeName + ' - ' + optionName + '! Please reduce quantity.');
+
+                                // Reset to maximum available quantity
+                                $('input[name="qty"]').val(optionQty);
+
+                                addToCartBtn.prop('disabled', false)
+                                    .css({
+                                        'opacity': '1',
+                                        'cursor': 'pointer',
+                                        'background': 'red'
+                                    });
+                            } else {
+                                addToCartBtn.prop('disabled', false)
+                                    .css({
+                                        'opacity': '1',
+                                        'cursor': 'pointer',
+                                        'background': 'red'
+                                    });
+                            }
                         } else {
                             displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
-
-                            // ❌ Disable Add to Cart
                             addToCartBtn.prop('disabled', true)
                                 .css({
                                     'opacity': '0.5',
@@ -928,7 +1021,6 @@
                     }
 
                     selector.next('.span_selected_option_price').html(displayText).show();
-
                     $('.select_price' + number).val(amount);
 
                     var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
@@ -943,9 +1035,68 @@
                 }
             }
 
+            // ✅ Quantity change handlers
+            $(document).ready(function () {
+                // Plus button
+                $('.plus-1').on('click', function (e) {
+                    e.preventDefault();
+                    var qtyInput = $('input[name="qty"]');
+                    var currentQty = parseInt(qtyInput.val()) || 1;
+                    qtyInput.val(currentQty + 1);
+                    checkStockForAllOptions();
+                });
 
+                // Minus button
+                $('.minus-1').on('click', function (e) {
+                    e.preventDefault();
+                    var qtyInput = $('input[name="qty"]');
+                    var currentQty = parseInt(qtyInput.val()) || 1;
+                    if (currentQty > 1) {
+                        qtyInput.val(currentQty - 1);
+                        checkStockForAllOptions();
+                    }
+                });
+            });
+
+            // ✅ Function to check stock for all selected options with attribute names
+            function checkStockForAllOptions() {
+                var selectedQty = parseInt($('input[name="qty"]').val()) || 1;
+                var hasStockIssue = false;
+                var lowestStock = null;
+                var lowestStockAttribute = '';
+
+                $('select[class*="select_option"]').each(function () {
+                    var selectedOption = $(this).find('option:selected');
+                    var optionQty = selectedOption.data('qty');
+                    var attributeName = $(this).prev('h6').text().trim() || 'Option';
+                    var optionName = selectedOption.text().trim();
+
+                    if (optionQty !== undefined && parseInt(optionQty) > 0) {
+                        // Find the attribute with lowest stock
+                        if (lowestStock === null || parseInt(optionQty) < lowestStock) {
+                            lowestStock = parseInt(optionQty);
+                            lowestStockAttribute = attributeName + ' - ' + optionName;
+                        }
+
+                        if (selectedQty > parseInt(optionQty)) {
+                            alert('⚠️ Only ' + optionQty + ' items available for ' + attributeName + ' - ' + optionName + '! Quantity reduced to ' + optionQty + '.');
+                            $('input[name="qty"]').val(optionQty);
+                            hasStockIssue = true;
+                            return false;
+                        }
+                    }
+                });
+
+                // ✅ Show which attribute is limiting the quantity
+                if (!hasStockIssue && lowestStock !== null && selectedQty > lowestStock) {
+                    alert('⚠️ Maximum ' + lowestStock + ' items available for ' + lowestStockAttribute + '! Quantity reduced to ' + lowestStock + '.');
+                    $('input[name="qty"]').val(lowestStock);
+                    hasStockIssue = true;
+                }
+
+                return !hasStockIssue;
+            }
         }
-
 
         @foreach ($productAttributes_id as $key => $val_product_attribute)
             var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
@@ -956,13 +1107,13 @@
             // Add event listener for changes
             dropdown.on('change', function () {
                 updateOptionPrice($(this));
+                checkStockForAllOptions(); // ✅ Additional stock check
             });
         @endforeach
     </script>
 
-
     <script type="text/javascript">
-                                                                                                                                                        var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                                                                                                                                                                var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;
