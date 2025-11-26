@@ -64,8 +64,9 @@ $total_variation2 = 0;
                 </div>
 
                 <div class="subtotal">
-                    <h5>Total <span>${{ number_format($subtotal2) }}</span></h5>
-                    <p>Shipping, taxes, and discounts calculated at checkout.</p>
+                    <h5>Total <span>${{ number_format($subtotal2, 2) }}</span></h5>
+
+                    <p style="color: black">Shipping, taxes, and discounts calculated at checkout.</p>
                     <button type="submit" class="btn btn-bustom"
                         style="color: red; background: white; border: 4px solid white;">Update</button>
                     <a href="{{ route('checkout') }}" class="btn btn-bustom"

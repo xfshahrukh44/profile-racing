@@ -431,10 +431,6 @@
                                             <input class="form-control" type="text" name="street_number" value=""
                                                 placeholder="Apt/ Unit# (optional)">
                                         </div>
-                                        <div class="form-group">
-                                            <input class="form-control" type="text" name="street_number" value=""
-                                                placeholder="Apt/ Unit# (optional)">
-                                        </div>
 
                                         <!-- Hidden fields for address components -->
                                         <!-- <input type="hidden" name="country" id="country"> -->
@@ -505,7 +501,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card">
+                                        {{-- <div class="card">
                                             <div class="card-header" id="headingTwo">
                                                 <h5 class="mb-0">
                                                     <button class="btn btn-link" data-toggle="collapse"
@@ -530,7 +526,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
 
                                     <!-- <div class="form-group"> <button type="button" id="back-to-shipping" class="btn btn-secondary">Back to Shipping</button> </div> -->
