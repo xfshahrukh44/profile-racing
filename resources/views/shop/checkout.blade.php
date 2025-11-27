@@ -1176,12 +1176,13 @@
             // ==================== SHIPPING METHODS LOGIC ====================
             const shippingMethods = {
                 US: [
+                     { text: "UPS SurePost", code: "93" },
                     { text: "UPS Ground", code: "03" },
                     { text: "UPS 3 Day Select", code: "12" },
                     { text: "UPS 2nd Day Air", code: "02" },
-                    { text: "UPS Next Day Air Saver", code: "13" },
                     { text: "UPS Next Day Air", code: "01" },
-                    { text: "UPS SurePost", code: "93" }
+                    { text: "UPS Next Day Air Saver", code: "13" },
+                   
                 ],
                 INTERNATIONAL: [
                     { text: "UPS Standard", code: "11" },
@@ -1217,7 +1218,6 @@
                 }
 
                 const availableMethods = getShippingMethods(country);
-                // If no methods available
                 if (!availableMethods.length) {
                     $('#shipping-loading').hide();
                     $('#shipping-placeholder').text('No shipping options available for this address.').show();
@@ -1227,32 +1227,59 @@
                 let completedRequests = 0;
                 let hasResult = false;
 
+                // ➤ Store results here using method.code as key
+                const results = {};
+
                 availableMethods.forEach(method => {
                     $.ajax({
                         url: "{{ route('upsservices') }}",
                         type: "POST",
-                        data: { country, address, state, postal, city, shipping_method: method.code, _token: "{{ csrf_token() }}" },
+                        data: { 
+                            country, address, state, postal, city, 
+                            shipping_method: method.code, 
+                            _token: "{{ csrf_token() }}" 
+                        },
                         success: function (response) {
+
                             if (response.status) {
                                 hasResult = true;
-                                const radioId = `shipping-method-${method.code}`;
-                                const radioHtml = ` <div class="shipping-method-option">
-                                                                                                                                                                                <input type="radio" id="${radioId}" name="shipping_method" value="${method.code}" data-rate="${response.upsamount}"
-                                                                                                                                                                                    data-tax="${response.tax || 0}" data-method-name="${method.text}" class="shipping-method-radio">
-                                                                                                                                                                                    <label for="${radioId}"> <span class="method-name">${method.text}</span>
-                                                                                                                                                                                        <span class="method-price">$${response.upsamount}</span> ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''} </label> </div>`;
-                                $('#shipping-methods-container').append(radioHtml);
+
+                                const html = `
+                                    <div class="shipping-method-option">
+                                        <input type="radio" id="shipping-method-${method.code}"
+                                            name="shipping_method"
+                                            value="${method.code}"
+                                            data-rate="${response.upsamount}"
+                                            data-tax="${response.tax || 0}"
+                                            data-method-name="${method.text}"
+                                            class="shipping-method-radio">
+
+                                        <label for="shipping-method-${method.code}">
+                                            <span class="method-name">${method.text}</span>
+                                            <span class="method-price">$${response.upsamount}</span>
+                                            ${response.delivery_time ? `<span class="method-time">(${response.delivery_time})</span>` : ''}
+                                        </label>
+                                    </div>`;
+
+                                // ➤ store in results using method.code
+                                results[method.code] = html;
                             }
-                        },
-                        error: function (xhr) {
-                            console.error('Error loading shipping method:', method.text, xhr.responseText);
                         },
                         complete: function () {
                             completedRequests++;
-                            // ✅ Only after all requests complete
+
                             if (completedRequests === availableMethods.length) {
                                 $('#shipping-loading').hide();
+
                                 if (hasResult) {
+
+                                    // ➤ append in EXACT SAME ORDER as shippingMethods
+                                    availableMethods.forEach(m => {
+                                        if (results[m.code]) {
+                                            $('#shipping-methods-container').append(results[m.code]);
+                                        }
+                                    });
+
                                     $('#shipping-methods-wrapper').show();
                                 } else {
                                     $('#shipping-placeholder').text('No valid shipping methods found for this address.').show();
