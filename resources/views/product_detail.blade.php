@@ -313,16 +313,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                                                                                                                                                                                                        <div class="container">
-                                                                                                                                                                                                                                            <div class="row">
-                                                                                                                                                                                                                                                <div class="col-lg-12">
-                                                                                                                                                                                                                                                    <div class="inner-headings">
-                                                                                                                                                                                                                                                        <h2>PRODUCTS</h2>
+                                                                                                                                                                                                                                                    <div class="container">
+                                                                                                                                                                                                                                                        <div class="row">
+                                                                                                                                                                                                                                                            <div class="col-lg-12">
+                                                                                                                                                                                                                                                                <div class="inner-headings">
+                                                                                                                                                                                                                                                                    <h2>PRODUCTS</h2>
+                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                        </div>
                                                                                                                                                                                                                                                     </div>
-                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                    </section> -->
+                                                                                                                                                                                                                                                </section> -->
 
 
 
@@ -332,15 +332,15 @@
 
 
                 <?php
-
-    use App\Product;
-
-    $get_category = DB::table('categories')->get();
-    $route_category = Request::segment(3);
-    $route_subcategory = Request::segment(4);
-    $route_child_subcategory = Request::segment(5);
-
-                                                                                                                                                                                                        ?>
+                
+                use App\Product;
+                
+                $get_category = DB::table('categories')->get();
+                $route_category = Request::segment(3);
+                $route_subcategory = Request::segment(4);
+                $route_child_subcategory = Request::segment(5);
+                
+                ?>
 
                 <div class="col-md-3">
 
@@ -350,52 +350,52 @@
 
                             @foreach ($get_category as $key1 => $val_category)
                                 @if ($val_category->id != 2)
-                                                    {{-- Category ID 2 ko hide karna --}}
-                                                    <li class="inner-shop">
-                                                        <a href="{{ URL('product/' . $val_category->id) }}" style="<?php        if ($route_category == $val_category->id) {
-                                        echo 'color:red';
-                                    } ?>">
-                                                            {{ $val_category->name }}
-                                                        </a>
+                                    {{-- Category ID 2 ko hide karna --}}
+                                    <li class="inner-shop">
+                                        <a href="{{ URL('product/' . $val_category->id) }}" style="<?php if ($route_category == $val_category->id) {
+                                            echo 'color:red';
+                                        } ?>">
+                                            {{ $val_category->name }}
+                                        </a>
 
-                                                        <?php        $get_subcategory = DB::table('subcategories')->where('category', $val_category->id)->get(); ?>
+                                        <?php $get_subcategory = DB::table('subcategories')->where('category', $val_category->id)->get(); ?>
 
-                                                        @foreach ($get_subcategory as $key2 => $val_subcategory)
-                                                                            <div class="inner-drop" style="<?php            if ($route_category == $val_subcategory->category) {
-                                                                echo 'display:block;';
-                                                            } ?>">
-                                                                                <ul>
-                                                                                    <li class="inner-shop-2">
-                                                                                        <a href="{{ URL('product/' . $val_category->id . '/' . $val_subcategory->id) }}"
-                                                                                            style="<?php            if ($route_subcategory == $val_subcategory->id) {
+                                        @foreach ($get_subcategory as $key2 => $val_subcategory)
+                                            <div class="inner-drop" style="<?php if ($route_category == $val_subcategory->category) {
+                                                echo 'display:block;';
+                                            } ?>">
+                                                <ul>
+                                                    <li class="inner-shop-2">
+                                                        <a href="{{ URL('product/' . $val_category->id . '/' . $val_subcategory->id) }}"
+                                                            style="<?php if ($route_subcategory == $val_subcategory->id) {
                                                                 echo 'color:red';
                                                             } ?>">
-                                                                                            {{ $val_subcategory->subcategory }}
-                                                                                        </a>
+                                                            {{ $val_subcategory->subcategory }}
+                                                        </a>
 
-                                                                                        <?php            $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?>
+                                                        <?php $get_childsubcategory = DB::table('childsubcategories')->where('subcategory', $val_subcategory->id)->get(); ?>
 
-                                                                                        @foreach ($get_childsubcategory as $key2 => $val_childsubcategory)
-                                                                                                                    <div class="inner-drop-2" style="<?php                if ($route_subcategory == $val_childsubcategory->subcategory) {
-                                                                                                echo 'display:block;';
-                                                                                            } ?>">
-                                                                                                                        <ul>
-                                                                                                                            <li>
-                                                                                                                                <a href="{{ URL('product/' . $val_category->id . '/' . $val_subcategory->id . '/' . $val_childsubcategory->id) }}"
-                                                                                                                                    style="<?php                if ($route_child_subcategory == $val_childsubcategory->id) {
-                                                                                                echo 'color:red';
-                                                                                            } ?>">
-                                                                                                                                    {{ $val_childsubcategory->childsubcategory }}
-                                                                                                                                </a>
-                                                                                                                            </li>
-                                                                                                                        </ul>
-                                                                                                                    </div>
-                                                                                        @endforeach
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
+                                                        @foreach ($get_childsubcategory as $key2 => $val_childsubcategory)
+                                                            <div class="inner-drop-2" style="<?php if ($route_subcategory == $val_childsubcategory->subcategory) {
+                                                                echo 'display:block;';
+                                                            } ?>">
+                                                                <ul>
+                                                                    <li>
+                                                                        <a href="{{ URL('product/' . $val_category->id . '/' . $val_subcategory->id . '/' . $val_childsubcategory->id) }}"
+                                                                            style="<?php if ($route_child_subcategory == $val_childsubcategory->id) {
+                                                                                echo 'color:red';
+                                                                            } ?>">
+                                                                            {{ $val_childsubcategory->childsubcategory }}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         @endforeach
                                                     </li>
+                                                </ul>
+                                            </div>
+                                        @endforeach
+                                    </li>
                                 @endif
                             @endforeach
 
@@ -425,7 +425,7 @@
                                 @endforeach
 
                                 {{-- BUNDLE ITEMS KI IMAGES - Agar product bundle hai to --}}
-                                @if($get_product_detail->type == 'bundle')
+                                @if ($get_product_detail->type == 'bundle')
                                     @php
                                         // Bundle items with their product details
                                         $bundleItems = DB::table('bundle_items')
@@ -435,7 +435,7 @@
                                             ->get();
                                     @endphp
 
-                                    @foreach($bundleItems as $bundleItem)
+                                    @foreach ($bundleItems as $bundleItem)
                                         <div class="swiper-slide">
                                             <img src="{{ asset($bundleItem->image) }}" style="height: 430px;" />
                                             <div class="bundle-item-overlay">
@@ -466,8 +466,8 @@
                                 @endforeach
 
                                 {{-- BUNDLE ITEMS KI THUMBNAILS --}}
-                                @if($get_product_detail->type == 'bundle')
-                                    @foreach($bundleItems as $bundleItem)
+                                @if ($get_product_detail->type == 'bundle')
+                                    @foreach ($bundleItems as $bundleItem)
                                         <div class="swiper-slide bundle-thumbnail">
                                             <img src="{{ asset($bundleItem->image) }}" style="height: 100px;" />
                                             <div class="bundle-badge">x{{ $bundleItem->quantity }}</div>
@@ -494,7 +494,7 @@
                                 </button>
 
                                 {{-- BUNDLE KE LIYE EXTRA TAB --}}
-                                @if($get_product_detail->type == 'bundle')
+                                @if ($get_product_detail->type == 'bundle')
                                     <button class="clicktabs" onclick="opencity(event , 'porduct3')">
                                         Bundle Details
                                     </button>
@@ -513,7 +513,7 @@
                                 </div>
 
                                 {{-- BUNDLE DETAILS TAB --}}
-                                @if($get_product_detail->type == 'bundle')
+                                @if ($get_product_detail->type == 'bundle')
                                     <div class="cycleinfo" id="porduct3" style="display:none;">
                                         <div class="bundle-details">
                                             <h5>Bundle Composition</h5>
@@ -530,7 +530,7 @@
                                                     @php
                                                         $bundleTotal = 0;
                                                     @endphp
-                                                    @foreach($bundleItems as $bundleItem)
+                                                    @foreach ($bundleItems as $bundleItem)
                                                         @php
                                                             $itemTotal = $bundleItem->price * $bundleItem->quantity;
                                                             $bundleTotal += $itemTotal;
@@ -543,7 +543,8 @@
                                                         </tr>
                                                     @endforeach
                                                     <tr>
-                                                        <td colspan="3" class="text-end"><strong>Individual Total:</strong></td>
+                                                        <td colspan="3" class="text-end"><strong>Individual
+                                                                Total:</strong></td>
                                                         <td><strong>₹{{ number_format($bundleTotal, 2) }}</strong></td>
                                                     </tr>
                                                     <tr>
@@ -552,15 +553,17 @@
                                                         <td><strong>₹{{ number_format($get_product_detail->price, 2) }}</strong>
                                                         </td>
                                                     </tr>
-                                                    @if($bundleTotal > $get_product_detail->price)
+                                                    @if ($bundleTotal > $get_product_detail->price)
                                                         <tr>
                                                             @php
                                                                 $savings = $bundleTotal - $get_product_detail->price;
                                                                 $savingsPercentage = ($savings / $bundleTotal) * 100;
                                                             @endphp
-                                                            <td colspan="3" class="text-end"><strong>Total Savings:</strong></td>
+                                                            <td colspan="3" class="text-end"><strong>Total
+                                                                    Savings:</strong></td>
                                                             <td><strong>₹{{ number_format($savings, 2) }}
-                                                                    ({{ number_format($savingsPercentage, 1) }}%)</strong></td>
+                                                                    ({{ number_format($savingsPercentage, 1) }}%)</strong>
+                                                            </td>
                                                         </tr>
                                                     @endif
                                                 </tbody>
@@ -575,78 +578,78 @@
 
 
                 <?php
-    $custom_ordering_products_map = [
-        116 => [50, 51, 52, 53, 55, 56, 25, 26],
-        126 => [50, 51, 52, 53, 55, 56, 25, 26],
-        146 => [50, 26],
-        148 => [50, 24, 55, 27, 25, 26],
-        151 => [50, 7, 26],
-        153 => [50, 58, 55, 27, 25, 26],
-        155 => [50, 51, 55, 27, 25, 26],
-        157 => [66, 5, 27, 25, 26],
-        165 => [50, 67, 53, 27],
-        167 => [50, 67, 52, 27],
-        5 => [9, 10],
-        201 => [21, 14],
-        236 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
-        246 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
-        262 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
-        313 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
-        315 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
-        318 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
-        321 => [50, 79, 7, 25, 26, 74, 75],
-        322 => [36, 51, 79, 37, 27, 25, 38, 74, 75],
-        326 => [24, 79, 25, 26, 27, 28, 74, 75],
-        333 => [24, 77, 27, 28, 74, 75],
-        340 => [50, 67, 77, 52, 53, 74, 75],
-        373 => [14, 9, 97],
-        388 => [14, 9, 97],
-        388 => [97, 80],
-        260 => [14, 11],
-        270 => [87, 86],
-        418 => [9, 14],
-        428 => [14, 9],
-        265 => [14, 9],
-        293 => [14, 58, 44, 27],
-        295 => [14, 58, 44, 27],
-        295 => [14, 58, 44, 27, 60],
-        143 => [14, 58, 60, 44],
-        143 => [14, 58, 44, 27, 61, 26],
-        133 => [14, 58, 44, 27],
-        135 => [14, 58, 44, 27, 25, 26],
-        131 => [14, 57, 27, 25, 38],
-        460 => [83, 5],
-    ];
-
-    $custom_ordering_products_array = null;
-    if (array_key_exists($get_product_detail->id, $custom_ordering_products_map)) {
-        $custom_ordering_products_array = $custom_ordering_products_map[$get_product_detail->id];
-    }
-
-    if ($get_product_detail->id == 455) {
-        $productAttributes_id = DB::table('product_attributes')->select('product_id', 'attribute_id')->where('product_id', $get_product_detail->id)->groupBy('attribute_id')->orderBy('attribute_id', 'desc')->get();
-    } else {
-        $productAttributes_id = DB::table('product_attributes')
-            ->select('product_id', 'attribute_id')
-            ->where('product_id', $get_product_detail->id)
-            ->groupBy('attribute_id')
-            ->when(!is_null($custom_ordering_products_array), function ($q) use ($custom_ordering_products_array) {
-                return $q->orderByRaw('FIELD(attribute_id, ' . implode(',', $custom_ordering_products_array) . ')');
-            })
-            ->get();
-    }
-                                                                                                                                                                                                                                                            ?>
+                $custom_ordering_products_map = [
+                    116 => [50, 51, 52, 53, 55, 56, 25, 26],
+                    126 => [50, 51, 52, 53, 55, 56, 25, 26],
+                    146 => [50, 26],
+                    148 => [50, 24, 55, 27, 25, 26],
+                    151 => [50, 7, 26],
+                    153 => [50, 58, 55, 27, 25, 26],
+                    155 => [50, 51, 55, 27, 25, 26],
+                    157 => [66, 5, 27, 25, 26],
+                    165 => [50, 67, 53, 27],
+                    167 => [50, 67, 52, 27],
+                    5 => [9, 10],
+                    201 => [21, 14],
+                    236 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    246 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    262 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    313 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    315 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    318 => [50, 67, 77, 52, 53, 78, 79, 55, 56, 25, 26, 74, 75],
+                    321 => [50, 79, 7, 25, 26, 74, 75],
+                    322 => [36, 51, 79, 37, 27, 25, 38, 74, 75],
+                    326 => [24, 79, 25, 26, 27, 28, 74, 75],
+                    333 => [24, 77, 27, 28, 74, 75],
+                    340 => [50, 67, 77, 52, 53, 74, 75],
+                    373 => [14, 9, 97],
+                    388 => [14, 9, 97],
+                    388 => [97, 80],
+                    260 => [14, 11],
+                    270 => [87, 86],
+                    418 => [9, 14],
+                    428 => [14, 9],
+                    265 => [14, 9],
+                    293 => [14, 58, 44, 27],
+                    295 => [14, 58, 44, 27],
+                    295 => [14, 58, 44, 27, 60],
+                    143 => [14, 58, 60, 44],
+                    143 => [14, 58, 44, 27, 61, 26],
+                    133 => [14, 58, 44, 27],
+                    135 => [14, 58, 44, 27, 25, 26],
+                    131 => [14, 57, 27, 25, 38],
+                    460 => [83, 5],
+                ];
+                
+                $custom_ordering_products_array = null;
+                if (array_key_exists($get_product_detail->id, $custom_ordering_products_map)) {
+                    $custom_ordering_products_array = $custom_ordering_products_map[$get_product_detail->id];
+                }
+                
+                if ($get_product_detail->id == 455) {
+                    $productAttributes_id = DB::table('product_attributes')->select('product_id', 'attribute_id')->where('product_id', $get_product_detail->id)->groupBy('attribute_id')->orderBy('attribute_id', 'desc')->get();
+                } else {
+                    $productAttributes_id = DB::table('product_attributes')
+                        ->select('product_id', 'attribute_id')
+                        ->where('product_id', $get_product_detail->id)
+                        ->groupBy('attribute_id')
+                        ->when(!is_null($custom_ordering_products_array), function ($q) use ($custom_ordering_products_array) {
+                            return $q->orderByRaw('FIELD(attribute_id, ' . implode(',', $custom_ordering_products_array) . ')');
+                        })
+                        ->get();
+                }
+                ?>
 
 
 
                 <div class="col-lg-4">
 
-                    @if($get_product_detail->type == 'bundle')
+                    @if ($get_product_detail->type == 'bundle')
                         <div class="col-lg-12">
                             <div class="bundle-components-section">
                                 <h4>This Bundle Includes:</h4>
                                 <div class="row">
-                                    @foreach($bundleItems as $bundleItem)
+                                    @foreach ($bundleItems as $bundleItem)
                                         <div class="col-md-12 col-sm-12 mb-3">
                                             <div class="bundle-component-card">
                                                 <div class="component-image">
@@ -657,7 +660,8 @@
                                                 </div>
                                                 <div class="component-info">
                                                     <h6>{{ $bundleItem->product_title }}</h6>
-                                                    <p class="component-price">₹{{ number_format($bundleItem->price, 2) }}</p>
+                                                    <p class="component-price">₹{{ number_format($bundleItem->price, 2) }}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -683,29 +687,28 @@
 
                             @endphp
                             @if ($get_product_detail->id === 332)
-                                                    <?php    $product = Product::find(335);  ?>
+                                <?php $product = Product::find(335); ?>
 
-                                                    <h3 id="h3_original">${{ $get_product_detail->price_with_increment }}
-                                                        <?php    if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
-                                    echo ' - $' . $get_product_detail->maximum_price_with_increment;
-                                } ?>
-                                                    </h3>
+                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }}
+                                    <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                                        echo ' - $' . $get_product_detail->maximum_price_with_increment;
+                                    } ?>
+                                </h3>
                             @elseif($get_product_detail)
-                                                    <h3 id="h3_original">${{ $get_product_detail->price_with_increment }}
-                                                        <?php    if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
-                                    echo ' - $' . $get_product_detail->maximum_price_with_increment;
-                                } ?>
-                                                    </h3>
-
+                                <h3 id="h3_original">${{ $get_product_detail->price_with_increment }}
+                                    <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
+                                        echo ' - $' . $get_product_detail->maximum_price_with_increment;
+                                    } ?>
+                                </h3>
                             @else
-                                                    <h3 id="originproductprice">${{ $minPrice }} <?php    if ($maxPrice != '' && $maxPrice != '0') {
+                                <h3 id="originproductprice">${{ $minPrice }} <?php if ($maxPrice != '' && $maxPrice != '0') {
                                     echo ' - $' . $maxPrice;
                                 } ?></h3>
                             @endif
                             <h3 id="h3_additional" hidden>${{ $get_product_detail->price_with_increment }}
                                 <?php if ($get_product_detail->maximum_price_with_increment != '' && $get_product_detail->maximum_price_with_increment != '0') {
-        echo ' - $' . $get_product_detail->maximum_price_with_increment;
-    } ?>
+                                    echo ' - $' . $get_product_detail->maximum_price_with_increment;
+                                } ?>
                             </h3>
                             <input type="hidden" name="exist_price" id="exist_price" value=0>
 
@@ -713,7 +716,7 @@
                             @foreach ($productAttributes_id as $key => $val_product_attribute)
                                 <h6> {{ App\Attributes::find($val_product_attribute->attribute_id)->name }} </h6>
 
-                                <?php    $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get();  ?>
+                                <?php $get_attribute_values = DB::table('product_attributes')->where('attribute_id', $val_product_attribute->attribute_id)->where('product_id', $val_product_attribute->product_id)->get(); ?>
 
                                 <input type="hidden" name="select_price"
                                     class="select_price{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}"
@@ -728,7 +731,8 @@
                                     @foreach ($get_attribute_values as $key => $val_attr_value)
                                         <option data-price="{{ $val_attr_value->price }}"
                                             data-attribute-value-id="{{ $val_attr_value->id }}"
-                                            data-qty="{{ $val_attr_value->qty ?? 0 }}" value="{{ $val_attr_value->value }}">
+                                            data-qty="{{ $val_attr_value->qty ?? 0 }}"
+                                            value="{{ $val_attr_value->value }}">
                                             {{ App\AttributeValue::find($val_attr_value->value)->value }}
                                         </option>
                                     @endforeach
@@ -743,13 +747,15 @@
                                             <figure class="bundled_product_image woocommerce-product-gallery__image"><a
                                                     href="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677.jpg"
                                                     class="image zoom" title="Elite Freewheel Tool Gallery Photo copy(1)"
-                                                    data-rel="photoSwipe"><img width="100" height="100" style="margin-top: 15px;"
+                                                    data-rel="photoSwipe"><img width="100" height="100"
+                                                        style="margin-top: 15px;"
                                                         src="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-300x300.jpg"
                                                         class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image"
-                                                        alt="" title="Elite Freewheel Tool Gallery Photo copy(1)" data-caption=""
+                                                        alt="" title="Elite Freewheel Tool Gallery Photo copy(1)"
+                                                        data-caption=""
                                                         data-large_image="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677.jpg"
-                                                        data-large_image_width="487" data-large_image_height="380" decoding="async"
-                                                        loading="lazy"
+                                                        data-large_image_width="487" data-large_image_height="380"
+                                                        decoding="async" loading="lazy"
                                                         srcset="https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-300x300.jpg 300w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-100x100.jpg 100w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-150x150.jpg 150w, https://www.profileracing.com/wp-content/uploads/2016/05/Elite-Freewheel-Tool-Gallery-Photo-copy1-e1656431648677-45x45.jpg 45w"
                                                         sizes="auto, (max-width: 300px) 100vw, 300px"></a></figure>
                                         </div>
@@ -758,27 +764,32 @@
                                                     class="bundled_product_title_inner"><span class="item_title">ELITE
                                                         FREEWHEEL TOOL</span><span class="item_qty"></span><span
                                                         class="item_suffix"></span></span> <span
-                                                    class="bundled_product_title_link"><a class="bundled_product_permalink"
+                                                    class="bundled_product_title_link"><a
+                                                        class="bundled_product_permalink"
                                                         href="https://www.profileracing.com/product/elite-freewheel-tool/"
                                                         target="_blank" aria-label="View product"></a></span></h4>
                                             <label class="bundled_product_optional_checkbox">
 
-                                                <input class="bundled_product_checkbox" type="checkbox" id="add_price_checkbox"
-                                                    name="bundle_selected_optional_1" value="{{ $product->price }}">
-                                                <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span
-                                                                class="woocommerce-Price-currencySymbol" style="color: #fff;">Add
+                                                <input class="bundled_product_checkbox" type="checkbox"
+                                                    id="add_price_checkbox" name="bundle_selected_optional_1"
+                                                    value="{{ $product->price }}">
+                                                <span class="price"><span
+                                                        class="woocommerce-Price-amount amount"><bdi><span
+                                                                class="woocommerce-Price-currencySymbol"
+                                                                style="color: #fff;">Add
                                                                 For $
                                                                 {{ $product->price }}</span></bdi></span></span></label>
                                             <div class="cart" data-title="ELITE FREEWHEEL TOOL"
-                                                data-product_title="ELITE FREEWHEEL TOOL" data-visible="yes" data-optional_suffix=""
-                                                data-optional="yes" data-type="simple" data-bundled_item_id="1"
-                                                data-custom_data="[]" data-product_id="62592" data-bundle_id="8693">
+                                                data-product_title="ELITE FREEWHEEL TOOL" data-visible="yes"
+                                                data-optional_suffix="" data-optional="yes" data-type="simple"
+                                                data-bundled_item_id="1" data-custom_data="[]" data-product_id="62592"
+                                                data-bundle_id="8693">
                                                 <div class="bundled_item_wrap">
                                                     <div class="bundled_item_cart_content" style="">
                                                         <div class="bundled_item_cart_details"></div>
                                                         <div class="bundled_item_after_cart_details bundled_item_button">
-                                                            <input class="bundled_qty" type="hidden" name="bundle_quantity_1"
-                                                                value="1">
+                                                            <input class="bundled_qty" type="hidden"
+                                                                name="bundle_quantity_1" value="1">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -810,8 +821,8 @@
                             <h6>Quantity</h6>
                             <div class="quantity">
                                 <a href="#" class=" minus-11"><span>-</span></a>
-                                <input name="qty" id="qty" type="text" class="quantity__input input-1" readonly=""
-                                    value="1">
+                                <input name="qty" id="qty" type="text" class="quantity__input input-1"
+                                    readonly="" value="1">
                                 <a href="#" class=" plus-11"><span>+</span></a>
                             </div>
 
@@ -856,128 +867,128 @@
     </script>
 
     <!-- <script>
-                                                let productId = {!! $get_product_detail->id !!}; 
+        let productId = {!! $get_product_detail->id !!};
 
-                                                if (productId === 332) {
-                                                    document.addEventListener("DOMContentLoaded", function () {
-                                                        let checkbox = document.getElementById('add_price_checkbox');
-                                                        let priceElement = document.getElementById('h3_original');
-                                                        let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}"); 
+        if (productId === 332) {
+            document.addEventListener("DOMContentLoaded", function() {
+                let checkbox = document.getElementById('add_price_checkbox');
+                let priceElement = document.getElementById('h3_original');
+                let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}");
 
-                                                        if (checkbox) {
-                                                            checkbox.addEventListener('change', function () {
-                                                                let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
 
-                                                                let additionalPrice = parseFloat(selectvalue) || 0;
+                        let additionalPrice = parseFloat(selectvalue) || 0;
 
-                                                                if (this.checked) {
-                                                                    console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
+                        if (this.checked) {
+                            console.log(`$${(basePrice + additionalPrice + 19.99).toFixed(2)}`);
 
-                                                                    priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
-                                                                } else {
-                                                                    priceElement.innerText = `$${basePrice.toFixed(2)}`;
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                } else {
+                            priceElement.innerText = `$${(basePrice + additionalPrice + 19.99).toFixed(2)}`;
+                        } else {
+                            priceElement.innerText = `$${basePrice.toFixed(2)}`;
+                        }
+                    });
+                }
+            });
+        } else {
 
-                                                    function updateOptionPrice(selector) {
-                                                        var text = selector.attr('class');
-                                                        var regex = /\d+/;
-                                                        var number = text.match(regex)[0];
+            function updateOptionPrice(selector) {
+                var text = selector.attr('class');
+                var regex = /\d+/;
+                var number = text.match(regex)[0];
 
-                                                        var selectedOption = selector.find('option:selected');
-                                                        var optionPrice = selectedOption.data('price');
-                                                        var optionQty = selectedOption.data('qty');
-                                                        var attributeValueId = selectedOption.data('attribute-value-id');
-                                                        var addToCartBtn = $('#addCart');
+                var selectedOption = selector.find('option:selected');
+                var optionPrice = selectedOption.data('price');
+                var optionQty = selectedOption.data('qty');
+                var attributeValueId = selectedOption.data('attribute-value-id');
+                var addToCartBtn = $('#addCart');
 
-                                                        if (selectedOption.index() === 0) {
-                                                            selector.next('.span_selected_option_price').html('').hide();
-                                                            addToCartBtn.prop('disabled', false)  // default enable
-                                                                .css({
-                                                                    'opacity': '1',
-                                                                    'cursor': 'pointer'
-                                                                });
-                                                            return;
-                                                        }
+                if (selectedOption.index() === 0) {
+                    selector.next('.span_selected_option_price').html('').hide();
+                    addToCartBtn.prop('disabled', false) // default enable
+                        .css({
+                            'opacity': '1',
+                            'cursor': 'pointer'
+                        });
+                    return;
+                }
 
-                                                        if (optionPrice !== undefined) {
-                                                            var amount = parseFloat(optionPrice).toFixed(2);
+                if (optionPrice !== undefined) {
+                    var amount = parseFloat(optionPrice).toFixed(2);
 
-                                                            let displayText = '$' + amount;
+                    let displayText = '$' + amount;
 
-                                                            if (optionQty !== undefined) {
-                                                                if (parseInt(optionQty) > 0) {
-                                                                    // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
-                                                                    displayText = displayText;
-
-
-                                                                    addToCartBtn.prop('disabled', false)
-                                                                        .css({
-                                                                            'opacity': '1',
-                                                                            'cursor': 'pointer',
-                                                                            'background': 'red'
-                                                                        });
-                                                                } else {
-                                                                    displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
-
-                                                                    // ❌ Disable Add to Cart
-                                                                    addToCartBtn.prop('disabled', true)
-                                                                        .css({
-                                                                            'opacity': '0.5',
-                                                                            'cursor': 'not-allowed',
-                                                                            'background': '#888'
-                                                                        });
-                                                                }
-                                                            }
-
-                                                            selector.next('.span_selected_option_price').html(displayText).show();
-
-                                                            $('.select_price' + number).val(amount);
-
-                                                            var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
-                                                            $('.select_price' + number).each(function () {
-                                                                totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
-                                                            });
-
-                                                            $('#h3_original').prop('hidden', false);
-                                                            $('#h3_additional').prop('hidden', false);
-                                                        } else {
-                                                            selector.next('.span_selected_option_price').html('$0.00').show();
-                                                        }
-                                                    }
+                    if (optionQty !== undefined) {
+                        if (parseInt(optionQty) > 0) {
+                            // displayText += ' — Available: ' + optionQty + ' item' + (optionQty > 1 ? 's' : '');
+                            displayText = displayText;
 
 
-                                                }
+                            addToCartBtn.prop('disabled', false)
+                                .css({
+                                    'opacity': '1',
+                                    'cursor': 'pointer',
+                                    'background': 'red'
+                                });
+                        } else {
+                            displayText += ' — <span style="color:#ff4444;">Out of stock</span>';
+
+                            // ❌ Disable Add to Cart
+                            addToCartBtn.prop('disabled', true)
+                                .css({
+                                    'opacity': '0.5',
+                                    'cursor': 'not-allowed',
+                                    'background': '#888'
+                                });
+                        }
+                    }
+
+                    selector.next('.span_selected_option_price').html(displayText).show();
+
+                    $('.select_price' + number).val(amount);
+
+                    var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+                    $('.select_price' + number).each(function() {
+                        totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
+                    });
+
+                    $('#h3_original').prop('hidden', false);
+                    $('#h3_additional').prop('hidden', false);
+                } else {
+                    selector.next('.span_selected_option_price').html('$0.00').show();
+                }
+            }
 
 
-                                                @foreach ($productAttributes_id as $key => $val_product_attribute)
-                                                    var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
+        }
 
-                                                    // Initialize on page load
-                                                    updateOptionPrice(dropdown);
 
-                                                    // Add event listener for changes
-                                                    dropdown.on('change', function () {
-                                                        updateOptionPrice($(this));
-                                                    });
-                                                @endforeach
-                                            </script> -->
+        @foreach ($productAttributes_id as $key => $val_product_attribute)
+            var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
+
+            // Initialize on page load
+            updateOptionPrice(dropdown);
+
+            // Add event listener for changes
+            dropdown.on('change', function() {
+                updateOptionPrice($(this));
+            });
+        @endforeach
+    </script> -->
 
 
     <script>
         let productId = {!! $get_product_detail->id !!};
 
         if (productId === 332) {
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 let checkbox = document.getElementById('add_price_checkbox');
                 let priceElement = document.getElementById('h3_original');
                 let basePrice = parseFloat("{{ $get_product_detail->price_with_increment }}");
 
                 if (checkbox) {
-                    checkbox.addEventListener('change', function () {
+                    checkbox.addEventListener('change', function() {
                         let selectvalue = document.getElementsByClassName('get_option').value ?? 0;
                         let additionalPrice = parseFloat(selectvalue) || 0;
 
@@ -1029,7 +1040,8 @@
 
                             // ✅ Check if selected quantity exceeds available stock
                             if (currentQty > parseInt(optionQty)) {
-                                alert('❌ Only ' + optionQty + ' items available for ' + attributeName + ' - ' + optionName + '! Please reduce quantity.');
+                                alert('❌ Only ' + optionQty + ' items available for ' + attributeName + ' - ' + optionName +
+                                    '! Please reduce quantity.');
 
                                 // Reset to maximum available quantity
                                 $('input[name="qty"]').val(optionQty);
@@ -1063,7 +1075,7 @@
                     $('.select_price' + number).val(amount);
 
                     var totalPrice = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
-                    $('.select_price' + number).each(function () {
+                    $('.select_price' + number).each(function() {
                         totalPrice = (parseFloat(totalPrice) + parseFloat($(this).val())).toFixed(2);
                     });
 
@@ -1074,9 +1086,9 @@
                 }
             }
 
-            $(document).ready(function () {
+            $(document).ready(function() {
                 // Plus button
-                $('.plus-11').on('click', function (e) {
+                $('.plus-11').on('click', function(e) {
                     e.preventDefault();
                     var qtyInput = $('input[name="qty"]');
                     var currentQty = parseInt(qtyInput.val()) || 1;
@@ -1090,7 +1102,7 @@
                 });
 
                 // Minus button
-                $('.minus-11').on('click', function (e) {
+                $('.minus-11').on('click', function(e) {
                     e.preventDefault();
                     var qtyInput = $('input[name="qty"]');
                     var currentQty = parseInt(qtyInput.val()) || 1;
@@ -1105,7 +1117,7 @@
                 var maxAvailable = null;
                 var limitingAttribute = '';
 
-                $('select[class*="select_option"]').each(function () {
+                $('select[class*="select_option"]').each(function() {
                     var selectedOption = $(this).find('option:selected');
                     var optionQty = selectedOption.data('qty');
                     var attributeName = $(this).prev('h6').text().trim() || 'Option';
@@ -1129,7 +1141,8 @@
 
                 // ✅ FIX: Agar increase nahi kar sakte, toh alert show karo aur false return karo
                 if (!canIncrease && maxAvailable !== null) {
-                    alert('❌ Only ' + maxAvailable + ' items available for ' + limitingAttribute + '! You cannot add more than ' + maxAvailable + ' items.');
+                    alert('❌ Only ' + maxAvailable + ' items available for ' + limitingAttribute +
+                        '! You cannot add more than ' + maxAvailable + ' items.');
                     return false;
                 }
 
@@ -1151,7 +1164,7 @@
             updateOptionPrice(dropdown);
 
             // Add event listener for changes
-            dropdown.on('change', function () {
+            dropdown.on('change', function() {
                 updateOptionPrice($(this));
                 checkStockForAllOptions();
             });
@@ -1159,7 +1172,7 @@
     </script>
 
     <script type="text/javascript">
-                                                                                                                                                                                                var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
+        var t_price = parseFloat('{{ $get_product_detail->price_with_increment }}').toFixed(2);
         // var temp_p = 0;
         // $('.get_option').on('change', function () {
         //     temp_p = 0;
@@ -1180,7 +1193,7 @@
             var temp_p = 0;
 
             // Iterate through each span and calculate the total additional price
-            $('.span_selected_option_price').each(function () {
+            $('.span_selected_option_price').each(function() {
                 if ($(this).text() != '') {
                     // var stringWithoutDollarSign = $(this).text().replace("$", "");
                     var stringWithoutDollarSign = $(this).text()
@@ -1203,18 +1216,18 @@
 
         updateTotalPrice();
 
-        $('.get_option').on('change', function () {
+        $('.get_option').on('change', function() {
             updateTotalPrice();
         });
 
-        $(document).ready(function () {
-            $(".inner-shop").click(function () {
+        $(document).ready(function() {
+            $(".inner-shop").click(function() {
                 $(".inner-drop").show()
             })
         });
 
-        $(document).ready(function () {
-            $(".inner-shop-2").click(function () {
+        $(document).ready(function() {
+            $(".inner-shop-2").click(function() {
                 $(".inner-drop-2").show()
             })
         });
@@ -1254,5 +1267,43 @@
             document.getElementById(cityName).style.display = "block";
             evt.currentTarget.className += " activee"
         }
+    </script>
+    <script>
+        document.getElementById('add-cart').addEventListener('submit', function(e) {
+
+            let selects = document.querySelectorAll('.get_option');
+            let allValid = true;
+
+            selects.forEach(function(select) {
+
+                // Remove old message
+                let errorMsg = select.parentNode.querySelector('.error-text');
+                if (errorMsg) errorMsg.remove();
+
+                // Reset border
+                select.style.border = "1px solid #555";
+
+                if (select.value === "") {
+                    e.preventDefault();
+                    allValid = false;
+
+                    // Red border highlight
+                    select.style.border = "2px solid red";
+
+                    // Create error message
+                    let msg = document.createElement('small');
+                    msg.classList.add('error-text');
+                    msg.style.color = "red";
+                    msg.style.display = "block";
+                    msg.style.marginTop = "5px";
+                    msg.innerText = "Fill this input (required)";
+
+                    // Add message directly under SELECT
+                    select.parentNode.appendChild(msg);
+                }
+            });
+
+            if (!allValid) return false;
+        });
     </script>
 @endsection
