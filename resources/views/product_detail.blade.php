@@ -313,16 +313,16 @@
     <!-- ============================================================== -->
 
     <!-- <section class="heading-sec">
-                                                                                                                                                                                                                                                    <div class="container">
-                                                                                                                                                                                                                                                        <div class="row">
-                                                                                                                                                                                                                                                            <div class="col-lg-12">
-                                                                                                                                                                                                                                                                <div class="inner-headings">
-                                                                                                                                                                                                                                                                    <h2>PRODUCTS</h2>
+                                                                                                                                                                                                                                                        <div class="container">
+                                                                                                                                                                                                                                                            <div class="row">
+                                                                                                                                                                                                                                                                <div class="col-lg-12">
+                                                                                                                                                                                                                                                                    <div class="inner-headings">
+                                                                                                                                                                                                                                                                        <h2>PRODUCTS</h2>
+                                                                                                                                                                                                                                                                    </div>
                                                                                                                                                                                                                                                                 </div>
                                                                                                                                                                                                                                                             </div>
                                                                                                                                                                                                                                                         </div>
-                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                </section> -->
+                                                                                                                                                                                                                                                    </section> -->
 
 
 
