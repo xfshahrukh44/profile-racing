@@ -1094,11 +1094,11 @@
                     var currentQty = parseInt(qtyInput.val()) || 1;
                     var newQty = currentQty + 1;
 
-                    // ✅ FIX: Pehle check karo, phir increase karo
+                  
                     if (canIncreaseQuantity(newQty)) {
                         qtyInput.val(newQty);
                     }
-                    // Agar false return kare, toh kuch nahi karo - quantity same rahegi
+                   
                 });
 
                 // Minus button
@@ -1124,22 +1124,22 @@
                     var optionName = selectedOption.text().trim();
 
                     if (optionQty !== undefined && parseInt(optionQty) > 0) {
-                        // Find the limiting attribute (lowest stock)
+                       
                         if (maxAvailable === null || parseInt(optionQty) < maxAvailable) {
                             maxAvailable = parseInt(optionQty);
                             limitingAttribute = attributeName + ' - ' + optionName;
                         }
 
-                        // ✅ FIX: Directly check and return false
+                        
                         if (newQty > parseInt(optionQty)) {
                             canIncrease = false;
-                            // ✅ Break the loop immediately
+                           
                             return false;
                         }
                     }
                 });
 
-                // ✅ FIX: Agar increase nahi kar sakte, toh alert show karo aur false return karo
+              
                 if (!canIncrease && maxAvailable !== null) {
                     alert('❌ Only ' + maxAvailable + ' items available for ' + limitingAttribute +
                         '! You cannot add more than ' + maxAvailable + ' items.');
@@ -1149,10 +1149,10 @@
                 return canIncrease;
             }
 
-            // ✅ FIX: Ye function bhi update karo
+            
             function checkStockForAllOptions() {
                 var selectedQty = parseInt($('input[name="qty"]').val()) || 1;
-                // Bas check karo, koi automatic setting nahi
+                
                 canIncreaseQuantity(selectedQty);
             }
         }
@@ -1160,10 +1160,10 @@
         @foreach ($productAttributes_id as $key => $val_product_attribute)
             var dropdown = $('.select_option{{ App\Attributes::find($val_product_attribute->attribute_id)->id }}');
 
-            // Initialize on page load
+           
             updateOptionPrice(dropdown);
 
-            // Add event listener for changes
+          
             dropdown.on('change', function() {
                 updateOptionPrice($(this));
                 checkStockForAllOptions();
@@ -1296,7 +1296,7 @@
                     msg.style.color = "red";
                     msg.style.display = "block";
                     msg.style.marginTop = "5px";
-                    msg.innerText = "Fill this input (required)";
+                    msg.innerText = "You must choose an option before Addtocart";
 
                     // Add message directly under SELECT
                     select.parentNode.appendChild(msg);
